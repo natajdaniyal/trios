@@ -1,4 +1,4 @@
-import json
+﻿import json
 import os
 
 
@@ -9,13 +9,13 @@ class Profile:
         self.file = f"data/{username}.json"
 
 
-    # آیا حساب وجود دارد؟
+    # Ø¢ÛŒØ§ Ø­Ø³Ø§Ø¨ ÙˆØ¬ÙˆØ¯ Ø¯Ø§Ø±Ø¯ØŸ
     def exists(self):
         return os.path.exists(self.file)
 
 
 
-    # ساخت حساب
+    # Ø³Ø§Ø®Øª Ø­Ø³Ø§Ø¨
     def create(self, password):
 
         if self.exists():
@@ -42,7 +42,7 @@ class Profile:
 
 
 
-    # ورود با رمز
+    # ÙˆØ±ÙˆØ¯ Ø¨Ø§ Ø±Ù…Ø²
     def check_password(self, password):
 
         if not self.exists():
@@ -55,7 +55,7 @@ class Profile:
 
 
 
-    # خواندن اطلاعات
+    # Ø®ÙˆØ§Ù†Ø¯Ù† Ø§Ø·Ù„Ø§Ø¹Ø§Øª
     def load(self):
 
         with open(
@@ -68,7 +68,7 @@ class Profile:
 
 
 
-    # ذخیره اطلاعات
+    # Ø°Ø®ÛŒØ±Ù‡ Ø§Ø·Ù„Ø§Ø¹Ø§Øª
     def save(self, data):
 
         with open(
@@ -86,7 +86,7 @@ class Profile:
 
 
 
-    # ثبت یک تلاش آزمایش
+    # Ø«Ø¨Øª ÛŒÚ© ØªÙ„Ø§Ø´ Ø¢Ø²Ù…Ø§ÛŒØ´
     def add_experiment(
             self,
             name,
@@ -139,7 +139,7 @@ class Profile:
 
 
 
-    # گرفتن گزارش کلی
+    # Ú¯Ø±ÙØªÙ† Ú¯Ø²Ø§Ø±Ø´ Ú©Ù„ÛŒ
     def get_report(self):
 
         data = self.load()
@@ -159,14 +159,70 @@ class Profile:
 
 
 
-    # حذف حساب
+    # Ø­Ø°Ù Ø­Ø³Ø§Ø¨
     def delete_account(self):
 
-        if self.exists():
+        if not self.exists():
+            return False
 
-            os.remove(self.file)
+        os.remove(self.file)
+
+        self.clear_session()
+
+        return True
+
+    def create_session(self):
+
+        if not self.exists():
+            return False
+
+        session_data = {
+            "username": self.username
+        }
+
+        with open(
+            "data/session.json",
+            "w",
+            encoding="utf-8"
+        ) as f:
+
+            json.dump(
+                session_data,
+                f,
+                ensure_ascii=False,
+                indent=4
+            )
+
+        return True
+
+
+    # Ø¯Ø±ÛŒØ§ÙØª Session ÙØ¹Ù„ÛŒ
+    def get_session(self):
+
+        session_file = "data/session.json"
+
+        if not os.path.exists(session_file):
+            return None
+
+        with open(
+            session_file,
+            "r",
+            encoding="utf-8"
+        ) as f:
+
+            data = json.load(f)
+
+        return data.get("username")
+
+
+    # Ø­Ø°Ù Session Ø§ÛŒÙ† Ø¯Ø³ØªÚ¯Ø§Ù‡
+    def clear_session(self):
+
+        session_file = "data/session.json"
+
+        if os.path.exists(session_file):
+            os.remove(session_file)
 
             return True
-
 
         return False

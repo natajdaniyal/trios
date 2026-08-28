@@ -1,131 +1,94 @@
 import os
 import sys
 
-# اضافه کردن مسیر پروژه اصلی
-sys.path.append(
-    os.path.dirname(
-        os.path.dirname(__file__)
-    )
-)
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from explorer import Profile
 
-
-print("\n🧪 TRIOS PROFILE TEST")
-print("=" * 35)
-
+print("\nTRIOS PROFILE & SESSION TEST")
+print("=" * 40)
 
 username = "__test_user__"
 password = "1234"
-
 
 passed = 0
 failed = 0
 
 
 def check(condition, message):
-
     global passed, failed
 
     if condition:
-        print(f"✅ {message}")
+        print(f"PASS: {message}")
         passed += 1
-
     else:
-        print(f"❌ {message}")
+        print(f"FAIL: {message}")
         failed += 1
 
 
-
-# ساخت پروفایل تستی
 profile = Profile(username)
 
-
-# اگر از قبل وجود داشت پاک شود
 if profile.exists():
     profile.delete_account()
 
+profile.clear_session()
 
+check(profile.create(password), "Create Account")
+check(profile.exists(), "Profile File Created")
+check(profile.check_password(password), "Correct Password")
+check(not profile.check_password("9999"), "Wrong Password")
+check(not profile.create(password), "Duplicate Username Blocked")
 
-# تست ساخت حساب
+profile.create_session()
 
-created = profile.create(password)
+check(profile.get_session() == username, "Session Created")
+
+new_profile = Profile(username)
 
 check(
-    created,
-    "Create Account"
+    new_profile.get_session() == username,
+    "Session Persists"
 )
 
+profile.clear_session()
 
-
-# تست ساخته شدن فایل
+check(
+    profile.get_session() is None,
+    "Session Cleared"
+)
 
 check(
     profile.exists(),
-    "Profile File Created"
+    "Account Preserved After Device Logout"
 )
 
-
-
-# تست رمز درست
+profile.create_session()
 
 check(
-    profile.check_password(password),
-    "Correct Password"
+    profile.get_session() == username,
+    "Session Recreated"
 )
 
-
-
-# تست رمز غلط
-
 check(
-    not profile.check_password("9999"),
-    "Wrong Password"
-)
-
-
-
-# تست جلوگیری از حساب تکراری
-
-duplicate = profile.create(password)
-
-check(
-    not duplicate,
-    "Duplicate Username Blocked"
-)
-
-
-
-# تست حذف حساب
-
-deleted = profile.delete_account()
-
-check(
-    deleted,
+    profile.delete_account(),
     "Delete Account"
 )
-
-
-
-# تست حذف کامل فایل
 
 check(
     not profile.exists(),
     "Profile File Removed"
 )
 
+check(
+    profile.get_session() is None,
+    "Session Removed With Account"
+)
 
-
-print("\n" + "=" * 35)
-
-print(f"✅ Passed : {passed}")
-print(f"❌ Failed : {failed}")
-
+print("\n" + "=" * 40)
+print(f"Passed : {passed}")
+print(f"Failed : {failed}")
 
 if failed == 0:
-
-    print("\n🟢 Profile System Healthy")
-
+    print("\nPROFILE & SESSION SYSTEM HEALTHY")
 else:
-
-    print("\n🔴 Profile System Has Problems")
+    print("\nPROFILE & SESSION SYSTEM HAS PROBLEMS")
