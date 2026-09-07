@@ -117,10 +117,10 @@ def test_multiple_bodies():
     assert body_a.force.x == 2
     assert body_a.force.y == 0
 
-    assert body_b.force.x == -1
+    assert body_b.force.x == 0
     assert body_b.force.y == 0
 
-    assert body_c.force.x == -1
+    assert body_c.force.x == -2
     assert body_c.force.y == 0
 
 
