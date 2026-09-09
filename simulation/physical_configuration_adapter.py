@@ -8,6 +8,8 @@ does not create or evaluate experiments.
 
 from body import Body
 from vector import Vector2
+from force_engine import ForceEngine
+from forces.gravitational_force import GravitationalForce
 from physical_configuration import StagePhysicalConfiguration
 from experiment_infrastructure import ExperimentStage
 from simulation_engine import SimulationEngine
@@ -62,8 +64,9 @@ def simulation_from_configuration(
     Create a SimulationEngine initialized from a physical configuration.
 
     The configuration supplies only the initial physical state. The
-    simulation engine remains responsible for execution. No experiment
-    semantics are introduced here.
+    simulation engine remains responsible for execution. When no custom
+    force engine is supplied, the adapter uses the default TRIOS
+    gravitational interaction.
     """
 
     if not isinstance(configuration, StagePhysicalConfiguration):
@@ -72,6 +75,10 @@ def simulation_from_configuration(
             "StagePhysicalConfiguration instance, got "
             f"{type(configuration)!r}."
         )
+
+    if force_engine is None:
+        force_engine = ForceEngine()
+        force_engine.add_force(GravitationalForce())
 
     return SimulationEngine(
         bodies=bodies_from_configuration(configuration),
