@@ -1,14 +1,15 @@
 """
-Adapters between Physical Configuration and simulation objects.
+Adapters between experiment configuration and simulation objects.
 
-This module converts a StagePhysicalConfiguration into the concrete
-objects expected by the simulation layer. It does not define any
-physics rules and does not create experiments.
+This module converts physical configuration data into concrete objects
+expected by the simulation layer. It does not define physics rules and
+does not create or evaluate experiments.
 """
 
 from body import Body
 from vector import Vector2
 from physical_configuration import StagePhysicalConfiguration
+from experiment_infrastructure import ExperimentStage
 from simulation_engine import SimulationEngine
 
 
@@ -74,6 +75,32 @@ def simulation_from_configuration(
 
     return SimulationEngine(
         bodies=bodies_from_configuration(configuration),
+        time_step=time_step,
+        force_engine=force_engine,
+    )
+
+
+def simulation_from_stage(
+    stage,
+    time_step=1,
+    force_engine=None,
+):
+    """
+    Create a SimulationEngine from an ExperimentStage.
+
+    The stage remains a definition object. This adapter simply reads its
+    physical configuration and delegates the conversion to
+    simulation_from_configuration().
+    """
+
+    if not isinstance(stage, ExperimentStage):
+        raise TypeError(
+            "simulation_from_stage expects an ExperimentStage instance, got "
+            f"{type(stage)!r}."
+        )
+
+    return simulation_from_configuration(
+        stage.physical_configuration,
         time_step=time_step,
         force_engine=force_engine,
     )
