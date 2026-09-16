@@ -1,6 +1,6 @@
 import streamlit as st
 
-from user_interface import authenticate_user, create_user, delete_user, user_profile
+from user_interface import authenticate_user, create_user, recover_user, user_profile
 
 
 st.set_page_config(page_title="TRIOS", page_icon="🌌", layout="wide")
@@ -17,9 +17,13 @@ def show_home():
             st.session_state.page = "login"
             st.rerun()
     with col2:
-        if st.button("🌌 TRIOS چیست؟", use_container_width=True):
-            st.session_state.page = "about"
+        if st.button("🔄 بازیابی حساب", use_container_width=True):
+            st.session_state.page = "recover"
             st.rerun()
+
+    if st.button("🌌 TRIOS چیست؟", use_container_width=True):
+        st.session_state.page = "about"
+        st.rerun()
 
 
 def show_login():
@@ -38,9 +42,35 @@ def show_login():
             st.session_state.page = "dashboard"
             st.rerun()
 
+    if st.button("🔄 بازیابی حساب موجود", use_container_width=True):
+        st.session_state.page = "recover"
+        st.rerun()
+
     if st.button("ساخت حساب جدید", use_container_width=True):
         st.session_state.page = "register"
         st.rerun()
+
+    if st.button("⬅️ بازگشت", use_container_width=True):
+        st.session_state.page = "home"
+        st.rerun()
+
+
+def show_recover():
+    st.header("🔄 بازیابی حساب")
+    st.info("حساب حذف نمی‌شود؛ با نام کاربری و رمز عبور، حساب موجودت را روی این دستگاه بازیابی می‌کنی.")
+
+    username = st.text_input("نام کاربری", key="recover_username")
+    password = st.text_input("رمز عبور", type="password", key="recover_password")
+
+    if st.button("بازیابی حساب", use_container_width=True):
+        try:
+            data = recover_user(username, password)
+        except ValueError as exc:
+            st.error(str(exc))
+        else:
+            st.session_state.user = data["username"]
+            st.session_state.page = "dashboard"
+            st.rerun()
 
     if st.button("⬅️ بازگشت", use_container_width=True):
         st.session_state.page = "home"
@@ -99,7 +129,7 @@ def show_dashboard():
     st.write(f"**تعداد تلاش‌ها:** {data['total_attempts']}")
     st.write(f"**دقت:** {data['accuracy']}%")
 
-    if st.button("🚪 خروج", use_container_width=True):
+    if st.button("🚪 خروج از این دستگاه", use_container_width=True):
         st.session_state.pop("user", None)
         st.session_state.page = "home"
         st.rerun()
@@ -161,7 +191,7 @@ if "page" not in st.session_state:
     st.session_state.page = "home"
 
 if "user" in st.session_state:
-    if st.session_state.page in {"home", "login", "register"}:
+    if st.session_state.page in {"home", "login", "register", "recover"}:
         st.session_state.page = "dashboard"
 else:
     if st.session_state.page in {"dashboard", "lab", "report"}:
@@ -174,6 +204,8 @@ if page == "home":
     show_home()
 elif page == "login":
     show_login()
+elif page == "recover":
+    show_recover()
 elif page == "register":
     show_register()
 elif page == "dashboard":
