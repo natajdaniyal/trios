@@ -3,29 +3,40 @@ import streamlit as st
 from user_interface import (
     authenticate_user,
     create_user,
+    delete_user,
     logout_user,
     recover_user,
+    restore_user_session,
     user_profile,
 )
 
 
-st.set_page_config(page_title="TRIOS", page_icon="🌌", layout="wide")
+st.set_page_config(page_title="TRIOS", page_icon="🪐", layout="wide")
+
+
+def show_logo():
+    st.markdown(
+        """
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+            <div style="font-size:42px;line-height:1;">◉</div>
+            <div>
+                <div style="font-size:34px;font-weight:700;line-height:1.1;">TRIOS</div>
+                <div style="font-size:14px;opacity:.7;">Three-Body Research & Interactive Orbit Simulation</div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def show_home():
-    st.title("🌌 TRIOS")
+    show_logo()
     st.caption("آزمایشگاه شبیه‌سازی و بررسی مسئله سه‌جسمی")
     st.write("به آزمایشگاه TRIOS خوش آمدی.")
 
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("🚀 ورود به TRIOS", use_container_width=True):
-            st.session_state.page = "login"
-            st.rerun()
-    with col2:
-        if st.button("🔄 بازیابی حساب", use_container_width=True):
-            st.session_state.page = "recover"
-            st.rerun()
+    if st.button("🚀 ورود به TRIOS", use_container_width=True):
+        st.session_state.page = "login"
+        st.rerun()
 
     if st.button("🌌 TRIOS چیست؟", use_container_width=True):
         st.session_state.page = "about"
@@ -33,7 +44,8 @@ def show_home():
 
 
 def show_login():
-    st.header("🚀 ورود به TRIOS")
+    show_logo()
+    st.header("ورود به TRIOS")
 
     username = st.text_input("نام کاربری", key="login_username")
     password = st.text_input("رمز عبور", type="password", key="login_password")
@@ -48,13 +60,15 @@ def show_login():
             st.session_state.page = "dashboard"
             st.rerun()
 
-    if st.button("🔄 بازیابی حساب موجود", use_container_width=True):
-        st.session_state.page = "recover"
-        st.rerun()
-
-    if st.button("ساخت حساب جدید", use_container_width=True):
-        st.session_state.page = "register"
-        st.rerun()
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("🔄 بازیابی حساب موجود", use_container_width=True):
+            st.session_state.page = "recover"
+            st.rerun()
+    with col2:
+        if st.button("✨ ساخت حساب جدید", use_container_width=True):
+            st.session_state.page = "register"
+            st.rerun()
 
     if st.button("⬅️ بازگشت", use_container_width=True):
         st.session_state.page = "home"
@@ -78,8 +92,8 @@ def show_recover():
             st.session_state.page = "dashboard"
             st.rerun()
 
-    if st.button("⬅️ بازگشت", use_container_width=True):
-        st.session_state.page = "home"
+    if st.button("⬅️ بازگشت به ورود", use_container_width=True):
+        st.session_state.page = "login"
         st.rerun()
 
 
@@ -112,7 +126,8 @@ def show_dashboard():
     username = st.session_state.user
     data = user_profile(username)
 
-    st.title(f"🌌 خوش آمدی، {username}!")
+    show_logo()
+    st.title(f"خوش برگشتی، {username}! 👋")
     st.caption("آزمایشگاه شخصی TRIOS")
 
     col1, col2, col3 = st.columns(3)
@@ -125,20 +140,54 @@ def show_dashboard():
             st.session_state.page = "report"
             st.rerun()
     with col3:
-        if st.button("🌌 درباره TRIOS", use_container_width=True):
-            st.session_state.page = "about"
+        if st.button("👤 پروفایل", use_container_width=True):
+            st.session_state.page = "profile"
             st.rerun()
 
     st.divider()
-    st.subheader("حساب کاربری")
+    st.subheader("وضعیت حساب")
     st.write(f"**سطح:** {data['level']}")
     st.write(f"**تعداد تلاش‌ها:** {data['total_attempts']}")
     st.write(f"**دقت:** {data['accuracy']}%")
+
+
+def show_profile():
+    username = st.session_state.user
+    data = user_profile(username)
+
+    st.header("👤 پروفایل")
+    st.write(f"**نام کاربری:** {data['username']}")
+    st.write(f"**سطح:** {data['level']}")
+    st.write(f"**تعداد تلاش‌ها:** {data['total_attempts']}")
+    st.write(f"**پاسخ‌های درست:** {data['correct_answers']}")
+    st.write(f"**دقت:** {data['accuracy']}%")
+
+    st.divider()
+    st.subheader("مدیریت حساب")
 
     if st.button("🚪 خروج از این دستگاه", use_container_width=True):
         logout_user(username)
         st.session_state.pop("user", None)
         st.session_state.page = "home"
+        st.rerun()
+
+    st.divider()
+    st.subheader("حذف حساب")
+    st.warning("حذف حساب دائمی است و اطلاعات ذخیره‌شده‌ی این حساب را پاک می‌کند.")
+    confirm_delete = st.checkbox("می‌خواهم حسابم را برای همیشه حذف کنم.")
+
+    if st.button("🗑️ حذف دائمی حساب", use_container_width=True):
+        if not confirm_delete:
+            st.error("برای حذف حساب، ابتدا تأیید حذف را فعال کن.")
+        elif delete_user(username):
+            st.session_state.pop("user", None)
+            st.session_state.page = "home"
+            st.rerun()
+        else:
+            st.error("حساب پیدا نشد.")
+
+    if st.button("⬅️ بازگشت به داشبورد", use_container_width=True):
+        st.session_state.page = "dashboard"
         st.rerun()
 
 
@@ -177,15 +226,31 @@ def show_report():
 
 
 def show_about():
-    st.header("🌌 TRIOS چیست؟")
+    show_logo()
+    st.header("TRIOS چیست؟")
     st.write(
-        "TRIOS یک سامانه برای شبیه‌سازی و مطالعه سیستم‌های فیزیکی چندجسمی "
-        "با تمرکز بر مسئله سه‌جسمی است."
+        "TRIOS یک سامانه برای شبیه‌سازی، مشاهده و مطالعه‌ی سیستم‌های فیزیکی چندجسمی "
+        "با تمرکز بر مسئله‌ی سه‌جسمی است. هدف TRIOS فقط نمایش حرکت چند جرم نیست؛ "
+        "بلکه فراهم کردن یک زیرساخت منظم برای تعریف شرایط فیزیکی، اجرای شبیه‌سازی، "
+        "اندازه‌گیری نتایج و بررسی علمی آن‌هاست."
     )
     st.write(
-        "هسته فیزیک، شبیه‌سازی، پیکربندی فیزیکی، قوانین انتخاب، "
-        "اجرای آزمایش و اعتبارسنجی علمی از رابط کاربری جدا نگه داشته شده‌اند."
+        "در معماری TRIOS، هسته‌ی فیزیک مسئول قوانین و محاسبات فیزیکی است؛ "
+        "لایه‌ی شبیه‌سازی اجرای گام‌های زمانی را مدیریت می‌کند؛ پیکربندی فیزیکی "
+        "شرایط اولیه را نگه می‌دارد؛ زیرساخت آزمایش مراحل و نتایج را مدیریت می‌کند؛ "
+        "و اعتبارسنجی علمی معیارهایی مانند انرژی، تکانه، تکانه‌ی زاویه‌ای و مرکز جرم را بررسی می‌کند."
     )
+    st.write(
+        "این جداسازی باعث می‌شود رابط کاربری و بخش آموزشی مجبور نباشند منطق فیزیک را "
+        "دوباره پیاده‌سازی کنند. در نتیجه، TRIOS می‌تواند در آینده هم به‌عنوان یک ابزار "
+        "مطالعاتی و هم به‌عنوان یک محیط آموزشی تعاملی توسعه پیدا کند، بدون اینکه هسته‌ی علمی پروژه به رابط کاربری وابسته شود."
+    )
+    st.write(
+        "TRIOS همچنین برای آزمایش‌های تکرارپذیر طراحی شده است؛ یعنی شرایط فیزیکی، "
+        "اجرای شبیه‌سازی، اندازه‌گیری‌ها و اعتبارسنجی می‌توانند از هم تفکیک شوند و "
+        "نتایج قابل بررسی و مقایسه باشند."
+    )
+    st.info("فعلاً تمرکز پروژه روی تکمیل زیرساخت و معماری است؛ آزمایش‌های آموزشی واقعی در این مرحله ساخته نشده‌اند.")
 
     if st.button("⬅️ بازگشت", use_container_width=True):
         st.session_state.page = (
@@ -197,11 +262,17 @@ def show_about():
 if "page" not in st.session_state:
     st.session_state.page = "home"
 
+if "user" not in st.session_state:
+    restored = restore_user_session()
+    if restored:
+        st.session_state.user = restored["username"]
+        st.session_state.page = "dashboard"
+
 if "user" in st.session_state:
     if st.session_state.page in {"home", "login", "register", "recover"}:
         st.session_state.page = "dashboard"
 else:
-    if st.session_state.page in {"dashboard", "lab", "report"}:
+    if st.session_state.page in {"dashboard", "lab", "report", "profile"}:
         st.session_state.page = "home"
 
 
@@ -217,6 +288,8 @@ elif page == "register":
     show_register()
 elif page == "dashboard":
     show_dashboard()
+elif page == "profile":
+    show_profile()
 elif page == "lab":
     show_lab()
 elif page == "report":
