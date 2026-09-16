@@ -1,12 +1,14 @@
 import pytest
 
 from experiment_definition import ExperimentDefinition
-from parameter_rules import SelectionRules
-from physical_configuration import StagePhysicalConfiguration
+from experiment_infrastructure import Experiment
+from parameter_rules import ParameterRule, SelectionRules
+from physical_configuration import BodyPhysicalConfiguration, StagePhysicalConfiguration
 
 
 def make_configuration():
     configuration = StagePhysicalConfiguration("stage-1")
+    configuration.add_body(BodyPhysicalConfiguration("A", 10.0))
     return configuration
 
 
@@ -34,7 +36,31 @@ def test_experiment_definition_builds_stage():
     stage = definition.stage()
 
     assert stage.name == "test"
-    assert stage.physical_configuration is configuration
+    assert stage.physical_configuration is not configuration
+    assert stage.physical_configuration.get_body("A").mass == 10.0
+
+
+def test_experiment_definition_applies_selections_when_building_stage():
+    configuration = make_configuration()
+    rules = SelectionRules()
+    rules.add_rule(ParameterRule("A.mass", True, 10.0, 5.0, 20.0, 5.0))
+    definition = ExperimentDefinition("test", configuration, rules)
+
+    stage = definition.stage({"A.mass": 15.0})
+
+    assert stage.physical_configuration.get_body("A").mass == 15.0
+    assert configuration.get_body("A").mass == 10.0
+
+
+def test_experiment_definition_builds_experiment():
+    definition = ExperimentDefinition("test", make_configuration())
+
+    experiment = definition.build_experiment()
+
+    assert isinstance(experiment, Experiment)
+    assert experiment.name == "test"
+    assert len(experiment) == 1
+    assert experiment.stages()[0].name == "test"
 
 
 def test_experiment_definition_validates_inputs():
