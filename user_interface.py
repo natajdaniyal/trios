@@ -5,9 +5,7 @@ an interface can call, so a web interface does not need to reproduce the
 console menu or depend on numeric menu choices.
 """
 
-from experiment import run_test
 from tools.explorer import Profile
-from tools.report import Report
 
 
 def user_profile(username):
@@ -21,14 +19,6 @@ def user_profile(username):
 def user_report(username):
     """Return the stored report data for an existing user."""
     return user_profile(username)
-
-
-def run_user_experiment(username):
-    """Run the existing compatibility experiment for a user."""
-    profile = Profile(username)
-    if not profile.exists():
-        raise ValueError("User account does not exist.")
-    return run_test(profile)
 
 
 def logout_user(username):
