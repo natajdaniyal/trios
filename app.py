@@ -1,7 +1,6 @@
 import streamlit as st
 
 from user_interface import (
-    authenticate_user,
     create_user,
     delete_user,
     logout_user,
@@ -35,7 +34,7 @@ def show_home():
     st.write("به آزمایشگاه TRIOS خوش آمدی.")
 
     if st.button("🚀 ورود به TRIOS", use_container_width=True):
-        st.session_state.page = "login"
+        st.session_state.page = "entry"
         st.rerun()
 
     if st.button("🌌 TRIOS چیست؟", use_container_width=True):
@@ -43,33 +42,18 @@ def show_home():
         st.rerun()
 
 
-def show_login():
+def show_entry():
     show_logo()
     st.header("ورود به TRIOS")
+    st.write("حساب خودت را بازیابی کن یا یک حساب جدید بساز.")
 
-    username = st.text_input("نام کاربری", key="login_username")
-    password = st.text_input("رمز عبور", type="password", key="login_password")
+    if st.button("🔄 بازیابی حساب موجود", use_container_width=True):
+        st.session_state.page = "recover"
+        st.rerun()
 
-    if st.button("ورود", use_container_width=True):
-        try:
-            data = authenticate_user(username, password)
-        except ValueError as exc:
-            st.error(str(exc))
-        else:
-            st.session_state.user = data["username"]
-            st.session_state.welcome_message = f"خوش برگشتی، {data['username']}! 👋"
-            st.session_state.page = "dashboard"
-            st.rerun()
-
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("🔄 بازیابی حساب موجود", use_container_width=True):
-            st.session_state.page = "recover"
-            st.rerun()
-    with col2:
-        if st.button("✨ ساخت حساب جدید", use_container_width=True):
-            st.session_state.page = "register"
-            st.rerun()
+    if st.button("✨ ساخت حساب جدید", use_container_width=True):
+        st.session_state.page = "register"
+        st.rerun()
 
     if st.button("⬅️ بازگشت", use_container_width=True):
         st.session_state.page = "home"
@@ -94,8 +78,8 @@ def show_recover():
             st.session_state.page = "dashboard"
             st.rerun()
 
-    if st.button("⬅️ بازگشت به ورود", use_container_width=True):
-        st.session_state.page = "login"
+    if st.button("⬅️ بازگشت", use_container_width=True):
+        st.session_state.page = "entry"
         st.rerun()
 
 
@@ -120,8 +104,8 @@ def show_register():
                 st.session_state.page = "dashboard"
                 st.rerun()
 
-    if st.button("⬅️ بازگشت به ورود", use_container_width=True):
-        st.session_state.page = "login"
+    if st.button("⬅️ بازگشت", use_container_width=True):
+        st.session_state.page = "entry"
         st.rerun()
 
 
@@ -269,7 +253,7 @@ if "user" not in st.session_state:
         st.session_state.page = "dashboard"
 
 if "user" in st.session_state:
-    if st.session_state.page in {"home", "login", "register", "recover"}:
+    if st.session_state.page in {"home", "entry", "register", "recover"}:
         st.session_state.page = "dashboard"
 else:
     if st.session_state.page in {"dashboard", "lab", "report", "profile"}:
@@ -280,8 +264,8 @@ page = st.session_state.page
 
 if page == "home":
     show_home()
-elif page == "login":
-    show_login()
+elif page == "entry":
+    show_entry()
 elif page == "recover":
     show_recover()
 elif page == "register":
