@@ -55,7 +55,7 @@ def _subprocess_environment():
 
     # Keep the project's existing flat-import architecture available when
     # custom tests are launched as independent Python processes.
-    project_root = TEST_FOLDER.parent
+    project_root = TEST_FOLDER.parent.resolve()
     python_paths = [
         project_root,
         project_root / "core",
@@ -65,7 +65,7 @@ def _subprocess_environment():
     ]
 
     existing_pythonpath = env.get("PYTHONPATH")
-    paths = [str(path) for path in python_paths]
+    paths = [str(path.resolve()) for path in python_paths]
 
     if existing_pythonpath:
         paths.append(existing_pythonpath)
@@ -73,6 +73,30 @@ def _subprocess_environment():
     env["PYTHONPATH"] = os.pathsep.join(paths)
 
     return env
+
+
+def _subprocess_command(test_file):
+    """Run a custom test with project paths injected into that Python process."""
+
+    project_root = str(TEST_FOLDER.parent.resolve())
+    core_path = str((TEST_FOLDER.parent / "core").resolve())
+    simulation_path = str((TEST_FOLDER.parent / "simulation").resolve())
+    validation_path = str((TEST_FOLDER.parent / "validation").resolve())
+    tools_path = str((TEST_FOLDER.parent / "tools").resolve())
+
+    bootstrap = (
+        "import runpy, sys; "
+        f"sys.path[:0] = {project_root!r}, {core_path!r}, "
+        f"{simulation_path!r}, {validation_path!r}, {tools_path!r}; "
+        "runpy.run_path(sys.argv[1], run_name='__main__')"
+    )
+
+    return [
+        sys.executable,
+        "-c",
+        bootstrap,
+        str(test_file),
+    ]
 
 
 def run_custom_test(test_file):
@@ -85,10 +109,7 @@ def run_custom_test(test_file):
     """
 
     result = subprocess.run(
-        [
-            sys.executable,
-            str(test_file),
-        ],
+        _subprocess_command(test_file),
         cwd=TEST_FOLDER.parent,
         env=_subprocess_environment(),
         encoding="utf-8",
@@ -119,10 +140,7 @@ def run_custom_test_with_result(test_file, reporter):
     start_time = time.perf_counter()
 
     result = subprocess.run(
-        [
-            sys.executable,
-            str(test_file),
-        ],
+        _subprocess_command(test_file),
         cwd=TEST_FOLDER.parent,
         env=_subprocess_environment(),
         encoding="utf-8",
