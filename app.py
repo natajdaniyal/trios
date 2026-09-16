@@ -14,18 +14,7 @@ st.set_page_config(page_title="TRIOS", page_icon="🪐", layout="wide")
 
 
 def show_logo():
-    st.markdown(
-        """
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
-            <div style="font-size:42px;line-height:1;">◉</div>
-            <div>
-                <div style="font-size:34px;font-weight:700;line-height:1.1;">TRIOS</div>
-                <div style="font-size:14px;opacity:.7;">Three-Body Research & Interactive Orbit Simulation</div>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    st.image("assets/trios_logo.png", width=180)
 
 
 def show_home():
