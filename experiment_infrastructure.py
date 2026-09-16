@@ -1,23 +1,8 @@
 """
 Experiment Infrastructure Layer
 
-Purpose
--------
-Provide the generic "skeleton" for experiments:
-
-    Experiment
-        -> ExperimentStage (one or more)
-            -> StagePhysicalConfiguration (from the Physical
-               Configuration layer)
-
-and, separately, a minimal container for the outcome of running an
-experiment:
-
-    ExperimentResult
-
-This layer defines experiment STRUCTURE only. It intentionally does
-NOT know about the Physics Core, Simulation execution, learner
-predictions, scoring, rewards, educational logic, or GUI behavior.
+Defines experiment structure and generic result containers. It does not
+know about physics, simulation execution, learner behavior, or GUI logic.
 """
 
 from measurement import MeasurementSet
@@ -79,16 +64,19 @@ class Experiment:
 
 
 class ExperimentResult:
-    """Container for generic experiment data and measured values."""
+    """Container for generic experiment data, measurements, and validations."""
 
-    def __init__(self, data=None, measurements=None):
+    def __init__(self, data=None, measurements=None, validations=None):
         self.data = data
         self.measurements = (
             MeasurementSet() if measurements is None else measurements
         )
+        self.validations = {} if validations is None else validations
 
         if not isinstance(self.measurements, MeasurementSet):
             raise TypeError("measurements must be a MeasurementSet instance.")
+        if not isinstance(self.validations, dict):
+            raise TypeError("validations must be a dict instance.")
 
     def add_measurement(self, name, value):
         return self.measurements.add(name, value)
@@ -99,8 +87,24 @@ class ExperimentResult:
     def has_measurement(self, name):
         return self.measurements.has(name)
 
+    def add_validation(self, name, value):
+        if not name:
+            raise ValueError("Validation name cannot be empty.")
+        if name in self.validations:
+            raise ValueError(f"Validation already exists: {name!r}.")
+
+        self.validations[name] = value
+        return value
+
+    def get_validation(self, name):
+        return self.validations[name]
+
+    def has_validation(self, name):
+        return name in self.validations
+
     def __repr__(self):
         return (
             f"ExperimentResult(data={self.data!r}, "
-            f"measurements={self.measurements!r})"
+            f"measurements={self.measurements!r}, "
+            f"validations={self.validations!r})"
         )
