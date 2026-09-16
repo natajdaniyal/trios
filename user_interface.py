@@ -16,6 +16,38 @@ def user_profile(username):
     return profile.load()
 
 
+def authenticate_user(username, password):
+    """Authenticate an existing user and return profile data."""
+    username = username.strip()
+    if not username:
+        raise ValueError("Username cannot be empty.")
+    if password is None or password == "":
+        raise ValueError("Password cannot be empty.")
+
+    profile = Profile(username)
+    if not profile.exists():
+        raise ValueError("User account does not exist.")
+    if not profile.check_password(password):
+        raise ValueError("Incorrect password.")
+
+    return profile.load()
+
+
+def create_user(username, password):
+    """Create a new user account and return its stored profile data."""
+    username = username.strip()
+    if not username:
+        raise ValueError("Username cannot be empty.")
+    if password is None or password == "":
+        raise ValueError("Password cannot be empty.")
+
+    profile = Profile(username)
+    if not profile.create(password):
+        raise ValueError("User account already exists.")
+
+    return profile.load()
+
+
 def user_report(username):
     """Return the stored report data for an existing user."""
     return user_profile(username)
