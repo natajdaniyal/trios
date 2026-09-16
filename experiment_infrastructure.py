@@ -10,43 +10,22 @@ Provide the generic "skeleton" for experiments:
             -> StagePhysicalConfiguration (from the Physical
                Configuration layer)
 
-and, separately, a minimal placeholder for the outcome of running an
+and, separately, a minimal container for the outcome of running an
 experiment:
 
     ExperimentResult
 
 This layer defines experiment STRUCTURE only. It intentionally does
-NOT know about:
-
-    - the Physics Core (Body, ForceEngine, PhysicsEngine, ...),
-    - Simulation execution,
-    - learner predictions,
-    - scoring, rewards, or correctness evaluation,
-    - educational/validation logic,
-    - the GUI or any game layer,
-    - parameter editability rules (Parameter / Selection Rules layer).
-
-Experiment Definition (what an experiment IS) is deliberately kept
-separate from Experiment Execution (what happens when it RUNS).
-This module only implements Experiment Definition / Infrastructure.
+NOT know about the Physics Core, Simulation execution, learner
+predictions, scoring, rewards, educational logic, or GUI behavior.
 """
 
+from measurement import MeasurementSet
 from physical_configuration import StagePhysicalConfiguration
 
 
 class ExperimentStage:
-    """
-    A single stage of an experiment.
-
-    Holds exactly:
-
-        - name
-        - physical_configuration (a StagePhysicalConfiguration)
-
-    This class does not execute simulations, does not compute
-    physics, does not evaluate predictions, and has no notion of
-    scoring, reward, or GUI.
-    """
+    """A single stage containing a name and physical configuration."""
 
     def __init__(self, name, physical_configuration):
         if not isinstance(physical_configuration, StagePhysicalConfiguration):
@@ -67,31 +46,13 @@ class ExperimentStage:
 
 
 class Experiment:
-    """
-    Represents an experiment as an ordered collection of stages.
-
-    Holds exactly:
-
-        - name
-        - stages (ordered list of ExperimentStage)
-
-    This class does not know about the Physics Engine, does not run
-    simulations, does not produce scientific results, does not check
-    predictions, and has no scoring, reward, or GUI concerns.
-    """
+    """Represents an experiment as an ordered collection of stages."""
 
     def __init__(self, name):
         self.name = name
         self._stages = []
 
     def add_stage(self, stage):
-        """
-        Add an ExperimentStage to this experiment.
-
-        Raises:
-            TypeError: if stage is not an ExperimentStage instance.
-        """
-
         if not isinstance(stage, ExperimentStage):
             raise TypeError(
                 "add_stage expects an ExperimentStage instance, got "
@@ -99,17 +60,12 @@ class Experiment:
             )
 
         self._stages.append(stage)
-
         return stage
 
     def get_stage(self, index):
-        """Return the ExperimentStage at index."""
-
         return self._stages[index]
 
     def stages(self):
-        """Return the list of stages, in order."""
-
         return list(self._stages)
 
     def __len__(self):
@@ -123,17 +79,28 @@ class Experiment:
 
 
 class ExperimentResult:
-    """
-    A minimal, independent placeholder for experiment outcome data.
+    """Container for generic experiment data and measured values."""
 
-    The precise semantics of an experiment result (scientific
-    conclusions, learner outcomes, scoring, etc.) have not been
-    defined yet, so this class intentionally holds only a single,
-    generic slot for result data and imposes no structure on it.
-    """
-
-    def __init__(self, data=None):
+    def __init__(self, data=None, measurements=None):
         self.data = data
+        self.measurements = (
+            MeasurementSet() if measurements is None else measurements
+        )
+
+        if not isinstance(self.measurements, MeasurementSet):
+            raise TypeError("measurements must be a MeasurementSet instance.")
+
+    def add_measurement(self, name, value):
+        return self.measurements.add(name, value)
+
+    def get_measurement(self, name):
+        return self.measurements.get(name)
+
+    def has_measurement(self, name):
+        return self.measurements.has(name)
 
     def __repr__(self):
-        return f"ExperimentResult(data={self.data!r})"
+        return (
+            f"ExperimentResult(data={self.data!r}, "
+            f"measurements={self.measurements!r})"
+        )
