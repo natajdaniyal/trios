@@ -33,6 +33,13 @@ def authenticate_user(username, password):
     return profile.load()
 
 
+def recover_user(username, password):
+    """Recover an existing account and return its stored profile data."""
+    data = authenticate_user(username, password)
+    Profile(data["username"]).create_session()
+    return data
+
+
 def create_user(username, password):
     """Create a new user account and return its stored profile data."""
     username = username.strip()
