@@ -1,6 +1,12 @@
 import streamlit as st
 
-from user_interface import authenticate_user, create_user, recover_user, user_profile
+from user_interface import (
+    authenticate_user,
+    create_user,
+    logout_user,
+    recover_user,
+    user_profile,
+)
 
 
 st.set_page_config(page_title="TRIOS", page_icon="🌌", layout="wide")
@@ -130,6 +136,7 @@ def show_dashboard():
     st.write(f"**دقت:** {data['accuracy']}%")
 
     if st.button("🚪 خروج از این دستگاه", use_container_width=True):
+        logout_user(username)
         st.session_state.pop("user", None)
         st.session_state.page = "home"
         st.rerun()
