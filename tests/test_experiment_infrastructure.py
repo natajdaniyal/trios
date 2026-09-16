@@ -20,6 +20,8 @@ from experiment_infrastructure import (
     ExperimentResult,
 )
 
+from measurement import MeasurementSet
+
 
 def make_body(name="A", mass=10):
     return BodyPhysicalConfiguration(
@@ -135,12 +137,23 @@ def test_experiment_result_creation():
     result = ExperimentResult()
 
     assert result.data is None
+    assert isinstance(result.measurements, MeasurementSet)
+    assert len(result.measurements) == 0
 
 
 def test_experiment_result_holds_data():
     result = ExperimentResult(data={"anything": "goes"})
 
     assert result.data == {"anything": "goes"}
+
+
+def test_experiment_result_adds_and_reads_measurement():
+    result = ExperimentResult()
+
+    result.add_measurement("energy", 12.5)
+
+    assert result.has_measurement("energy")
+    assert result.get_measurement("energy") == 12.5
 
 
 # --------------------------------------------------------------
