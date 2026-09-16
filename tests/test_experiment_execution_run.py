@@ -54,6 +54,29 @@ def test_run_experiment_records_final_body_state():
     assert body["velocity_y"] == pytest.approx(-2)
 
 
+def test_run_experiment_collects_measurements():
+    experiment = Experiment("test-experiment")
+    experiment.add_stage(ExperimentStage("stage-1", make_configuration(make_body("A"))))
+
+    result = run_experiment(
+        experiment,
+        steps_per_stage=0,
+        measurements=[lambda simulation: ("body_count", len(simulation.bodies))],
+    )
+
+    assert result.get_measurement("body_count") == 1
+
+
+def test_run_experiment_rejects_invalid_measurements():
+    experiment = Experiment("test-experiment")
+    experiment.add_stage(ExperimentStage("stage-1", make_configuration(make_body("A"))))
+
+    with pytest.raises(TypeError):
+        run_experiment(experiment, measurements="energy")
+    with pytest.raises(TypeError):
+        run_experiment(experiment, measurements=["energy"])
+
+
 def test_run_experiment_rejects_invalid_step_count():
     experiment = Experiment("test-experiment")
     with pytest.raises(TypeError):
