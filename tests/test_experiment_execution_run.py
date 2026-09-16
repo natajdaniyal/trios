@@ -3,6 +3,7 @@ import pytest
 from experiment_infrastructure import Experiment, ExperimentResult, ExperimentStage
 from physical_configuration import BodyPhysicalConfiguration, StagePhysicalConfiguration
 from experiment_execution import run_experiment
+from system_validation import ConservationValidator
 
 
 def make_configuration(*bodies):
@@ -67,6 +68,28 @@ def test_run_experiment_collects_measurements():
     assert result.get_measurement("body_count") == 1
 
 
+def test_run_experiment_collects_validation_results():
+    experiment = Experiment("test-experiment")
+    experiment.add_stage(ExperimentStage("stage-1", make_configuration(make_body("A"))))
+
+    result = run_experiment(
+        experiment,
+        steps_per_stage=0,
+        validators=[
+            lambda initial, final: (
+                "conservation",
+                ConservationValidator().compare(initial, final),
+            )
+        ],
+    )
+
+    validation = result.get_validation("conservation")
+    assert validation["energy_error"] == pytest.approx(0)
+    assert validation["momentum_error"] == pytest.approx(0)
+    assert validation["angular_momentum_error"] == pytest.approx(0)
+    assert validation["center_of_mass_error"] == pytest.approx(0)
+
+
 def test_run_experiment_rejects_invalid_measurements():
     experiment = Experiment("test-experiment")
     experiment.add_stage(ExperimentStage("stage-1", make_configuration(make_body("A"))))
@@ -75,6 +98,16 @@ def test_run_experiment_rejects_invalid_measurements():
         run_experiment(experiment, measurements="energy")
     with pytest.raises(TypeError):
         run_experiment(experiment, measurements=["energy"])
+
+
+def test_run_experiment_rejects_invalid_validators():
+    experiment = Experiment("test-experiment")
+    experiment.add_stage(ExperimentStage("stage-1", make_configuration(make_body("A"))))
+
+    with pytest.raises(TypeError):
+        run_experiment(experiment, validators="energy")
+    with pytest.raises(TypeError):
+        run_experiment(experiment, validators=["energy"])
 
 
 def test_run_experiment_rejects_invalid_step_count():
