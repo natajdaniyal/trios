@@ -15,17 +15,7 @@ def simulations_from_experiment(
     time_step=1,
     force_engine=None,
 ):
-    """
-    Create one independent SimulationEngine for each experiment stage.
-
-    Stages are processed in their existing order. Each simulation is
-    initialized only from that stage's physical configuration.
-
-    This function prepares simulations; it does not run them. The
-    number of simulation steps and result semantics are intentionally
-    left undefined until the experiment execution contract is defined.
-    """
-
+    """Create one independent SimulationEngine for each experiment stage."""
     if not isinstance(experiment, Experiment):
         raise TypeError(
             "simulations_from_experiment expects an Experiment instance, "
@@ -33,7 +23,6 @@ def simulations_from_experiment(
         )
 
     simulations = []
-
     for stage in experiment.stages():
         simulations.append(
             simulation_from_stage(
@@ -46,23 +35,38 @@ def simulations_from_experiment(
     return simulations
 
 
+def _stage_result(stage, simulation):
+    return {
+        "stage_name": stage.name,
+        "time": simulation.time,
+        "bodies": [
+            {
+                "name": body.name,
+                "mass": body.mass,
+                "position_x": body.position.x,
+                "position_y": body.position.y,
+                "velocity_x": body.velocity.x,
+                "velocity_y": body.velocity.y,
+            }
+            for body in simulation.bodies
+        ],
+    }
+
+
 def run_experiment(
     experiment,
     steps_per_stage=1,
     time_step=1,
     force_engine=None,
+    measurements=None,
 ):
+    """Execute experiment stages and optionally collect measured values.
+
+    ``measurements`` is an optional iterable of callables. Each callable
+    receives the completed stage simulation and must return ``(name, value)``.
+    Measurement storage remains generic; this function does not define
+    scientific metrics itself.
     """
-    Execute each experiment stage independently for a fixed number of steps.
-
-    The returned ExperimentResult contains one record per stage. Each
-    record stores the stage name, final simulation time, and the final
-    physical state of each body.
-
-    This function does not evaluate predictions, calculate scores or
-    rewards, apply educational rules, or persist experiment data.
-    """
-
     if not isinstance(experiment, Experiment):
         raise TypeError(
             "run_experiment expects an Experiment instance, "
@@ -71,9 +75,17 @@ def run_experiment(
 
     if not isinstance(steps_per_stage, int) or isinstance(steps_per_stage, bool):
         raise TypeError("steps_per_stage must be an integer.")
-
     if steps_per_stage < 0:
         raise ValueError("steps_per_stage must be >= 0.")
+    if measurements is not None:
+        if isinstance(measurements, (str, bytes)):
+            raise TypeError("measurements must be an iterable of callables.")
+        try:
+            measurements = list(measurements)
+        except TypeError as exc:
+            raise TypeError("measurements must be an iterable of callables.") from exc
+        if not all(callable(measurement) for measurement in measurements):
+            raise TypeError("measurements must contain only callables.")
 
     simulations = simulations_from_experiment(
         experiment,
@@ -81,32 +93,19 @@ def run_experiment(
         force_engine=force_engine,
     )
 
-    stage_results = []
+    result = ExperimentResult(
+        data={
+            "experiment_name": experiment.name,
+            "stages": [],
+        }
+    )
 
     for stage, simulation in zip(experiment.stages(), simulations):
         simulation.run(steps_per_stage)
+        result.data["stages"].append(_stage_result(stage, simulation))
 
-        stage_results.append(
-            {
-                "stage_name": stage.name,
-                "time": simulation.time,
-                "bodies": [
-                    {
-                        "name": body.name,
-                        "mass": body.mass,
-                        "position_x": body.position.x,
-                        "position_y": body.position.y,
-                        "velocity_x": body.velocity.x,
-                        "velocity_y": body.velocity.y,
-                    }
-                    for body in simulation.bodies
-                ],
-            }
-        )
+        for measurement in measurements or []:
+            name, value = measurement(simulation)
+            result.add_measurement(name, value)
 
-    return ExperimentResult(
-        data={
-            "experiment_name": experiment.name,
-            "stages": stage_results,
-        }
-    )
+    return result
