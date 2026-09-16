@@ -4,6 +4,7 @@ import subprocess
 
 
 TEST_FOLDER = os.path.dirname(__file__)
+PROJECT_ROOT = os.path.dirname(TEST_FOLDER)
 
 
 TESTS = [
@@ -26,6 +27,28 @@ TESTS = [
     "test_magnetic_behavior.py",
     "test_magnet_physics_integration.py",
 ]
+
+
+def _subprocess_environment():
+    """Build the environment needed by legacy standalone project tests."""
+
+    env = os.environ.copy()
+    env["PYTHONIOENCODING"] = "utf-8"
+
+    python_paths = [
+        PROJECT_ROOT,
+        os.path.join(PROJECT_ROOT, "core"),
+        os.path.join(PROJECT_ROOT, "simulation"),
+        os.path.join(PROJECT_ROOT, "validation"),
+        os.path.join(PROJECT_ROOT, "tools"),
+    ]
+
+    existing_pythonpath = env.get("PYTHONPATH")
+    if existing_pythonpath:
+        python_paths.append(existing_pythonpath)
+
+    env["PYTHONPATH"] = os.pathsep.join(python_paths)
+    return env
 
 
 def run_full_project_test():
@@ -52,10 +75,8 @@ def run_full_project_test():
                 sys.executable,
                 os.path.join(TEST_FOLDER, test)
             ],
-            env={
-                **os.environ,
-                "PYTHONIOENCODING": "utf-8"
-            },
+            cwd=PROJECT_ROOT,
+            env=_subprocess_environment(),
             encoding="utf-8",
             errors="replace"
         )
