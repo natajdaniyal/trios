@@ -57,6 +57,7 @@ def show_login():
             st.error(str(exc))
         else:
             st.session_state.user = data["username"]
+            st.session_state.welcome_message = f"خوش برگشتی، {data['username']}! 👋"
             st.session_state.page = "dashboard"
             st.rerun()
 
@@ -89,6 +90,7 @@ def show_recover():
             st.error(str(exc))
         else:
             st.session_state.user = data["username"]
+            st.session_state.welcome_message = f"خوش برگشتی، {data['username']}! 👋"
             st.session_state.page = "dashboard"
             st.rerun()
 
@@ -114,6 +116,7 @@ def show_register():
                 st.error(str(exc))
             else:
                 st.session_state.user = data["username"]
+                st.session_state.welcome_message = f"خوش اومدی، {data['username']}! 🎉"
                 st.session_state.page = "dashboard"
                 st.rerun()
 
@@ -124,10 +127,12 @@ def show_register():
 
 def show_dashboard():
     username = st.session_state.user
-    data = user_profile(username)
 
     show_logo()
-    st.title(f"خوش برگشتی، {username}! 👋")
+    greeting = st.session_state.pop("welcome_message", None)
+    if greeting is None:
+        greeting = f"خوش برگشتی، {username}! 👋"
+    st.title(greeting)
     st.caption("آزمایشگاه شخصی TRIOS")
 
     col1, col2, col3 = st.columns(3)
@@ -144,23 +149,14 @@ def show_dashboard():
             st.session_state.page = "profile"
             st.rerun()
 
-    st.divider()
-    st.subheader("وضعیت حساب")
-    st.write(f"**سطح:** {data['level']}")
-    st.write(f"**تعداد تلاش‌ها:** {data['total_attempts']}")
-    st.write(f"**دقت:** {data['accuracy']}%")
-
 
 def show_profile():
     username = st.session_state.user
     data = user_profile(username)
 
     st.header("👤 پروفایل")
+    st.subheader("اطلاعات شخصی")
     st.write(f"**نام کاربری:** {data['username']}")
-    st.write(f"**سطح:** {data['level']}")
-    st.write(f"**تعداد تلاش‌ها:** {data['total_attempts']}")
-    st.write(f"**پاسخ‌های درست:** {data['correct_answers']}")
-    st.write(f"**دقت:** {data['accuracy']}%")
 
     st.divider()
     st.subheader("مدیریت حساب")
@@ -168,6 +164,7 @@ def show_profile():
     if st.button("🚪 خروج از این دستگاه", use_container_width=True):
         logout_user(username)
         st.session_state.pop("user", None)
+        st.session_state.pop("welcome_message", None)
         st.session_state.page = "home"
         st.rerun()
 
@@ -181,6 +178,7 @@ def show_profile():
             st.error("برای حذف حساب، ابتدا تأیید حذف را فعال کن.")
         elif delete_user(username):
             st.session_state.pop("user", None)
+            st.session_state.pop("welcome_message", None)
             st.session_state.page = "home"
             st.rerun()
         else:
@@ -205,8 +203,10 @@ def show_lab():
 def show_report():
     data = user_profile(st.session_state.user)
     st.header("📊 گزارش من")
+
+    st.subheader("خلاصه عملکرد")
     st.write(f"**سطح:** {data['level']}")
-    st.write(f"**تعداد تلاش‌ها:** {data['total_attempts']}")
+    st.write(f"**تعداد آزمایش‌ها / تلاش‌ها:** {data['total_attempts']}")
     st.write(f"**پاسخ‌های درست:** {data['correct_answers']}")
     st.write(f"**دقت:** {data['accuracy']}%")
 
