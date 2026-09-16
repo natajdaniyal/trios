@@ -17,7 +17,7 @@ def user_profile(username):
 
 
 def authenticate_user(username, password):
-    """Authenticate an existing user and return profile data."""
+    """Authenticate an existing user, start its session, and return profile data."""
     username = username.strip()
     if not username:
         raise ValueError("Username cannot be empty.")
@@ -30,18 +30,17 @@ def authenticate_user(username, password):
     if not profile.check_password(password):
         raise ValueError("Incorrect password.")
 
+    profile.create_session()
     return profile.load()
 
 
 def recover_user(username, password):
-    """Recover an existing account and return its stored profile data."""
-    data = authenticate_user(username, password)
-    Profile(data["username"]).create_session()
-    return data
+    """Recover an existing account and start its session."""
+    return authenticate_user(username, password)
 
 
 def create_user(username, password):
-    """Create a new user account and return its stored profile data."""
+    """Create a new user account, start its session, and return profile data."""
     username = username.strip()
     if not username:
         raise ValueError("Username cannot be empty.")
@@ -52,6 +51,21 @@ def create_user(username, password):
     if not profile.create(password):
         raise ValueError("User account already exists.")
 
+    profile.create_session()
+    return profile.load()
+
+
+def restore_user_session():
+    """Return the stored session's profile data, or None when no session exists."""
+    username = Profile("").get_session()
+    if not username:
+        return None
+
+    profile = Profile(username)
+    if not profile.exists():
+        profile.clear_session()
+        return None
+
     return profile.load()
 
 
@@ -61,7 +75,7 @@ def user_report(username):
 
 
 def logout_user(username):
-    """Clear the local console session for a user."""
+    """Clear the local session for a user without deleting the account."""
     profile = Profile(username)
     return profile.clear_session()
 
