@@ -45,6 +45,36 @@ def discover_tests():
     )
 
 
+def _subprocess_environment():
+    """Build the environment used by standalone Trios test subprocesses."""
+
+    env = os.environ.copy()
+
+    # Force UTF-8 for Windows subprocesses.
+    env["PYTHONIOENCODING"] = "utf-8"
+
+    # Keep the project's existing flat-import architecture available when
+    # custom tests are launched as independent Python processes.
+    project_root = TEST_FOLDER.parent
+    python_paths = [
+        project_root,
+        project_root / "core",
+        project_root / "simulation",
+        project_root / "validation",
+        project_root / "tools",
+    ]
+
+    existing_pythonpath = env.get("PYTHONPATH")
+    paths = [str(path) for path in python_paths]
+
+    if existing_pythonpath:
+        paths.append(existing_pythonpath)
+
+    env["PYTHONPATH"] = os.pathsep.join(paths)
+
+    return env
+
+
 def run_custom_test(test_file):
     """
     Execute one Trios custom test.
@@ -54,18 +84,13 @@ def run_custom_test(test_file):
         non-zero -> FAILED
     """
 
-    env = os.environ.copy()
-
-    # Force UTF-8 for Windows subprocesses.
-    env["PYTHONIOENCODING"] = "utf-8"
-
     result = subprocess.run(
         [
             sys.executable,
             str(test_file),
         ],
         cwd=TEST_FOLDER.parent,
-        env=env,
+        env=_subprocess_environment(),
         encoding="utf-8",
         errors="replace",
         capture_output=True,
@@ -93,18 +118,13 @@ def run_custom_test_with_result(test_file, reporter):
 
     start_time = time.perf_counter()
 
-    env = os.environ.copy()
-
-    # Force UTF-8 for Windows subprocesses.
-    env["PYTHONIOENCODING"] = "utf-8"
-
     result = subprocess.run(
         [
             sys.executable,
             str(test_file),
         ],
         cwd=TEST_FOLDER.parent,
-        env=env,
+        env=_subprocess_environment(),
         encoding="utf-8",
         errors="replace",
         capture_output=True,
