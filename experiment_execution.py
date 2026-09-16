@@ -1,20 +1,16 @@
 """
 Experiment execution adapter.
 
-This module connects experiment definition to simulation construction
-and execution. It does not define experiment objectives, predictions,
-scoring, rewards, editability rules, or GUI behavior.
+Connects experiment definitions to simulation construction, execution,
+measurements, and optional scientific validation.
 """
 
 from experiment_infrastructure import Experiment, ExperimentResult
 from simulation.physical_configuration_adapter import simulation_from_stage
+from validation.system_validation import PhysicalStateSnapshot
 
 
-def simulations_from_experiment(
-    experiment,
-    time_step=1,
-    force_engine=None,
-):
+def simulations_from_experiment(experiment, time_step=1, force_engine=None):
     """Create one independent SimulationEngine for each experiment stage."""
     if not isinstance(experiment, Experiment):
         raise TypeError(
@@ -22,17 +18,14 @@ def simulations_from_experiment(
             f"got {type(experiment)!r}."
         )
 
-    simulations = []
-    for stage in experiment.stages():
-        simulations.append(
-            simulation_from_stage(
-                stage,
-                time_step=time_step,
-                force_engine=force_engine,
-            )
+    return [
+        simulation_from_stage(
+            stage,
+            time_step=time_step,
+            force_engine=force_engine,
         )
-
-    return simulations
+        for stage in experiment.stages()
+    ]
 
 
 def _stage_result(stage, simulation):
@@ -53,19 +46,33 @@ def _stage_result(stage, simulation):
     }
 
 
+def _callable_list(values, name):
+    if values is None:
+        return None
+    if isinstance(values, (str, bytes)):
+        raise TypeError(f"{name} must be an iterable of callables.")
+    try:
+        values = list(values)
+    except TypeError as exc:
+        raise TypeError(f"{name} must be an iterable of callables.") from exc
+    if not all(callable(value) for value in values):
+        raise TypeError(f"{name} must contain only callables.")
+    return values
+
+
 def run_experiment(
     experiment,
     steps_per_stage=1,
     time_step=1,
     force_engine=None,
     measurements=None,
+    validators=None,
 ):
-    """Execute experiment stages and optionally collect measured values.
+    """Execute stages and optionally collect measurements and validations.
 
-    ``measurements`` is an optional iterable of callables. Each callable
-    receives the completed stage simulation and must return ``(name, value)``.
-    Measurement storage remains generic; this function does not define
-    scientific metrics itself.
+    A validator receives ``(initial_snapshot, final_snapshot)`` and must
+    return ``(name, value)``. This keeps scientific interpretation outside
+    the execution engine while giving results a stable validation container.
     """
     if not isinstance(experiment, Experiment):
         raise TypeError(
@@ -77,15 +84,9 @@ def run_experiment(
         raise TypeError("steps_per_stage must be an integer.")
     if steps_per_stage < 0:
         raise ValueError("steps_per_stage must be >= 0.")
-    if measurements is not None:
-        if isinstance(measurements, (str, bytes)):
-            raise TypeError("measurements must be an iterable of callables.")
-        try:
-            measurements = list(measurements)
-        except TypeError as exc:
-            raise TypeError("measurements must be an iterable of callables.") from exc
-        if not all(callable(measurement) for measurement in measurements):
-            raise TypeError("measurements must contain only callables.")
+
+    measurements = _callable_list(measurements, "measurements")
+    validators = _callable_list(validators, "validators")
 
     simulations = simulations_from_experiment(
         experiment,
@@ -101,11 +102,23 @@ def run_experiment(
     )
 
     for stage, simulation in zip(experiment.stages(), simulations):
+        initial_snapshot = (
+            PhysicalStateSnapshot.capture(simulation.bodies)
+            if validators
+            else None
+        )
+
         simulation.run(steps_per_stage)
         result.data["stages"].append(_stage_result(stage, simulation))
 
         for measurement in measurements or []:
             name, value = measurement(simulation)
             result.add_measurement(name, value)
+
+        if validators:
+            final_snapshot = PhysicalStateSnapshot.capture(simulation.bodies)
+            for validator in validators:
+                name, value = validator(initial_snapshot, final_snapshot)
+                result.add_validation(name, value)
 
     return result
