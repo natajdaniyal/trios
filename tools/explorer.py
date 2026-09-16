@@ -9,18 +9,19 @@ class Profile:
         self.file = f"data/{username}.json"
 
 
-    # Ø¢ÛŒØ§ Ø­Ø³Ø§Ø¨ ÙˆØ¬ÙˆØ¯ Ø¯Ø§Ø±Ø¯ØŸ
+    # آیا حساب وجود دارد؟
     def exists(self):
         return os.path.exists(self.file)
 
 
 
-    # Ø³Ø§Ø®Øª Ø­Ø³Ø§Ø¨
+    # ساخت حساب
     def create(self, password):
 
         if self.exists():
             return False
 
+        os.makedirs("data", exist_ok=True)
 
         data = {
             "username": self.username,
@@ -42,7 +43,7 @@ class Profile:
 
 
 
-    # ÙˆØ±ÙˆØ¯ Ø¨Ø§ Ø±Ù…Ø²
+    # ورود با رمز
     def check_password(self, password):
 
         if not self.exists():
@@ -55,7 +56,7 @@ class Profile:
 
 
 
-    # Ø®ÙˆØ§Ù†Ø¯Ù† Ø§Ø·Ù„Ø§Ø¹Ø§Øª
+    # خواندن اطلاعات
     def load(self):
 
         with open(
@@ -68,8 +69,10 @@ class Profile:
 
 
 
-    # Ø°Ø®ÛŒØ±Ù‡ Ø§Ø·Ù„Ø§Ø¹Ø§Øª
+    # ذخیره اطلاعات
     def save(self, data):
+
+        os.makedirs("data", exist_ok=True)
 
         with open(
             self.file,
@@ -86,7 +89,7 @@ class Profile:
 
 
 
-    # Ø«Ø¨Øª ÛŒÚ© ØªÙ„Ø§Ø´ Ø¢Ø²Ù…Ø§ÛŒØ´
+    # ثبت یک تلاش آزمایش
     def add_experiment(
             self,
             name,
@@ -139,7 +142,7 @@ class Profile:
 
 
 
-    # Ú¯Ø±ÙØªÙ† Ú¯Ø²Ø§Ø±Ø´ Ú©Ù„ÛŒ
+    # گرفتن گزارش کلی
     def get_report(self):
 
         data = self.load()
@@ -159,7 +162,7 @@ class Profile:
 
 
 
-    # Ø­Ø°Ù Ø­Ø³Ø§Ø¨
+    # حذف حساب
     def delete_account(self):
 
         if not self.exists():
@@ -175,6 +178,8 @@ class Profile:
 
         if not self.exists():
             return False
+
+        os.makedirs("data", exist_ok=True)
 
         session_data = {
             "username": self.username
@@ -196,7 +201,7 @@ class Profile:
         return True
 
 
-    # Ø¯Ø±ÛŒØ§ÙØª Session ÙØ¹Ù„ÛŒ
+    # دریافت Session فعلی
     def get_session(self):
 
         session_file = "data/session.json"
@@ -215,7 +220,7 @@ class Profile:
         return data.get("username")
 
 
-    # Ø­Ø°Ù Session Ø§ÛŒÙ† Ø¯Ø³ØªÚ¯Ø§Ù‡
+    # حذف Session این دستگاه
     def clear_session(self):
 
         session_file = "data/session.json"
