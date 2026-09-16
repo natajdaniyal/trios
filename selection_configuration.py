@@ -37,17 +37,24 @@ def configuration_from_selection(configuration, rules, selections=None):
     if not isinstance(selections, dict):
         raise TypeError("selections must be a dictionary.")
 
+    for parameter_name in selections:
+        parts = parameter_name.split(".", 1)
+        if len(parts) != 2 or parts[1] not in _PARAMETER_FIELDS:
+            raise ValueError(f"Invalid selection name '{parameter_name}'.")
+        if not configuration.has_body(parts[0]):
+            raise ValueError(f"No body named '{parts[0]}' exists in the configuration.")
+        if not rules.has_rule(parameter_name):
+            raise ValueError(f"No selection rule exists for '{parameter_name}'.")
+
     result = StagePhysicalConfiguration(stage_name=configuration.stage_name)
 
     for body in configuration.bodies():
         values = body.as_dict()
         for parameter_name, value in selections.items():
             parts = parameter_name.split(".", 1)
-            if len(parts) != 2 or parts[0] != body.name or parts[1] not in _PARAMETER_FIELDS:
+            if parts[0] != body.name:
                 continue
             rule = rules.get_rule(parameter_name)
-            if rule is None:
-                raise ValueError(f"No selection rule exists for '{parameter_name}'.")
             rule.validate(value)
             values[parts[1]] = value
 
