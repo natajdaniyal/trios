@@ -23,8 +23,8 @@ def test_physical_state_snapshot_captures_core_validation_values():
 
 
 def test_conservation_validator_reports_changes():
-    initial = PhysicalStateSnapshot((10, 2, 0), (2, 1), 3, (1, 2))
-    final = PhysicalStateSnapshot((9, 2, 0), (2.3, 1.4), 3.5, (1.3, 2.4))
+    initial = PhysicalStateSnapshot(10, (2, 1), 3, (1, 2))
+    final = PhysicalStateSnapshot(9, (2.3, 1.4), 3.5, (1.3, 2.4))
 
     result = ConservationValidator().compare(initial, final)
 
