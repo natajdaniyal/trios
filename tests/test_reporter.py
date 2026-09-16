@@ -4,6 +4,8 @@ from typing import Optional
 
 @dataclass
 class TestResult:
+    __test__ = False
+
     name: str
     status: str
     duration: Optional[float] = None
