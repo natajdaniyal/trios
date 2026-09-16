@@ -1,6 +1,7 @@
-from experiment_infrastructure import ExperimentStage
+from experiment_infrastructure import Experiment, ExperimentStage
 from parameter_rules import SelectionRules
 from physical_configuration import StagePhysicalConfiguration
+from selection_configuration import configuration_from_selection
 
 
 class ExperimentDefinition:
@@ -18,5 +19,15 @@ class ExperimentDefinition:
         self.physical_configuration = physical_configuration
         self.selection_rules = selection_rules
 
-    def stage(self):
-        return ExperimentStage(self.name, self.physical_configuration)
+    def stage(self, selections=None):
+        configuration = configuration_from_selection(
+            self.physical_configuration,
+            self.selection_rules,
+            selections,
+        )
+        return ExperimentStage(self.name, configuration)
+
+    def build_experiment(self, selections=None):
+        experiment = Experiment(self.name)
+        experiment.add_stage(self.stage(selections))
+        return experiment
