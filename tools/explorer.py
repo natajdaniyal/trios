@@ -15,7 +15,7 @@ class Profile:
 
 
 
-    # ساخت حساب
+    # ساخت حساب با سیستم داخلی TRIOS
     def create(self, password):
 
         if self.exists():
@@ -26,6 +26,38 @@ class Profile:
         data = {
             "username": self.username,
             "password": password,
+            "auth_method": "trios",
+
+            "level": 1,
+
+            "experiments": [],
+
+            "total_attempts": 0,
+            "correct_answers": 0,
+            "accuracy": 0
+        }
+
+
+        self.save(data)
+
+        return True
+
+
+    # ساخت حساب متصل به Google
+    def create_google(self, google_sub, google_email=None, google_name=None):
+
+        if self.exists():
+            return False
+
+        os.makedirs("data", exist_ok=True)
+
+        data = {
+            "username": self.username,
+            "password": None,
+            "auth_method": "google",
+            "google_sub": google_sub,
+            "google_email": google_email or "",
+            "google_name": google_name or "",
 
             "level": 1,
 
@@ -51,6 +83,9 @@ class Profile:
 
 
         data = self.load()
+
+        if data.get("auth_method", "trios") != "trios":
+            return False
 
         return data.get("password") == password
 
@@ -90,53 +125,26 @@ class Profile:
 
 
     # ثبت یک تلاش آزمایش
-    def add_experiment(
-            self,
-            name,
-            prediction,
-            result,
-            correct):
-
+    def add_experiment(self, name, prediction, result, correct):
 
         data = self.load()
 
-
         experiment = {
-
             "name": name,
-
             "prediction": prediction,
-
             "result": result,
-
             "correct": correct
         }
 
-
         data["experiments"].append(experiment)
-
-
         data["total_attempts"] += 1
 
-
-
         if correct:
-
             data["correct_answers"] += 1
 
-
-
         data["accuracy"] = round(
-            (
-                data["correct_answers"]
-                /
-                data["total_attempts"]
-            )
-            *
-            100
+            (data["correct_answers"] / data["total_attempts"]) * 100
         )
-
-
 
         self.save(data)
 
@@ -147,17 +155,11 @@ class Profile:
 
         data = self.load()
 
-
         return {
-
             "level": data["level"],
-
             "experiments": data["experiments"],
-
             "attempts": data["total_attempts"],
-
             "accuracy": data["accuracy"]
-
         }
 
 
@@ -169,7 +171,6 @@ class Profile:
             return False
 
         os.remove(self.file)
-
         self.clear_session()
 
         return True
@@ -185,23 +186,13 @@ class Profile:
             "username": self.username
         }
 
-        with open(
-            "data/session.json",
-            "w",
-            encoding="utf-8"
-        ) as f:
-
-            json.dump(
-                session_data,
-                f,
-                ensure_ascii=False,
-                indent=4
-            )
+        with open("data/session.json", "w", encoding="utf-8") as f:
+            json.dump(session_data, f, ensure_ascii=False, indent=4)
 
         return True
 
 
-    # دریافت Session فعلی
+    # دریافت Session فعلی (legacy console compatibility)
     def get_session(self):
 
         session_file = "data/session.json"
@@ -209,25 +200,19 @@ class Profile:
         if not os.path.exists(session_file):
             return None
 
-        with open(
-            session_file,
-            "r",
-            encoding="utf-8"
-        ) as f:
-
+        with open(session_file, "r", encoding="utf-8") as f:
             data = json.load(f)
 
         return data.get("username")
 
 
-    # حذف Session این دستگاه
+    # حذف Session فعلی (legacy console compatibility)
     def clear_session(self):
 
         session_file = "data/session.json"
 
         if os.path.exists(session_file):
             os.remove(session_file)
-
             return True
 
         return False
