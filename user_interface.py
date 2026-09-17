@@ -89,6 +89,22 @@ def google_profile(google_sub):
     return None
 
 
+def google_email_profile(email):
+    """Return any TRIOS profile already using the supplied email."""
+    if not email:
+        return None
+
+    email = email.strip().lower()
+    for data in _iter_profiles():
+        if data.get("google_email", "").strip().lower() == email:
+            return data
+
+        # A native TRIOS account may not have a stored email yet. This branch
+        # intentionally does not match it: email is not the TRIOS identity key.
+
+    return None
+
+
 def create_google_user(username, google_sub, google_email=None, google_name=None):
     """Create one TRIOS profile for a Google identity, rejecting duplicates."""
     username = username.strip()
@@ -100,6 +116,9 @@ def create_google_user(username, google_sub, google_email=None, google_name=None
     if google_profile(google_sub) is not None:
         raise ValueError("This Google account already has a TRIOS account.")
 
+    if google_email_profile(google_email) is not None:
+        raise ValueError("This Google account is already linked to a TRIOS account.")
+
     profile = Profile(username)
     if not profile.create_google(google_sub, google_email, google_name):
         raise ValueError("User account already exists.")
@@ -108,7 +127,7 @@ def create_google_user(username, google_sub, google_email=None, google_name=None
 
 
 def restore_user_session():
-    """Legacy console-session helper; web UI should use Streamlit session state."""
+    """Legacy console-session helper; web UI uses Streamlit session state."""
     username = Profile("").get_session()
     if not username:
         return None
