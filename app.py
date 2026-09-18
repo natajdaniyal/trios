@@ -536,6 +536,52 @@ def apply_trios_design():
             background:rgba(255,255,255,.055) !important;
             color:#f5f8ff !important;
         }
+
+        .trios-nav-subtitle {
+            color: #95a3c4;
+            font-size: .78rem;
+            font-weight: 500;
+            margin-inline-start: .55rem;
+        }
+
+        [data-testid="stVerticalBlockBorderWrapper"] {
+            border-radius: 24px !important;
+            border-color: rgba(183, 210, 255, .13) !important;
+            background:
+                linear-gradient(145deg, rgba(255,255,255,.07), rgba(255,255,255,.025)),
+                rgba(14, 20, 48, .52) !important;
+            box-shadow:
+                0 18px 42px rgba(0,0,0,.16),
+                inset 0 1px 0 rgba(255,255,255,.055) !important;
+            backdrop-filter: blur(14px);
+        }
+
+        [data-testid="stVerticalBlockBorderWrapper"]:hover {
+            border-color: rgba(151, 214, 255, .30) !important;
+            box-shadow:
+                0 22px 48px rgba(0,0,0,.22),
+                0 0 30px rgba(115, 196, 255, .10),
+                inset 0 1px 0 rgba(255,255,255,.07) !important;
+        }
+
+        [data-testid="stSelectbox"] [data-baseweb="select"] > div {
+            min-height: 2.65rem;
+            border-radius: 14px !important;
+            border: 1px solid rgba(183,210,255,.16) !important;
+            background: rgba(255,255,255,.06) !important;
+            color: #f7f9ff !important;
+        }
+
+        [data-testid="stSelectbox"] svg {
+            fill: #9edfff !important;
+        }
+
+        .trios-hero {
+            box-shadow:
+                0 30px 100px rgba(0,0,0,.35),
+                0 0 70px rgba(108,176,255,.08),
+                inset 0 1px 0 rgba(255,255,255,.055);
+        }
         .trios-footer {
             margin-top: 4rem;
             padding: 1.4rem 0 .2rem;
@@ -807,41 +853,39 @@ def show_logo():
     st.image("assets/trios_logo.png", width=150)
 
 
+
 def show_public_nav():
-    st.markdown('<div class="trios-shell">', unsafe_allow_html=True)
-    left, mid, right = st.columns([2.2, 3.2, 2.2], vertical_alignment="center")
+    left, middle, language_col, login_col, signup_col = st.columns(
+        [0.7, 3.2, 1.2, 1.05, 1.35],
+        vertical_alignment="center",
+    )
 
     with left:
+        st.image("assets/trios_logo.png", width=46)
+
+    with middle:
         st.markdown(
-            """
+            f"""
             <div class="trios-brand">
-                <div class="trios-brand-mark">
-                    <img src="assets/trios_logo.png" alt="TRIOS">
-                </div>
-                <span>TRIOS</span>
+                <strong>TRIOS</strong>
+                <span class="trios-nav-subtitle">{t("nav_tagline")}</span>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-    with mid:
-        st.markdown(
-            '<div class="trios-nav-label" style="text-align:center;">Explore the three-body universe</div>',
-            unsafe_allow_html=True,
-        )
+    with language_col:
+        show_language_selector("public_language")
 
-    with right:
-        c1, c2 = st.columns(2, gap="small")
-        with c1:
-            if st.button("ورود", use_container_width=True, key="nav_login"):
-                st.session_state.page = "entry"
-                st.rerun()
-        with c2:
-            if st.button("ساخت حساب", use_container_width=True, key="nav_signup"):
-                st.session_state.page = "register"
-                st.rerun()
+    with login_col:
+        if st.button(t("nav_login"), use_container_width=True, key="nav_login"):
+            st.session_state.page = "entry"
+            st.rerun()
 
-    st.markdown("</div>", unsafe_allow_html=True)
+    with signup_col:
+        if st.button(t("nav_signup"), use_container_width=True, key="nav_signup"):
+            st.session_state.page = "register"
+            st.rerun()
 
 
 def show_hero_orbit():
@@ -852,31 +896,31 @@ def show_hero_orbit():
             <svg viewBox="0 0 440 440" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <radialGradient id="triosCore" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(220 220) rotate(90) scale(74)">
-                        <stop stop-color="#F9FDFF"/>
-                        <stop offset=".22" stop-color="#A9F1FF"/>
-                        <stop offset=".65" stop-color="#8B8CFF"/>
-                        <stop offset="1" stop-color="#8B8CFF" stop-opacity="0"/>
+                        <stop stop-color="#FFFFFF"/>
+                        <stop offset=".24" stop-color="#9DEBFF"/>
+                        <stop offset=".72" stop-color="#A78BFF"/>
+                        <stop offset="1" stop-color="#A78BFF" stop-opacity="0"/>
                     </radialGradient>
                     <filter id="triosBlur"><feGaussianBlur stdDeviation="12"/></filter>
                 </defs>
-                <g opacity=".8">
-                    <ellipse cx="220" cy="220" rx="160" ry="74" stroke="#69DFFF" stroke-opacity=".16" stroke-width="1.4"/>
-                    <ellipse cx="220" cy="220" rx="160" ry="74" transform="rotate(62 220 220)" stroke="#B189FF" stroke-opacity=".13" stroke-width="1.4"/>
-                    <ellipse cx="220" cy="220" rx="160" ry="74" transform="rotate(-62 220 220)" stroke="#7E9CFF" stroke-opacity=".12" stroke-width="1.4"/>
+                <g opacity=".84">
+                    <ellipse cx="220" cy="220" rx="160" ry="74" stroke="#66E0FF" stroke-opacity=".25" stroke-width="1.5"/>
+                    <ellipse cx="220" cy="220" rx="160" ry="74" transform="rotate(62 220 220)" stroke="#C28CFF" stroke-opacity=".20" stroke-width="1.5"/>
+                    <ellipse cx="220" cy="220" rx="160" ry="74" transform="rotate(-62 220 220)" stroke="#7FA6FF" stroke-opacity=".18" stroke-width="1.5"/>
                 </g>
                 <g class="trios-orbit-ring">
-                    <circle cx="220" cy="64" r="7" fill="#83E7FF" />
-                    <circle cx="220" cy="64" r="18" fill="#83E7FF" fill-opacity=".07" />
+                    <circle cx="220" cy="64" r="7" fill="#83E7FF"/>
+                    <circle cx="220" cy="64" r="18" fill="#83E7FF" fill-opacity=".08"/>
                 </g>
                 <g class="trios-orbit-ring reverse">
-                    <circle cx="220" cy="70" r="6" fill="#D19BFF" />
-                    <circle cx="220" cy="70" r="15" fill="#D19BFF" fill-opacity=".07" />
+                    <circle cx="220" cy="70" r="6" fill="#D49AFF"/>
+                    <circle cx="220" cy="70" r="15" fill="#D49AFF" fill-opacity=".08"/>
                 </g>
                 <g class="trios-orbit-ring" style="animation-duration: 17s;">
                     <circle cx="220" cy="58" r="5.2" fill="#FFFFFF"/>
                 </g>
-                <circle cx="220" cy="220" r="64" fill="#75E1FF" fill-opacity=".07" filter="url(#triosBlur)"/>
-                <circle cx="220" cy="220" r="54" fill="url(#triosCore)"/>
+                <circle cx="220" cy="220" r="72" fill="#79E4FF" fill-opacity=".08" filter="url(#triosBlur)"/>
+                <circle cx="220" cy="220" r="56" fill="url(#triosCore)"/>
                 <circle cx="220" cy="220" r="12" fill="#F7FCFF"/>
             </svg>
         </div>
@@ -886,13 +930,11 @@ def show_hero_orbit():
 
 
 def render_action_card(icon, title, description, button_label, callback_key):
-    st.markdown('<div class="trios-action-card">', unsafe_allow_html=True)
-    render_icon(icon, size=28)
-    st.markdown(f"<h3>{title}</h3>", unsafe_allow_html=True)
-    st.markdown(f"<p>{description}</p>", unsafe_allow_html=True)
-    clicked = st.button(button_label, use_container_width=True, key=callback_key)
-    st.markdown("</div>", unsafe_allow_html=True)
-    return clicked
+    with st.container(border=True):
+        render_icon(icon, size=28)
+        st.subheader(title)
+        st.caption(description)
+        return st.button(button_label, use_container_width=True, key=callback_key)
 
 
 def google_is_logged_in():
@@ -932,7 +974,7 @@ def process_google_identity():
     if profile:
         set_logged_in_user(
             profile,
-            f"خوش برگشتی، {profile['username']}!",
+            t("welcome_back", name=profile["username"]),
         )
 
     if flow == "recover":
@@ -948,73 +990,54 @@ def show_home():
     show_public_nav()
 
     st.markdown(
-        """
+        f"""
         <section class="trios-hero">
             <div class="trios-kicker">
                 <span class="trios-kicker-dot"></span>
-                A new way to explore gravity
+                {t("hero_kicker")}
             </div>
             <h1>
-                Discover the
-                <span class="trios-gradient-text">three-body universe.</span>
+                {t("hero_title_1")}
+                <span class="trios-gradient-text">{t("hero_title_2")}</span>
             </h1>
-            <p class="trios-hero-copy">
-                TRIOS turns the three-body problem into a beautiful scientific playground:
-                define physical conditions, run precise simulations, observe what happens,
-                and learn from the motion of gravity.
-            </p>
+            <p class="trios-hero-copy">{t("hero_copy")}</p>
         """,
         unsafe_allow_html=True,
     )
 
     show_hero_orbit()
 
-    c1, c2 = st.columns(2, gap="medium")
-    with c1:
-        if st.button("شروع با TRIOS", use_container_width=True, key="home_start"):
-            st.session_state.page = "entry"
-            st.rerun()
-    with c2:
-        if st.button("TRIOS چیست؟", use_container_width=True, key="home_about"):
-            st.session_state.page = "about"
-            st.rerun()
+    if st.button(t("about"), use_container_width=True, key="home_about"):
+        st.session_state.page = "about"
+        st.rerun()
 
     st.markdown(
-        """
-            <div class="trios-section-head">
-                <div>
-                    <h2>Science, without the clutter.</h2>
-                </div>
-                <p>
-                    Built around a clean separation between physics, simulation,
-                    experiments and the interface you use to explore them.
-                </p>
-            </div>
+        f'<div class="trios-section-head"><div><h2>{t("section_title")}</h2></div><p>{t("section_copy")}</p></div>',
+        unsafe_allow_html=True,
+    )
 
-            <div class="trios-card-grid">
-                <div class="trios-card">
-                    <div class="trios-icon-box">__ORBIT__</div>
-                    <h3>Explore motion</h3>
-                    <p>Watch gravitational systems evolve from carefully defined physical conditions.</p>
-                </div>
-                <div class="trios-card">
-                    <div class="trios-icon-box">__LAB__</div>
-                    <h3>Run experiments</h3>
-                    <p>Turn an idea into a repeatable experiment without mixing the science with the interface.</p>
-                </div>
-                <div class="trios-card">
-                    <div class="trios-icon-box">__CHART__</div>
-                    <h3>Study results</h3>
-                    <p>Observe measurements, compare behavior and build intuition from the simulation.</p>
-                </div>
-            </div>
+    c1, c2, c3 = st.columns(3, gap="medium")
 
-            <div class="trios-footer">
-                TRIOS · gravitational three-body simulation laboratory
-            </div>
-        """.replace("__ORBIT__", trios_icon("orbit", 34))
-          .replace("__LAB__", trios_icon("lab", 34))
-          .replace("__CHART__", trios_icon("chart", 34)),
+    with c1:
+        with st.container(border=True):
+            render_icon("orbit", size=32)
+            st.subheader(t("feature_motion"))
+            st.caption(t("feature_motion_copy"))
+
+    with c2:
+        with st.container(border=True):
+            render_icon("lab", size=32)
+            st.subheader(t("feature_lab"))
+            st.caption(t("feature_lab_copy"))
+
+    with c3:
+        with st.container(border=True):
+            render_icon("chart", size=32)
+            st.subheader(t("feature_results"))
+            st.caption(t("feature_results_copy"))
+
+    st.markdown(
+        f'<div class="trios-footer">{t("footer")}</div>',
         unsafe_allow_html=True,
     )
 
@@ -1022,166 +1045,172 @@ def show_home():
 
 
 def show_entry():
+    show_public_nav()
     st.markdown('<div class="trios-page">', unsafe_allow_html=True)
     render_icon("orbit", size=32)
     st.markdown(
-        '<h1 style="text-align:center;margin-bottom:.35rem;">ورود به TRIOS</h1>'
-        '<p style="text-align:center;color:#aeb9d8;">روش ورودت را انتخاب کن.</p>',
+        f'<h1 style="text-align:center;margin-bottom:.35rem;">{t("login_title")}</h1>'
+        f'<p style="text-align:center;color:#aeb9d8;">{t("choose_login")}</p>',
         unsafe_allow_html=True,
     )
 
     c1, c2 = st.columns(2, gap="medium")
+
     with c1:
-        render_icon("google", size=30)
-        st.subheader("Google")
-        st.caption("ورود سریع با حساب Google")
-        if st.button("ادامه با Google", use_container_width=True, key="google_login_button"):
-            start_google_login("login")
+        with st.container(border=True):
+            render_icon("google", size=30)
+            st.subheader("Google")
+            st.caption(t("google_fast"))
+            if st.button(t("google_login"), use_container_width=True, key="google_login_button"):
+                start_google_login("login")
 
     with c2:
-        render_icon("plus", size=30)
-        st.subheader("حساب TRIOS")
-        st.caption("ساخت حساب با نام کاربری و رمز عبور")
-        if st.button("ساخت حساب با TRIOS", use_container_width=True, key="register_button"):
-            st.session_state.page = "register"
-            st.rerun()
+        with st.container(border=True):
+            render_icon("plus", size=30)
+            st.subheader(t("native_account"))
+            st.caption(t("native_fast"))
+            if st.button(t("create_native"), use_container_width=True, key="register_button"):
+                st.session_state.page = "register"
+                st.rerun()
 
     st.divider()
 
     c3, c4 = st.columns(2, gap="medium")
     with c3:
-        render_icon("refresh", size=28)
-        st.subheader("بازیابی")
-        st.caption("ورود دوباره به حساب قبلی")
-        if st.button("بازیابی حساب", use_container_width=True, key="recover_button"):
+        if st.button(t("recover"), use_container_width=True, key="recover_button"):
             st.session_state.page = "recover"
             st.rerun()
     with c4:
-        render_icon("info", size=28)
-        st.subheader("درباره TRIOS")
-        st.caption("TRIOS چه کاری انجام می‌دهد؟")
-        if st.button("TRIOS چیست؟", use_container_width=True, key="entry_about_button"):
+        if st.button(t("about"), use_container_width=True, key="entry_about_button"):
             st.session_state.page = "about"
             st.rerun()
 
-    st.markdown("</div>", unsafe_allow_html=True)
-    if st.button("بازگشت", use_container_width=True, key="entry_back"):
+    if st.button(t("back"), use_container_width=True, key="entry_back"):
         st.session_state.page = "home"
         st.rerun()
 
+    st.markdown("</div>", unsafe_allow_html=True)
+
 
 def show_recover():
+    show_public_nav()
     st.markdown('<div class="trios-page">', unsafe_allow_html=True)
     render_icon("refresh", size=32)
     st.markdown(
-        '<h1 style="text-align:center;margin-bottom:.35rem;">بازیابی حساب</h1>'
-        '<p style="text-align:center;color:#aeb9d8;">روش ورود قبلی خودت را انتخاب کن.</p>',
+        f'<h1 style="text-align:center;margin-bottom:.35rem;">{t("recover_title")}</h1>'
+        f'<p style="text-align:center;color:#aeb9d8;">{t("recover_choose")}</p>',
         unsafe_allow_html=True,
     )
 
     c1, c2 = st.columns(2, gap="medium")
     with c1:
-        render_icon("google", size=30)
-        st.subheader("Google")
-        st.caption("بازیابی با همان حساب Google")
-        if st.button("بازیابی با Google", use_container_width=True, key="google_recover_button"):
-            start_google_login("recover")
-    with c2:
-        render_icon("lock", size=30)
-        st.subheader("حساب TRIOS")
-        st.caption("ورود با اطلاعات حساب TRIOS")
-        if st.button("بازیابی با حساب TRIOS", use_container_width=True):
-            st.session_state.page = "recover_trios"
-            st.rerun()
+        with st.container(border=True):
+            render_icon("google", size=30)
+            st.subheader("Google")
+            st.caption(t("recover_google_copy"))
+            if st.button(t("recover_google"), use_container_width=True, key="google_recover_button"):
+                start_google_login("recover")
 
-    st.markdown("</div>", unsafe_allow_html=True)
-    if st.button("بازگشت", use_container_width=True, key="recover_back"):
+    with c2:
+        with st.container(border=True):
+            render_icon("lock", size=30)
+            st.subheader(t("native_account"))
+            st.caption(t("recover_native_copy"))
+            if st.button(t("recover_native"), use_container_width=True):
+                st.session_state.page = "recover_trios"
+                st.rerun()
+
+    if st.button(t("back"), use_container_width=True, key="recover_back"):
         st.session_state.page = "entry"
         st.rerun()
 
+    st.markdown("</div>", unsafe_allow_html=True)
+
 
 def show_recover_trios():
+    show_public_nav()
     st.markdown('<div class="trios-page-card">', unsafe_allow_html=True)
     render_icon("lock", size=30)
-    st.header("ورود با حساب TRIOS")
-    st.info("نام کاربری و رمز عبور همان حساب TRIOS را وارد کن.")
+    st.header(t("recover_native_title"))
+    st.info(t("recover_notice"))
 
-    username = st.text_input("نام کاربری", key="recover_username")
-    password = st.text_input("رمز عبور", type="password", key="recover_password")
+    username = st.text_input(t("username"), key="recover_username")
+    password = st.text_input(t("password"), type="password", key="recover_password")
 
-    if st.button("ورود به حساب", use_container_width=True):
+    if st.button(t("login_account"), use_container_width=True):
         try:
             data = recover_user(username, password)
         except ValueError as exc:
             st.error(str(exc))
         else:
-            set_logged_in_user(data, f"خوش برگشتی، {data['username']}!")
+            set_logged_in_user(data, t("welcome_back", name=data["username"]))
 
     st.markdown("</div>", unsafe_allow_html=True)
-    if st.button("بازگشت", use_container_width=True, key="recover_trios_back"):
+    if st.button(t("back"), use_container_width=True, key="recover_trios_back"):
         st.session_state.page = "recover"
         st.rerun()
 
 
 def show_recover_google():
+    show_public_nav()
     st.markdown('<div class="trios-page-card">', unsafe_allow_html=True)
     render_icon("google", size=30)
-    st.header("بازیابی با Google")
-    st.error(
-        "این حساب Google هنوز به یک حساب TRIOS متصل نشده است. "
-        "برای جلوگیری از ساخت حساب تکراری، ابتدا با روش قبلی حسابت وارد شو."
-    )
+    st.header(t("google_recovery_title"))
+    st.error(t("google_not_linked"))
 
-    if st.button("بازگشت به بازیابی", use_container_width=True):
+    if st.button(t("back_to_recovery"), use_container_width=True):
         st.session_state.pop("google_recovery_error", None)
         st.session_state.page = "recover"
         st.rerun()
 
-    if st.button("خروج از Google", use_container_width=True):
+    if st.button(t("logout_google"), use_container_width=True):
         st.logout()
 
     st.markdown("</div>", unsafe_allow_html=True)
 
 
 def show_register():
+    show_public_nav()
     st.markdown('<div class="trios-page-card">', unsafe_allow_html=True)
     render_icon("plus", size=30)
-    st.header("ساخت حساب TRIOS")
+    st.header(t("register_title"))
 
-    username = st.text_input("نام کاربری", key="register_username")
-    password = st.text_input("رمز عبور", type="password", key="register_password")
-    confirm = st.text_input("تکرار رمز عبور", type="password", key="register_confirm")
+    username = st.text_input(t("username"), key="register_username")
+    password = st.text_input(t("password"), type="password", key="register_password")
+    confirm = st.text_input(t("confirm_password"), type="password", key="register_confirm")
 
-    if st.button("ساخت حساب", use_container_width=True):
+    if st.button(t("register"), use_container_width=True):
         if password != confirm:
-            st.error("رمزهای عبور یکسان نیستند.")
+            st.error(t("password_mismatch"))
         else:
             try:
                 data = create_user(username, password)
             except ValueError as exc:
                 st.error(str(exc))
             else:
-                set_logged_in_user(data, f"خوش اومدی، {data['username']}!")
+                set_logged_in_user(data, t("welcome", name=data["username"]))
 
     st.markdown("</div>", unsafe_allow_html=True)
-    if st.button("بازگشت", use_container_width=True, key="register_back"):
+    if st.button(t("back"), use_container_width=True, key="register_back"):
         st.session_state.page = "entry"
         st.rerun()
 
 
 def show_google_profile():
+    show_public_nav()
     identity = st.session_state.get("google_identity", google_identity())
 
     st.markdown('<div class="trios-page-card">', unsafe_allow_html=True)
     render_icon("google", size=30)
-    st.header("ساخت پروفایل TRIOS")
-    st.write("ورود با Google انجام شد. حالا یک نام برای پروفایل TRIOS خودت انتخاب کن.")
+    st.header(t("profile_title"))
+    st.write(t("profile_google_done"))
+
     if identity.get("name"):
-        st.caption(f"حساب Google: {identity['name']}")
+        st.caption(t("google_account", name=identity["name"]))
 
-    username = st.text_input("نام کاربری TRIOS", key="google_username")
+    username = st.text_input(t("trios_username"), key="google_username")
 
-    if st.button("ساخت پروفایل", use_container_width=True):
+    if st.button(t("create_profile"), use_container_width=True):
         try:
             data = create_google_user(
                 username,
@@ -1194,9 +1223,9 @@ def show_google_profile():
         else:
             st.session_state.pop("google_identity", None)
             st.session_state.pop("google_flow", None)
-            set_logged_in_user(data, f"خوش اومدی، {data['username']}!")
+            set_logged_in_user(data, t("welcome", name=data["username"]))
 
-    if st.button("خروج از Google", use_container_width=True):
+    if st.button(t("logout_google"), use_container_width=True):
         st.logout()
 
     st.markdown("</div>", unsafe_allow_html=True)
@@ -1204,48 +1233,46 @@ def show_google_profile():
 
 def show_dashboard():
     username = st.session_state.user
-    data = user_profile(username)
+
+    show_public_nav()
+
+    left, right = st.columns([1, 8], vertical_alignment="center")
+    with left:
+        st.image("assets/trios_logo.png", width=94)
+    with right:
+        st.markdown(
+            f"""
+            <div class="trios-hero" style="padding:2.5rem 1.5rem 1.7rem;margin-top:0;">
+                <div class="trios-kicker">
+                    <span class="trios-kicker-dot"></span>
+                    {t("dashboard_kicker")}
+                </div>
+                <h1 style="font-size:clamp(2rem,4.8vw,4rem);">
+                    {t("dashboard_title")}
+                    <span class="trios-gradient-text">{username}</span>
+                </h1>
+                <p class="trios-hero-copy">{t("dashboard_copy")}</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
     st.markdown(
-        f"""
-        <div class="trios-hero" style="padding:2.4rem 1.5rem 1.5rem;">
-            <div class="trios-kicker">
-                <span class="trios-kicker-dot"></span>
-                TRIOS workspace
-            </div>
-            <h1 style="font-size:clamp(2rem,4.8vw,4rem);">
-                Welcome back,
-                <span class="trios-gradient-text">{username}</span>
-            </h1>
-            <p class="trios-hero-copy">یک فضای آرام برای آزمایش، مشاهده و فکر کردن درباره‌ی حرکت.</p>
-        </div>
-        """,
+        f'<div class="trios-section-head"><div><h2>{t("path_title")}</h2></div><p>{t("path_copy")}</p></div>',
         unsafe_allow_html=True,
     )
 
-    s1, s2, s3, s4 = st.columns(4, gap="small")
-    with s1:
-        st.markdown(f'<div class="trios-stat"><div class="trios-stat-value">{data["level"]}</div><div class="trios-stat-label">سطح</div></div>', unsafe_allow_html=True)
-    with s2:
-        st.markdown(f'<div class="trios-stat"><div class="trios-stat-value">{data["total_attempts"]}</div><div class="trios-stat-label">تلاش‌ها</div></div>', unsafe_allow_html=True)
-    with s3:
-        st.markdown(f'<div class="trios-stat"><div class="trios-stat-value">{data["correct_answers"]}</div><div class="trios-stat-label">پاسخ درست</div></div>', unsafe_allow_html=True)
-    with s4:
-        st.markdown(f'<div class="trios-stat"><div class="trios-stat-value">{data["accuracy"]}%</div><div class="trios-stat-label">دقت</div></div>', unsafe_allow_html=True)
-
-    st.markdown('<div class="trios-section-head"><div><h2>مسیر تو در TRIOS</h2></div><p>از اینجا می‌توانی آزمایش‌ها، گزارش‌ها و پروفایلت را مدیریت کنی.</p></div>', unsafe_allow_html=True)
-
     c1, c2, c3 = st.columns(3, gap="medium")
     with c1:
-        if render_action_card("rocket", "شروع آزمایش", "وارد آزمایشگاه شو و برای اجرای یک آزمایش آماده شو.", "شروع آزمایش", "dashboard_lab"):
+        if render_action_card("rocket", t("start_experiment"), t("start_experiment_copy"), t("start_experiment"), "dashboard_lab"):
             st.session_state.page = "lab"
             st.rerun()
     with c2:
-        if render_action_card("chart", "گزارش من", "نتایج و عملکرد ثبت‌شده‌ی این حساب را ببین.", "مشاهده گزارش", "dashboard_report"):
+        if render_action_card("chart", t("view_report"), t("report_copy"), t("view_report"), "dashboard_report"):
             st.session_state.page = "report"
             st.rerun()
     with c3:
-        if render_action_card("profile", "پروفایل", "اطلاعات حساب و تنظیمات امنیتی خودت را مدیریت کن.", "باز کردن پروفایل", "dashboard_profile"):
+        if render_action_card("profile", t("profile"), t("profile_copy"), t("profile"), "dashboard_profile"):
             st.session_state.page = "profile"
             st.rerun()
 
@@ -1254,18 +1281,19 @@ def show_profile():
     username = st.session_state.user
     data = user_profile(username)
 
+    show_public_nav()
     st.markdown('<div class="trios-page-card">', unsafe_allow_html=True)
     render_icon("profile", size=32)
-    st.header("پروفایل")
-    st.subheader("اطلاعات شخصی")
-    st.write(f"**نام کاربری:** {data['username']}")
+    st.header(t("profile"))
+    st.subheader(t("profile_info"))
+    st.write(f"**{t('username')}:** {data['username']}")
     if data.get("auth_method") == "google":
-        st.caption("روش ورود: Google")
+        st.caption("Google")
 
     st.divider()
-    st.subheader("مدیریت حساب")
+    st.subheader(t("account_management"))
 
-    if st.button("خروج از این دستگاه", use_container_width=True):
+    if st.button(t("logout_device"), use_container_width=True):
         st.session_state.pop("user", None)
         st.session_state.pop("welcome_message", None)
         st.session_state.pop("google_identity", None)
@@ -1276,13 +1304,13 @@ def show_profile():
         st.rerun()
 
     st.divider()
-    st.subheader("حذف حساب")
-    st.warning("حذف حساب دائمی است و اطلاعات ذخیره‌شده‌ی این حساب را پاک می‌کند.")
-    confirm_delete = st.checkbox("می‌خواهم حسابم را برای همیشه حذف کنم.")
+    st.subheader(t("delete_account"))
+    st.warning(t("delete_warning"))
+    confirm_delete = st.checkbox(t("delete_confirm"))
 
-    if st.button("حذف دائمی حساب", use_container_width=True):
+    if st.button(t("delete_account"), use_container_width=True):
         if not confirm_delete:
-            st.error("برای حذف حساب، ابتدا تأیید حذف را فعال کن.")
+            st.error(t("confirm_delete_error"))
         elif delete_user(username):
             st.session_state.pop("user", None)
             st.session_state.pop("welcome_message", None)
@@ -1293,24 +1321,22 @@ def show_profile():
             st.session_state.page = "home"
             st.rerun()
         else:
-            st.error("حساب پیدا نشد.")
+            st.error(t("account_not_found"))
 
     st.markdown("</div>", unsafe_allow_html=True)
-    if st.button("بازگشت به داشبورد", use_container_width=True):
+    if st.button(t("back"), use_container_width=True):
         st.session_state.page = "dashboard"
         st.rerun()
 
 
 def show_lab():
+    show_public_nav()
     st.markdown('<div class="trios-page-card">', unsafe_allow_html=True)
     render_icon("lab", size=32)
-    st.header("آزمایشگاه من")
-    st.info(
-        "زیرساخت اجرای آزمایش‌های TRIOS آماده است. "
-        "محتوای آزمایش‌های آموزشی هنوز جداگانه تعریف نشده و فعلاً در این بخش ساخته نمی‌شود."
-    )
+    st.header(t("lab_title"))
+    st.info(t("lab_notice"))
     st.markdown("</div>", unsafe_allow_html=True)
-    if st.button("بازگشت", use_container_width=True):
+    if st.button(t("back"), use_container_width=True):
         st.session_state.page = "dashboard"
         st.rerun()
 
@@ -1318,28 +1344,27 @@ def show_lab():
 def show_report():
     data = user_profile(st.session_state.user)
 
+    show_public_nav()
     st.markdown('<div class="trios-page-card">', unsafe_allow_html=True)
     render_icon("chart", size=32)
-    st.header("گزارش من")
+    st.header(t("report_title"))
+    st.subheader(t("report_summary"))
 
-    st.subheader("خلاصه عملکرد")
-    st.write(f"**سطح:** {data['level']}")
-    st.write(f"**تعداد آزمایش‌ها / تلاش‌ها:** {data['total_attempts']}")
-    st.write(f"**پاسخ‌های درست:** {data['correct_answers']}")
-    st.write(f"**دقت:** {data['accuracy']}%")
+    st.write(f"**{t('level')}:** {data['level']}")
+    st.write(f"**{t('attempts')}:** {data['total_attempts']}")
+    st.write(f"**{t('correct')}:** {data['correct_answers']}")
+    st.write(f"**{t('accuracy')}:** {data['accuracy']}%")
 
     if data["experiments"]:
-        st.subheader("آزمایش‌های ثبت‌شده")
+        st.subheader(t("experiments"))
         for experiment in data["experiments"]:
-            st.write(
-                f"**{experiment['name']}** — "
-                f"{'درست' if experiment['correct'] else 'نادرست'}"
-            )
+            status = "Correct" if experiment["correct"] else "Incorrect"
+            st.write(f"**{experiment['name']}** — {status}")
     else:
-        st.info("هنوز گزارشی برای این حساب ثبت نشده است.")
+        st.info(t("no_report"))
 
     st.markdown("</div>", unsafe_allow_html=True)
-    if st.button("بازگشت", use_container_width=True):
+    if st.button(t("back"), use_container_width=True):
         st.session_state.page = "dashboard"
         st.rerun()
 
@@ -1347,34 +1372,22 @@ def show_report():
 def show_about():
     show_public_nav()
     st.markdown('<div class="trios-page-card">', unsafe_allow_html=True)
-    render_icon("info", size=32)
-    st.header("TRIOS چیست؟")
-    st.write(
-        "TRIOS یک سامانه برای شبیه‌سازی، مشاهده و مطالعه‌ی سیستم‌های فیزیکی چندجسمی "
-        "با تمرکز بر مسئله‌ی سه‌جسمی است. هدف TRIOS فقط نمایش حرکت چند جرم نیست؛ "
-        "بلکه فراهم کردن یک زیرساخت منظم برای تعریف شرایط فیزیکی، اجرای شبیه‌سازی، "
-        "اندازه‌گیری نتایج و بررسی علمی آن‌هاست."
-    )
-    st.write(
-        "در معماری TRIOS، هسته‌ی فیزیک مسئول قوانین و محاسبات فیزیکی است؛ "
-        "لایه‌ی شبیه‌سازی اجرای گام‌های زمانی را مدیریت می‌کند؛ پیکربندی فیزیکی "
-        "شرایط اولیه را نگه می‌دارد؛ زیرساخت آزمایش مراحل و نتایج را مدیریت می‌کند؛ "
-        "و اعتبارسنجی علمی معیارهایی مانند انرژی، تکانه، تکانه‌ی زاویه‌ای و مرکز جرم را بررسی می‌کند."
-    )
-    st.write(
-        "این جداسازی باعث می‌شود رابط کاربری و بخش آموزشی مجبور نباشند منطق فیزیک را "
-        "دوباره پیاده‌سازی کنند. در نتیجه، TRIOS می‌تواند در آینده هم به‌عنوان یک ابزار "
-        "مطالعاتی و هم به‌عنوان یک محیط آموزشی تعاملی توسعه پیدا کند، بدون اینکه هسته‌ی علمی پروژه به رابط کاربری وابسته شود."
-    )
-    st.write(
-        "TRIOS همچنین برای آزمایش‌های تکرارپذیر طراحی شده است؛ یعنی شرایط فیزیکی، "
-        "اجرای شبیه‌سازی، اندازه‌گیری‌ها و اعتبارسنجی می‌توانند از هم تفکیک شوند و "
-        "نتایج قابل بررسی و مقایسه باشند."
-    )
-    st.info("فعلاً تمرکز پروژه روی تکمیل زیرساخت و معماری است؛ آزمایش‌های آموزشی واقعی در این مرحله ساخته نشده‌اند.")
+
+    logo_col, content_col = st.columns([1.15, 4.85], vertical_alignment="center")
+    with logo_col:
+        st.image("assets/trios_logo.png", width=92)
+    with content_col:
+        st.header(t("about_title"))
+
+    st.write(t("about_text_1"))
+    st.write(t("about_text_2"))
+    st.write(t("about_text_3"))
+    st.write(t("about_text_4"))
+    st.info(t("about_notice"))
+
     st.markdown("</div>", unsafe_allow_html=True)
 
-    if st.button("بازگشت", use_container_width=True, key="about_back"):
+    if st.button(t("back"), use_container_width=True, key="about_back"):
         st.session_state.page = (
             "dashboard" if "user" in st.session_state else "home"
         )
