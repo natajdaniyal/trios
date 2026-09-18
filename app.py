@@ -1314,26 +1314,49 @@ def show_register():
     st.markdown('<div class="trios-page-card">', unsafe_allow_html=True)
     render_icon("plus", size=30)
     st.header(t("register_title"))
+    st.caption(t("choose_login"))
 
-    username = st.text_input(t("username"), key="register_username")
-    password = st.text_input(t("password"), type="password", key="register_password")
-    confirm = st.text_input(t("confirm_password"), type="password", key="register_confirm")
+    c1, c2 = st.columns(2, gap="medium")
+    with c1:
+        with st.container(border=True):
+            render_icon("google", size=30)
+            st.subheader("Google")
+            st.caption(t("google_fast"))
+            if st.button(t("google_login"), use_container_width=True, key="register_google_button"):
+                start_google_login("login")
 
-    if st.button(t("register"), use_container_width=True):
-        if password != confirm:
-            st.error(t("password_mismatch"))
-        else:
-            try:
-                data = create_user(username, password)
-            except ValueError as exc:
-                st.error(str(exc))
-            else:
-                set_logged_in_user(data, t("welcome", name=data["username"]))
+    with c2:
+        with st.container(border=True):
+            render_icon("plus", size=30)
+            st.subheader(t("native_account"))
+            st.caption(t("native_fast"))
 
-    st.markdown("</div>", unsafe_allow_html=True)
+            username = st.text_input(t("username"), key="register_username")
+            password = st.text_input(t("password"), type="password", key="register_password")
+            confirm = st.text_input(t("confirm_password"), type="password", key="register_confirm")
+
+            if st.button(t("register"), use_container_width=True, key="register_native_button"):
+                if password != confirm:
+                    st.error(t("password_mismatch"))
+                else:
+                    try:
+                        data = create_user(username, password)
+                    except ValueError as exc:
+                        st.error(str(exc))
+                    else:
+                        set_logged_in_user(data, t("welcome", name=data["username"]))
+
+    st.divider()
+
+    if st.button(t("recover"), use_container_width=True, key="register_recover_button"):
+        st.session_state.page = "recover"
+        st.rerun()
+
     if st.button(t("back"), use_container_width=True, key="register_back"):
         st.session_state.page = "entry"
         st.rerun()
+
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 def show_google_profile():
