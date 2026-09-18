@@ -538,6 +538,84 @@ def apply_trios_design():
         }
 
         .trios-nav-subtitle {
+            color: #a8b7dc;
+            font-size: .78rem;
+            font-weight: 500;
+            margin-inline-start: .55rem;
+        }
+
+        .trios-brand strong {
+            background: linear-gradient(110deg, #ffffff 0%, #9deaff 38%, #c2a1ff 72%, #ff9cda 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 28px rgba(119, 205, 255, .10);
+        }
+
+        .trios-kicker {
+            background:
+                linear-gradient(90deg, rgba(92,220,255,.10), rgba(184,128,255,.12), rgba(255,137,211,.10));
+            border-color: rgba(169, 211, 255, .22);
+        }
+
+        .trios-kicker-dot {
+            background: linear-gradient(135deg, #67eaff, #a986ff 55%, #ff90cf);
+            box-shadow:
+                0 0 12px rgba(103,234,255,.56),
+                0 0 24px rgba(219,133,255,.22);
+        }
+
+        .trios-card,
+        [data-testid="stVerticalBlockBorderWrapper"] {
+            background:
+                linear-gradient(145deg,
+                    rgba(101, 222, 255, .075),
+                    rgba(180, 129, 255, .06) 48%,
+                    rgba(255, 146, 211, .045)),
+                rgba(14, 20, 48, .54) !important;
+        }
+
+        .trios-card:hover,
+        [data-testid="stVerticalBlockBorderWrapper"]:hover {
+            border-color: rgba(159, 220, 255, .34) !important;
+            box-shadow:
+                0 22px 48px rgba(0,0,0,.21),
+                0 0 30px rgba(86,214,255,.12),
+                0 0 44px rgba(217,125,255,.07),
+                inset 0 1px 0 rgba(255,255,255,.08) !important;
+        }
+
+        .trios-icon-box {
+            background:
+                linear-gradient(145deg,
+                    rgba(102, 224, 255, .20),
+                    rgba(176, 132, 255, .16) 52%,
+                    rgba(255, 139, 207, .11)),
+                rgba(255,255,255,.035);
+        }
+
+        .trios-hero {
+            background:
+                radial-gradient(circle at 28% 18%, rgba(83, 225, 255, .15), transparent 24%),
+                radial-gradient(circle at 74% 30%, rgba(193, 126, 255, .14), transparent 26%),
+                radial-gradient(circle at 50% 70%, rgba(255, 129, 203, .08), transparent 30%),
+                linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.018));
+        }
+
+        .trios-hero-glow {
+            background:
+                radial-gradient(circle,
+                    rgba(103, 232, 255, .34),
+                    rgba(156, 115, 255, .18) 43%,
+                    rgba(255, 131, 204, .10) 58%,
+                    transparent 72%);
+        }
+
+        .trios-footer {
+            color: #91a1c6;
+        }
+
+
             color: #95a3c4;
             font-size: .78rem;
             font-weight: 500;
@@ -855,8 +933,8 @@ def show_logo():
 
 
 def show_public_nav():
-    left, middle, language_col, login_col, signup_col = st.columns(
-        [0.7, 3.2, 1.2, 1.05, 1.35],
+    left, middle, language_col, about_col, signup_col = st.columns(
+        [0.65, 3.15, 1.15, 1.25, 1.45],
         vertical_alignment="center",
     )
 
@@ -877,9 +955,9 @@ def show_public_nav():
     with language_col:
         show_language_selector("public_language")
 
-    with login_col:
-        if st.button(t("nav_login"), use_container_width=True, key="nav_login"):
-            st.session_state.page = "entry"
+    with about_col:
+        if st.button(t("about"), use_container_width=True, key="nav_about"):
+            st.session_state.page = "about"
             st.rerun()
 
     with signup_col:
