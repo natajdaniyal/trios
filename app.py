@@ -1085,10 +1085,6 @@ def show_home():
 
     show_hero_orbit()
 
-    if st.button(t("about"), use_container_width=True, key="home_about"):
-        st.session_state.page = "about"
-        st.rerun()
-
     st.markdown(
         f'<div class="trios-section-head"><div><h2>{t("section_title")}</h2></div><p>{t("section_copy")}</p></div>',
         unsafe_allow_html=True,
