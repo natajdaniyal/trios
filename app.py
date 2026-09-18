@@ -10,7 +10,7 @@ from user_interface import (
 )
 
 
-st.set_page_config(page_title="TRIOS", page_icon="🪐", layout="wide")
+st.set_page_config(page_title="TRIOS", page_icon="assets/trios_logo.png", layout="wide")
 
 
 def show_logo():
