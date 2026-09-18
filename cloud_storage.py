@@ -17,8 +17,16 @@ def cloud_enabled():
         return False
 
 
+def _database_url():
+    secrets = st.secrets.to_dict()
+    url = secrets["connections"]["trios_db"]["url"]
+    return url.replace("postgresql+psycopg://", "postgresql://", 1)
+
+
 def _connection():
-    return st.connection("trios_db", type="sql")
+    import psycopg
+
+    return psycopg.connect(_database_url())
 
 
 def _ensure_table():
@@ -26,9 +34,8 @@ def _ensure_table():
     if _TABLE_READY:
         return
 
-    conn = _connection()
-    with conn.session as session:
-        session.execute(
+    with _connection() as conn:
+        conn.execute(
             """
             CREATE TABLE IF NOT EXISTS trios_profiles (
                 username VARCHAR(255) PRIMARY KEY,
@@ -36,7 +43,7 @@ def _ensure_table():
             )
             """
         )
-        session.commit()
+        conn.commit()
     _TABLE_READY = True
 
 
@@ -49,18 +56,18 @@ def _decode(row):
 
 def get_profile(username):
     _ensure_table()
-    with _connection().session as session:
-        row = session.execute(
-            "SELECT profile_json FROM trios_profiles WHERE username = :username",
-            {"username": username},
+    with _connection() as conn:
+        row = conn.execute(
+            "SELECT profile_json FROM trios_profiles WHERE username = %s",
+            (username,),
         ).fetchone()
     return _decode(row)
 
 
 def list_profiles():
     _ensure_table()
-    with _connection().session as session:
-        rows = session.execute("SELECT profile_json FROM trios_profiles").fetchall()
+    with _connection() as conn:
+        rows = conn.execute("SELECT profile_json FROM trios_profiles").fetchall()
     return [json.loads(row[0]) for row in rows]
 
 
@@ -69,34 +76,34 @@ def save_profile(data):
     username = data["username"]
     payload = json.dumps(data, ensure_ascii=False)
 
-    with _connection().session as session:
-        updated = session.execute(
+    with _connection() as conn:
+        updated = conn.execute(
             """
             UPDATE trios_profiles
-            SET profile_json = :profile_json
-            WHERE username = :username
+            SET profile_json = %s
+            WHERE username = %s
             """,
-            {"username": username, "profile_json": payload},
+            (payload, username),
         )
         if updated.rowcount == 0:
-            session.execute(
+            conn.execute(
                 """
                 INSERT INTO trios_profiles (username, profile_json)
-                VALUES (:username, :profile_json)
+                VALUES (%s, %s)
                 """,
-                {"username": username, "profile_json": payload},
+                (username, payload),
             )
-        session.commit()
+        conn.commit()
 
 
 def delete_profile(username):
     _ensure_table()
-    with _connection().session as session:
-        result = session.execute(
-            "DELETE FROM trios_profiles WHERE username = :username",
-            {"username": username},
+    with _connection() as conn:
+        result = conn.execute(
+            "DELETE FROM trios_profiles WHERE username = %s",
+            (username,),
         )
-        session.commit()
+        conn.commit()
     return result.rowcount > 0
 
 
