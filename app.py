@@ -611,6 +611,56 @@ def apply_trios_design():
                     transparent 72%);
         }
 
+        .trios-github {
+            margin: 3.2rem auto 1.2rem;
+            max-width: 900px;
+            padding: 1.35rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.25rem;
+            border: 1px solid rgba(159, 220, 255, .16);
+            border-radius: 22px;
+            background:
+                linear-gradient(120deg,
+                    rgba(89, 220, 255, .08),
+                    rgba(177, 129, 255, .07),
+                    rgba(255, 139, 207, .06)),
+                rgba(10, 16, 40, .48);
+            box-shadow: 0 18px 45px rgba(0,0,0,.16);
+        }
+
+        .trios-github-eyebrow {
+            font-size: .72rem;
+            letter-spacing: .13em;
+            color: #8edfff;
+            font-weight: 700;
+        }
+
+        .trios-github h3 {
+            margin: .18rem 0 .2rem;
+        }
+
+        .trios-github p {
+            margin: 0;
+            color: #9da9c8;
+        }
+
+        .trios-github a {
+            flex: 0 0 auto;
+            padding: .7rem 1rem;
+            border-radius: 13px;
+            text-decoration: none;
+            color: #f8fbff;
+            border: 1px solid rgba(160, 220, 255, .24);
+            background: linear-gradient(135deg, rgba(92,220,255,.16), rgba(186,126,255,.16));
+        }
+
+        .trios-github a:hover {
+            border-color: rgba(160, 220, 255, .48);
+            box-shadow: 0 0 26px rgba(91, 216, 255, .12);
+        }
+
         .trios-footer {
             color: #91a1c6;
         }
@@ -1109,6 +1159,22 @@ def show_home():
             render_icon("chart", size=32)
             st.subheader(t("feature_results"))
             st.caption(t("feature_results_copy"))
+
+    st.markdown(
+        """
+        <div class="trios-github">
+            <div>
+                <div class="trios-github-eyebrow">OPEN SOURCE • TRIOS</div>
+                <h3>TRIOS on GitHub</h3>
+                <p>Explore the project, follow its development, and see how TRIOS is built.</p>
+            </div>
+            <a href="https://github.com/natajdaniyal/trios" target="_blank" rel="noopener noreferrer">
+                View GitHub ↗
+            </a>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     st.markdown(
         f'<div class="trios-footer">{t("footer")}</div>',
