@@ -1491,6 +1491,22 @@ def show_profile():
         st.session_state.page = "dashboard"
         st.rerun()
 
+    st.markdown(
+        """
+        <div class="trios-github">
+            <div>
+                <div class="trios-github-eyebrow">OPEN SOURCE • TRIOS</div>
+                <h3>TRIOS on GitHub</h3>
+                <p>Explore the project, follow its development, and see how TRIOS is built.</p>
+            </div>
+            <a href="https://github.com/natajdaniyal/trios" target="_blank" rel="noopener noreferrer">
+                View GitHub ↗
+            </a>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
 
 def show_lab():
     show_public_nav()
