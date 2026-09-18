@@ -10,8 +10,8 @@ _MIGRATION_DONE = False
 
 def cloud_enabled():
     try:
-        connections = st.secrets.get("connections", {})
-        config = connections.get("trios_db", {})
+        secrets = st.secrets.to_dict()
+        config = secrets.get("connections", {}).get("trios_db", {})
         return bool(config.get("url"))
     except Exception:
         return False
