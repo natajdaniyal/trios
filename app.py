@@ -1092,7 +1092,7 @@ def process_google_identity():
     if profile:
         set_logged_in_user(
             profile,
-            t("welcome", name=profile["username"]),
+            t("welcome_back", name=profile["username"]),
         )
 
     if flow == "recover":
