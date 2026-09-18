@@ -17,6 +17,102 @@ st.set_page_config(
 )
 
 
+
+LANGUAGES = {
+    "fa": "فارسی",
+    "en": "English",
+    "ar": "العربية",
+    "zh": "简体中文",
+    "es": "Español",
+    "fr": "Français",
+    "de": "Deutsch",
+    "ja": "日本語",
+}
+
+TRANSLATIONS = {
+    "fa": {
+        "nav_tagline":"آزمایشگاه شبیه‌سازی مسئله‌ی سه‌جسمی","nav_login":"ورود","nav_signup":"ساخت حساب","nav_language":"زبان",
+        "hero_kicker":"راهی تازه برای کشف گرانش","hero_title_1":"جهانِ","hero_title_2":"سه‌جسمی را کشف کن.","hero_copy":"TRIOS مسئله‌ی سه‌جسمی را به یک آزمایشگاه علمی زیبا تبدیل می‌کند؛ شرایط فیزیکی را تعریف کن، شبیه‌سازی را اجرا کن و حرکت گرانش را ببین.",
+        "home_start":"شروع با TRIOS","about":"TRIOS چیست؟","section_title":"علم، بدون شلوغی.","section_copy":"فیزیک، شبیه‌سازی، آزمایش و رابط کاربری به‌صورت تمیز از هم جدا شده‌اند.",
+        "feature_motion":"حرکت را کشف کن","feature_motion_copy":"تکامل سیستم‌های گرانشی را از شرایط اولیه‌ی دقیق مشاهده کن.","feature_lab":"آزمایش انجام بده","feature_lab_copy":"ایده‌ات را به یک آزمایش تکرارپذیر تبدیل کن، بدون اینکه علم با رابط کاربری قاطی شود.","feature_results":"نتایج را مطالعه کن","feature_results_copy":"اندازه‌گیری‌ها را ببین، رفتارها را مقایسه کن و از شبیه‌سازی شهود فیزیکی بساز.","footer":"TRIOS · آزمایشگاه شبیه‌سازی سه‌جسمی",
+        "login_title":"ورود به TRIOS","choose_login":"روش ورودت را انتخاب کن.","google_login":"ادامه با Google","google_fast":"ورود سریع با حساب Google","native_account":"حساب TRIOS","native_fast":"ساخت حساب با نام کاربری و رمز عبور","create_native":"ساخت حساب با TRIOS","recover":"بازیابی حساب","recover_copy":"ورود دوباره به حساب قبلی","about_short":"TRIOS چه کاری انجام می‌دهد؟","back":"بازگشت",
+        "recover_title":"بازیابی حساب","recover_choose":"روش ورود قبلی خودت را انتخاب کن.","recover_google":"بازیابی با Google","recover_google_copy":"بازیابی با همان حساب Google","recover_native":"بازیابی با حساب TRIOS","recover_native_copy":"ورود با اطلاعات حساب TRIOS","recover_native_title":"ورود با حساب TRIOS","recover_notice":"نام کاربری و رمز عبور همان حساب TRIOS را وارد کن.",
+        "username":"نام کاربری","password":"رمز عبور","login_account":"ورود به حساب","register_title":"ساخت حساب TRIOS","register":"ساخت حساب","confirm_password":"تکرار رمز عبور","password_mismatch":"رمزهای عبور یکسان نیستند.",
+        "welcome":"خوش اومدی، {name}!","welcome_back":"خوش برگشتی، {name}!","profile_title":"ساخت پروفایل TRIOS","profile_google_done":"ورود با Google انجام شد. حالا یک نام برای پروفایل TRIOS خودت انتخاب کن.","trios_username":"نام کاربری TRIOS","create_profile":"ساخت پروفایل","logout_google":"خروج از Google",
+        "dashboard_kicker":"فضای شخصی TRIOS","dashboard_title":"خوش برگشتی،","dashboard_copy":"یک فضای آرام برای آزمایش، مشاهده و فکر کردن درباره‌ی حرکت.","path_title":"مسیر تو در TRIOS","path_copy":"از اینجا می‌توانی آزمایش‌ها، گزارش‌ها و پروفایلت را مدیریت کنی.","start_experiment":"شروع آزمایش","start_experiment_copy":"وارد آزمایشگاه شو و برای اجرای یک آزمایش آماده شو.","view_report":"مشاهده گزارش","report_copy":"نتایج و عملکرد ثبت‌شده‌ی این حساب را ببین.","profile":"پروفایل","profile_copy":"اطلاعات حساب و تنظیمات امنیتی خودت را مدیریت کن.",
+        "lab_title":"آزمایشگاه من","lab_notice":"زیرساخت اجرای آزمایش‌های TRIOS آماده است. محتوای آزمایش‌های آموزشی هنوز جداگانه تعریف نشده و فعلاً در این بخش ساخته نمی‌شود.","report_title":"گزارش من","profile_info":"اطلاعات شخصی","account_management":"مدیریت حساب","logout_device":"خروج از این دستگاه","delete_account":"حذف دائمی حساب","delete_warning":"حذف حساب دائمی است و اطلاعات ذخیره‌شده‌ی این حساب را پاک می‌کند.","delete_confirm":"می‌خواهم حسابم را برای همیشه حذف کنم.","confirm_delete_error":"برای حذف حساب، ابتدا تأیید حذف را فعال کن.","account_not_found":"حساب پیدا نشد.",
+        "level":"سطح","attempts":"تلاش‌ها","correct":"پاسخ درست","accuracy":"دقت","report_summary":"خلاصه عملکرد","experiments":"آزمایش‌های ثبت‌شده","no_report":"هنوز گزارشی برای این حساب ثبت نشده است.",
+        "about_title":"TRIOS چیست؟","about_text_1":"TRIOS یک سامانه برای شبیه‌سازی، مشاهده و مطالعه‌ی سیستم‌های فیزیکی چندجسمی با تمرکز بر مسئله‌ی سه‌جسمی است.","about_text_2":"هسته‌ی فیزیک مسئول قوانین و محاسبات است؛ لایه‌ی شبیه‌سازی اجرای گام‌های زمانی را مدیریت می‌کند؛ پیکربندی فیزیکی شرایط اولیه را نگه می‌دارد؛ و زیرساخت آزمایش مراحل و نتایج را مدیریت می‌کند.","about_text_3":"این جداسازی باعث می‌شود رابط کاربری مجبور نباشد منطق فیزیک را دوباره پیاده‌سازی کند و TRIOS بتواند به‌عنوان یک ابزار مطالعاتی و آموزشی رشد کند.","about_text_4":"TRIOS برای آزمایش‌های تکرارپذیر طراحی شده است تا شرایط فیزیکی، اجرای شبیه‌سازی، اندازه‌گیری و اعتبارسنجی از هم تفکیک باشند.","about_notice":"فعلاً تمرکز پروژه روی تکمیل زیرساخت و معماری است؛ آزمایش‌های آموزشی واقعی در این مرحله ساخته نشده‌اند.",
+        "google_recovery_title":"بازیابی با Google","google_not_linked":"این حساب Google هنوز به یک حساب TRIOS متصل نشده است. برای جلوگیری از ساخت حساب تکراری، ابتدا با روش قبلی حسابت وارد شو.","back_to_recovery":"بازگشت به بازیابی","google_account":"حساب Google: {name}"
+    },
+    "en": {}
+}
+
+TRANSLATIONS["en"] = {
+    "nav_tagline":"Three-body simulation laboratory","nav_login":"Sign in","nav_signup":"Create account","nav_language":"Language",
+    "hero_kicker":"A new way to explore gravity","hero_title_1":"Discover the","hero_title_2":"three-body universe.","hero_copy":"TRIOS turns the three-body problem into a beautiful scientific playground: define physical conditions, run a simulation, and watch gravity move.",
+    "home_start":"Start with TRIOS","about":"What is TRIOS?","section_title":"Science, without the clutter.","section_copy":"Physics, simulation, experiments, and the interface are cleanly separated.",
+    "feature_motion":"Explore motion","feature_motion_copy":"Observe gravitational systems evolve from carefully defined initial conditions.","feature_lab":"Run experiments","feature_lab_copy":"Turn an idea into a repeatable experiment without mixing science with the interface.","feature_results":"Study results","feature_results_copy":"See measurements, compare behavior, and build physical intuition from simulation.","footer":"TRIOS · gravitational three-body simulation laboratory",
+    "login_title":"Sign in to TRIOS","choose_login":"Choose how you want to sign in.","google_login":"Continue with Google","google_fast":"Quick sign-in with Google","native_account":"TRIOS account","native_fast":"Username and password","create_native":"Create TRIOS account","recover":"Recover account","recover_copy":"Get back into an existing account","about_short":"What does TRIOS do?","back":"Back",
+    "recover_title":"Recover account","recover_choose":"Choose your previous sign-in method.","recover_google":"Recover with Google","recover_google_copy":"Use the same Google account","recover_native":"Recover with TRIOS","recover_native_copy":"Use your TRIOS credentials","recover_native_title":"Sign in with TRIOS","recover_notice":"Enter the username and password for your TRIOS account.",
+    "username":"Username","password":"Password","login_account":"Sign in","register_title":"Create a TRIOS account","register":"Create account","confirm_password":"Confirm password","password_mismatch":"Passwords do not match.",
+    "welcome":"Welcome, {name}!","welcome_back":"Welcome back, {name}!","profile_title":"Create your TRIOS profile","profile_google_done":"Google sign-in succeeded. Choose a name for your TRIOS profile.","trios_username":"TRIOS username","create_profile":"Create profile","logout_google":"Sign out of Google",
+    "dashboard_kicker":"TRIOS workspace","dashboard_title":"Welcome back,","dashboard_copy":"A calm space to experiment, observe, and think about motion.","path_title":"Your TRIOS path","path_copy":"Manage experiments, reports, and your profile from one place.","start_experiment":"Start experiment","start_experiment_copy":"Enter the laboratory and get ready to run an experiment.","view_report":"View report","report_copy":"Review the results recorded for this account.","profile":"Profile","profile_copy":"Manage account details and security settings.",
+    "lab_title":"My laboratory","lab_notice":"The TRIOS execution infrastructure is ready. Educational experiments are not defined yet.","report_title":"My report","profile_info":"Personal information","account_management":"Account management","logout_device":"Sign out on this device","delete_account":"Delete account permanently","delete_warning":"Deleting your account is permanent and removes the stored account data.","delete_confirm":"I want to permanently delete my account.","confirm_delete_error":"Confirm account deletion first.","account_not_found":"Account not found.",
+    "level":"Level","attempts":"Attempts","correct":"Correct","accuracy":"Accuracy","report_summary":"Performance summary","experiments":"Recorded experiments","no_report":"No report has been recorded for this account yet.",
+    "about_title":"What is TRIOS?","about_text_1":"TRIOS is a system for simulating, observing, and studying multi-body physical systems with a focus on the three-body problem.","about_text_2":"The physics core owns laws and calculations; simulation manages time steps; physical configuration stores initial conditions; and experiment infrastructure manages stages and results.","about_text_3":"This separation keeps the interface from reimplementing physics and lets TRIOS grow as both a scientific and educational environment.","about_text_4":"TRIOS is designed for repeatable experiments, separating physical conditions, simulation, measurement, and validation.","about_notice":"The project is currently focused on infrastructure and architecture; real educational experiments have not been built yet.",
+    "google_recovery_title":"Recover with Google","google_not_linked":"This Google account is not linked to a TRIOS account yet. Sign in with the previous method to avoid creating a duplicate account.","back_to_recovery":"Back to recovery","google_account":"Google account: {name}"
+}
+
+for code, overrides in {
+    "ar":{"nav_language":"اللغة","nav_login":"تسجيل الدخول","nav_signup":"إنشاء حساب","hero_kicker":"طريقة جديدة لاستكشاف الجاذبية","hero_title_1":"اكتشف","hero_title_2":"عالم الأجسام الثلاثة.","hero_copy":"حوّل TRIOS مسألة الأجسام الثلاثة إلى مختبر علمي جميل: حدّد الشروط الفيزيائية، شغّل المحاكاة، وشاهد الجاذبية تتحرك.","home_start":"ابدأ مع TRIOS","about":"ما هو TRIOS؟","section_title":"العلم، بلا فوضى.","feature_motion":"استكشف الحركة","feature_lab":"أجرِ التجارب","feature_results":"ادرس النتائج","login_title":"تسجيل الدخول إلى TRIOS","google_login":"المتابعة مع Google","create_native":"إنشاء حساب TRIOS","recover":"استعادة الحساب","back":"رجوع","dashboard_title":"مرحبًا بعودتك،","profile":"الملف الشخصي","report_title":"تقاريري","lab_title":"مختبري","about_title":"ما هو TRIOS؟"},
+    "zh":{"nav_language":"语言","nav_login":"登录","nav_signup":"创建账户","hero_kicker":"探索引力的新方式","hero_title_1":"探索","hero_title_2":"三体宇宙。","home_start":"开始使用 TRIOS","about":"什么是 TRIOS？","section_title":"科学，不再拥挤。","feature_motion":"探索运动","feature_lab":"进行实验","feature_results":"研究结果","login_title":"登录 TRIOS","google_login":"使用 Google 继续","create_native":"创建 TRIOS 账户","recover":"恢复账户","back":"返回","dashboard_title":"欢迎回来，","profile":"个人资料","report_title":"我的报告","lab_title":"我的实验室","about_title":"什么是 TRIOS？"},
+    "es":{"nav_language":"Idioma","nav_login":"Iniciar sesión","nav_signup":"Crear cuenta","hero_kicker":"Una nueva forma de explorar la gravedad","hero_title_1":"Descubre el","hero_title_2":"universo de tres cuerpos.","home_start":"Empezar con TRIOS","about":"¿Qué es TRIOS?","section_title":"Ciencia, sin ruido.","feature_motion":"Explora el movimiento","feature_lab":"Realiza experimentos","feature_results":"Estudia resultados","login_title":"Iniciar sesión en TRIOS","google_login":"Continuar con Google","create_native":"Crear cuenta de TRIOS","recover":"Recuperar cuenta","back":"Volver","dashboard_title":"Bienvenido de nuevo,","profile":"Perfil","report_title":"Mi informe","lab_title":"Mi laboratorio","about_title":"¿Qué es TRIOS?"},
+    "fr":{"nav_language":"Langue","nav_login":"Connexion","nav_signup":"Créer un compte","hero_kicker":"Une nouvelle façon d'explorer la gravité","hero_title_1":"Découvrez l'","hero_title_2":"univers des trois corps.","home_start":"Commencer avec TRIOS","about":"Qu'est-ce que TRIOS ?","section_title":"La science, sans surcharge.","feature_motion":"Explorer le mouvement","feature_lab":"Mener des expériences","feature_results":"Étudier les résultats","login_title":"Connexion à TRIOS","google_login":"Continuer avec Google","create_native":"Créer un compte TRIOS","recover":"Récupérer le compte","back":"Retour","dashboard_title":"Bon retour,","profile":"Profil","report_title":"Mon rapport","lab_title":"Mon laboratoire","about_title":"Qu'est-ce que TRIOS ?"},
+    "de":{"nav_language":"Sprache","nav_login":"Anmelden","nav_signup":"Konto erstellen","hero_kicker":"Eine neue Art, Gravitation zu entdecken","hero_title_1":"Entdecke das","hero_title_2":"Dreikörper-Universum.","home_start":"Mit TRIOS starten","about":"Was ist TRIOS?","section_title":"Wissenschaft, ohne Ballast.","feature_motion":"Bewegung erkunden","feature_lab":"Experimente durchführen","feature_results":"Ergebnisse untersuchen","login_title":"Bei TRIOS anmelden","google_login":"Mit Google fortfahren","create_native":"TRIOS-Konto erstellen","recover":"Konto wiederherstellen","back":"Zurück","dashboard_title":"Willkommen zurück,","profile":"Profil","report_title":"Mein Bericht","lab_title":"Mein Labor","about_title":"Was ist TRIOS?"},
+    "ja":{"nav_language":"言語","nav_login":"ログイン","nav_signup":"アカウント作成","hero_kicker":"重力を探る新しい方法","hero_title_1":"発見しよう、","hero_title_2":"三体宇宙。","home_start":"TRIOSを始める","about":"TRIOSとは？","section_title":"科学を、すっきりと。","feature_motion":"運動を探る","feature_lab":"実験する","feature_results":"結果を学ぶ","login_title":"TRIOSにログイン","google_login":"Googleで続行","create_native":"TRIOSアカウントを作成","recover":"アカウントを復元","back":"戻る","dashboard_title":"おかえりなさい、","profile":"プロフィール","report_title":"レポート","lab_title":"マイラボ","about_title":"TRIOSとは？"}
+}.items():
+    TRANSLATIONS[code] = {**TRANSLATIONS["en"], **overrides}
+
+def current_language():
+    return st.session_state.get("language", "fa")
+
+def t(key, **kwargs):
+    value = TRANSLATIONS.get(current_language(), TRANSLATIONS["en"]).get(key, TRANSLATIONS["en"].get(key, key))
+    return value.format(**kwargs) if kwargs else value
+
+def language_rtl():
+    return current_language() in {"fa", "ar"}
+
+def apply_language_direction():
+    direction = "rtl" if language_rtl() else "ltr"
+    st.markdown(
+        f"""
+        <style>
+        .main .block-container {{ direction:{direction}; }}
+        .stSelectbox, .stTextInput, .stCheckbox, .stButton {{ direction:{direction}; }}
+        .trios-nav, .trios-brand, .trios-hero, .trios-card, .trios-page-card, .trios-action-card {{ direction:{direction}; }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+def show_language_selector(key="language_selector"):
+    options = list(LANGUAGES.keys())
+    current = current_language()
+    index = options.index(current) if current in options else 0
+    selected = st.selectbox(
+        t("nav_language"),
+        options,
+        index=index,
+        format_func=lambda code: LANGUAGES[code],
+        label_visibility="collapsed",
+        key=key,
+    )
+    if selected != current:
+        st.session_state.language = selected
+        st.rerun()
+
 def apply_trios_design():
     """Presentation-only styling; application behavior remains unchanged."""
     st.markdown(
@@ -371,6 +467,75 @@ def apply_trios_design():
             font-size: .92rem;
         }
 
+        .trios-css-icon {
+            width: 1.8rem;
+            height: 1.8rem;
+            position: relative;
+            opacity: .95;
+        }
+        .trios-css-icon.orbit::before,
+        .trios-css-icon.orbit::after {
+            content:"";
+            position:absolute;
+            inset:.15rem;
+            border:2px solid #7bdfff;
+            border-radius:50%;
+            transform:rotate(34deg) scaleY(.48);
+        }
+        .trios-css-icon.orbit::after {
+            border-color:#b48cff;
+            transform:rotate(-34deg) scaleY(.48);
+        }
+        .trios-css-icon.flask::before {
+            content:"";
+            position:absolute;
+            left:.57rem;
+            top:.08rem;
+            width:.62rem;
+            height:.8rem;
+            border-left:2px solid #8ae5ff;
+            border-right:2px solid #b28bff;
+        }
+        .trios-css-icon.flask::after {
+            content:"";
+            position:absolute;
+            left:.28rem;
+            bottom:.1rem;
+            width:1.22rem;
+            height:1rem;
+            border:2px solid #8ae5ff;
+            border-top:0;
+            border-radius:0 0 .55rem .55rem;
+        }
+        .trios-css-icon.chart::before {
+            content:"";
+            position:absolute;
+            left:.12rem;
+            right:.12rem;
+            bottom:.18rem;
+            height:1.25rem;
+            border-left:2px solid #8ae5ff;
+            border-bottom:2px solid #8ae5ff;
+        }
+        .trios-css-icon.chart::after {
+            content:"";
+            position:absolute;
+            left:.42rem;
+            top:.52rem;
+            width:1.08rem;
+            height:.62rem;
+            border-top:2px solid #b58dff;
+            border-right:2px solid #b58dff;
+            transform:skew(-26deg) rotate(-18deg);
+        }
+        .stSelectbox { min-width:7.6rem; }
+        .stSelectbox [data-baseweb="select"] > div {
+            min-height:2.55rem;
+            border-radius:13px !important;
+            border:1px solid rgba(183,210,255,.14) !important;
+            background:rgba(255,255,255,.055) !important;
+            color:#f5f8ff !important;
+        }
         .trios-footer {
             margin-top: 4rem;
             padding: 1.4rem 0 .2rem;
@@ -1217,6 +1382,7 @@ def show_about():
 
 
 apply_trios_design()
+apply_language_direction()
 
 if "page" not in st.session_state:
     st.session_state.page = "home"
