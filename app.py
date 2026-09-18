@@ -38,7 +38,7 @@ TRANSLATIONS = {
         "login_title":"ورود به TRIOS","choose_login":"روش ورودت را انتخاب کن.","google_login":"ادامه با Google","google_fast":"ورود سریع با حساب Google","native_account":"حساب TRIOS","native_fast":"ساخت حساب با نام کاربری و رمز عبور","create_native":"ساخت حساب با TRIOS","recover":"بازیابی حساب","recover_copy":"ورود دوباره به حساب قبلی","about_short":"TRIOS چه کاری انجام می‌دهد؟","back":"بازگشت",
         "recover_title":"بازیابی حساب","recover_choose":"روش ورود قبلی خودت را انتخاب کن.","recover_google":"بازیابی با Google","recover_google_copy":"بازیابی با همان حساب Google","recover_native":"بازیابی با حساب TRIOS","recover_native_copy":"ورود با اطلاعات حساب TRIOS","recover_native_title":"ورود با حساب TRIOS","recover_notice":"نام کاربری و رمز عبور همان حساب TRIOS را وارد کن.",
         "username":"نام کاربری","password":"رمز عبور","login_account":"ورود به حساب","register_title":"ساخت حساب TRIOS","register":"ساخت حساب","confirm_password":"تکرار رمز عبور","password_mismatch":"رمزهای عبور یکسان نیستند.",
-        "welcome":"خوش اومدی، {name}!","welcome_back":"خوش برگشتی، {name}!","profile_title":"ساخت پروفایل TRIOS","profile_google_done":"ورود با Google انجام شد. حالا یک نام برای پروفایل TRIOS خودت انتخاب کن.","trios_username":"نام کاربری TRIOS","create_profile":"ساخت پروفایل","logout_google":"خروج از Google",
+        "welcome":"خوش آمدی، {name}!","welcome_back":"خوش برگشتی، {name}!","profile_title":"ساخت پروفایل TRIOS","profile_google_done":"ورود با Google انجام شد. حالا یک نام برای پروفایل TRIOS خودت انتخاب کن.","trios_username":"نام کاربری TRIOS","create_profile":"ساخت پروفایل","logout_google":"خروج از Google",
         "dashboard_kicker":"فضای شخصی TRIOS","dashboard_title":"خوش برگشتی،","dashboard_copy":"یک فضای آرام برای آزمایش، مشاهده و فکر کردن درباره‌ی حرکت.","path_title":"مسیر تو در TRIOS","path_copy":"از اینجا می‌توانی آزمایش‌ها، گزارش‌ها و پروفایلت را مدیریت کنی.","start_experiment":"شروع آزمایش","start_experiment_copy":"وارد آزمایشگاه شو و برای اجرای یک آزمایش آماده شو.","view_report":"مشاهده گزارش","report_copy":"نتایج و عملکرد ثبت‌شده‌ی این حساب را ببین.","profile":"پروفایل","profile_copy":"اطلاعات حساب و تنظیمات امنیتی خودت را مدیریت کن.",
         "lab_title":"آزمایشگاه من","lab_notice":"زیرساخت اجرای آزمایش‌های TRIOS آماده است. محتوای آزمایش‌های آموزشی هنوز جداگانه تعریف نشده و فعلاً در این بخش ساخته نمی‌شود.","report_title":"گزارش من","profile_info":"اطلاعات شخصی","account_management":"مدیریت حساب","logout_device":"خروج از این دستگاه","delete_account":"حذف دائمی حساب","delete_warning":"حذف حساب دائمی است و اطلاعات ذخیره‌شده‌ی این حساب را پاک می‌کند.","delete_confirm":"می‌خواهم حسابم را برای همیشه حذف کنم.","confirm_delete_error":"برای حذف حساب، ابتدا تأیید حذف را فعال کن.","account_not_found":"حساب پیدا نشد.",
         "level":"سطح","attempts":"تلاش‌ها","correct":"پاسخ درست","accuracy":"دقت","report_summary":"خلاصه عملکرد","experiments":"آزمایش‌های ثبت‌شده","no_report":"هنوز گزارشی برای این حساب ثبت نشده است.",
@@ -1067,6 +1067,19 @@ def google_identity():
     }
 
 
+VALID_PAGES = {
+    "home", "entry", "register", "recover", "recover_trios",
+    "recover_google", "google_profile", "dashboard", "profile",
+    "lab", "report", "about",
+}
+
+
+def navigate(page):
+    st.session_state.page = page
+    st.query_params["page"] = page
+    st.rerun()
+
+
 def start_google_login(flow):
     st.session_state.google_flow = flow
     st.login("google")
@@ -1076,8 +1089,7 @@ def set_logged_in_user(data, welcome_message=None):
     st.session_state.user = data["username"]
     if welcome_message:
         st.session_state.welcome_message = welcome_message
-    st.session_state.page = "dashboard"
-    st.rerun()
+    navigate("dashboard")
 
 
 def process_google_identity():
@@ -1128,12 +1140,10 @@ def show_home():
     action_about, action_signup = st.columns([1, 1], gap="medium")
     with action_about:
         if st.button(t("about"), use_container_width=True, key="hero_about"):
-            st.session_state.page = "about"
-            st.rerun()
+            navigate("about")
     with action_signup:
         if st.button(t("nav_signup"), use_container_width=True, key="hero_signup"):
-            st.session_state.page = "register"
-            st.rerun()
+            navigate("register")
 
     st.markdown(
         f'<div class="trios-section-head"><div><h2>{t("section_title")}</h2></div><p>{t("section_copy")}</p></div>',
@@ -1210,24 +1220,20 @@ def show_entry():
             st.subheader(t("native_account"))
             st.caption(t("native_fast"))
             if st.button(t("create_native"), use_container_width=True, key="register_button"):
-                st.session_state.page = "register"
-                st.rerun()
+                navigate("register")
 
     st.divider()
 
     c3, c4 = st.columns(2, gap="medium")
     with c3:
         if st.button(t("recover"), use_container_width=True, key="recover_button"):
-            st.session_state.page = "recover"
-            st.rerun()
+            navigate("recover")
     with c4:
         if st.button(t("about"), use_container_width=True, key="entry_about_button"):
-            st.session_state.page = "about"
-            st.rerun()
+            navigate("about")
 
     if st.button(t("back"), use_container_width=True, key="entry_back"):
-        st.session_state.page = "home"
-        st.rerun()
+        navigate("home")
 
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -1257,12 +1263,10 @@ def show_recover():
             st.subheader(t("native_account"))
             st.caption(t("recover_native_copy"))
             if st.button(t("recover_native"), use_container_width=True):
-                st.session_state.page = "recover_trios"
-                st.rerun()
+                navigate("recover_trios")
 
     if st.button(t("back"), use_container_width=True, key="recover_back"):
-        st.session_state.page = "entry"
-        st.rerun()
+        navigate("entry")
 
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -1287,8 +1291,7 @@ def show_recover_trios():
 
     st.markdown("</div>", unsafe_allow_html=True)
     if st.button(t("back"), use_container_width=True, key="recover_trios_back"):
-        st.session_state.page = "recover"
-        st.rerun()
+        navigate("recover")
 
 
 def show_recover_google():
@@ -1300,8 +1303,7 @@ def show_recover_google():
 
     if st.button(t("back_to_recovery"), use_container_width=True):
         st.session_state.pop("google_recovery_error", None)
-        st.session_state.page = "recover"
-        st.rerun()
+        navigate("recover")
 
     if st.button(t("logout_google"), use_container_width=True):
         st.logout()
@@ -1349,12 +1351,10 @@ def show_register():
     st.divider()
 
     if st.button(t("recover"), use_container_width=True, key="register_recover_button"):
-        st.session_state.page = "recover"
-        st.rerun()
+        navigate("recover")
 
     if st.button(t("back"), use_container_width=True, key="register_back"):
-        st.session_state.page = "entry"
-        st.rerun()
+        navigate("entry")
 
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -1403,6 +1403,12 @@ def show_dashboard():
     with left:
         st.image("assets/trios_logo.png", width=94)
     with right:
+        greeting = st.session_state.pop("welcome_message", None)
+        title = (
+            greeting
+            if greeting
+            else f'{t("dashboard_title")} <span class="trios-gradient-text">{username}</span>'
+        )
         st.markdown(
             f"""
             <div class="trios-hero" style="padding:2.5rem 1.5rem 1.7rem;margin-top:0;">
@@ -1411,8 +1417,7 @@ def show_dashboard():
                     {t("dashboard_kicker")}
                 </div>
                 <h1 style="font-size:clamp(2rem,4.8vw,4rem);">
-                    {t("dashboard_title")}
-                    <span class="trios-gradient-text">{username}</span>
+                    {title}
                 </h1>
                 <p class="trios-hero-copy">{t("dashboard_copy")}</p>
             </div>
@@ -1428,16 +1433,13 @@ def show_dashboard():
     c1, c2, c3 = st.columns(3, gap="medium")
     with c1:
         if render_action_card("rocket", t("start_experiment"), t("start_experiment_copy"), t("start_experiment"), "dashboard_lab"):
-            st.session_state.page = "lab"
-            st.rerun()
+            navigate("lab")
     with c2:
         if render_action_card("chart", t("view_report"), t("report_copy"), t("view_report"), "dashboard_report"):
-            st.session_state.page = "report"
-            st.rerun()
+            navigate("report")
     with c3:
         if render_action_card("profile", t("profile"), t("profile_copy"), t("profile"), "dashboard_profile"):
-            st.session_state.page = "profile"
-            st.rerun()
+            navigate("profile")
 
 
 def show_profile():
@@ -1463,8 +1465,7 @@ def show_profile():
         st.session_state.pop("google_flow", None)
         if data.get("auth_method") == "google":
             st.logout()
-        st.session_state.page = "home"
-        st.rerun()
+        navigate("home")
 
     st.divider()
     st.subheader(t("delete_account"))
@@ -1481,15 +1482,13 @@ def show_profile():
             st.session_state.pop("google_flow", None)
             if data.get("auth_method") == "google":
                 st.logout()
-            st.session_state.page = "home"
-            st.rerun()
+            navigate("home")
         else:
             st.error(t("account_not_found"))
 
     st.markdown("</div>", unsafe_allow_html=True)
     if st.button(t("back"), use_container_width=True):
-        st.session_state.page = "dashboard"
-        st.rerun()
+        navigate("dashboard")
 
     st.markdown(
         """
@@ -1516,8 +1515,7 @@ def show_lab():
     st.info(t("lab_notice"))
     st.markdown("</div>", unsafe_allow_html=True)
     if st.button(t("back"), use_container_width=True):
-        st.session_state.page = "dashboard"
-        st.rerun()
+        navigate("dashboard")
 
 
 def show_report():
@@ -1544,8 +1542,7 @@ def show_report():
 
     st.markdown("</div>", unsafe_allow_html=True)
     if st.button(t("back"), use_container_width=True):
-        st.session_state.page = "dashboard"
-        st.rerun()
+        navigate("dashboard")
 
 
 def show_about():
@@ -1576,8 +1573,15 @@ def show_about():
 apply_trios_design()
 apply_language_direction()
 
+requested_page = st.query_params.get("page")
+if requested_page not in VALID_PAGES:
+    requested_page = None
+
 if "page" not in st.session_state:
-    st.session_state.page = "home"
+    st.session_state.page = requested_page or "home"
+    st.query_params["page"] = st.session_state.page
+elif requested_page and requested_page != st.session_state.page:
+    st.session_state.page = requested_page
 
 process_google_identity()
 
