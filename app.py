@@ -13,9 +13,6 @@ from user_interface import (
 st.set_page_config(page_title="TRIOS", page_icon="assets/trios_logo.png", layout="wide")
 
 
-apply_trios_design()
-
-
 def apply_trios_design():
     """Presentation-only styling; does not change TRIOS behavior."""
     st.markdown(
@@ -233,6 +230,7 @@ def trios_google_icon():
 
 
 
+apply_trios_design()
 
 def show_logo():
     st.image("assets/trios_logo.png", width=180)
