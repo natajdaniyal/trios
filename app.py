@@ -933,8 +933,8 @@ def show_logo():
 
 
 def show_public_nav():
-    left, middle, language_col, about_col, signup_col = st.columns(
-        [0.65, 3.15, 1.15, 1.25, 1.45],
+    left, middle, language_col = st.columns(
+        [0.65, 3.15, 1.15],
         vertical_alignment="center",
     )
 
@@ -954,16 +954,6 @@ def show_public_nav():
 
     with language_col:
         show_language_selector("public_language")
-
-    with about_col:
-        if st.button(t("about"), use_container_width=True, key="nav_about"):
-            st.session_state.page = "about"
-            st.rerun()
-
-    with signup_col:
-        if st.button(t("nav_signup"), use_container_width=True, key="nav_signup"):
-            st.session_state.page = "register"
-            st.rerun()
 
 
 def show_hero_orbit():
@@ -1084,6 +1074,16 @@ def show_home():
     )
 
     show_hero_orbit()
+
+    action_about, action_signup = st.columns([1, 1], gap="medium")
+    with action_about:
+        if st.button(t("about"), use_container_width=True, key="hero_about"):
+            st.session_state.page = "about"
+            st.rerun()
+    with action_signup:
+        if st.button(t("nav_signup"), use_container_width=True, key="hero_signup"):
+            st.session_state.page = "register"
+            st.rerun()
 
     st.markdown(
         f'<div class="trios-section-head"><div><h2>{t("section_title")}</h2></div><p>{t("section_copy")}</p></div>',
