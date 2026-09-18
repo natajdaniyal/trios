@@ -13,6 +13,227 @@ from user_interface import (
 st.set_page_config(page_title="TRIOS", page_icon="assets/trios_logo.png", layout="wide")
 
 
+apply_trios_design()
+
+
+def apply_trios_design():
+    """Presentation-only styling; does not change TRIOS behavior."""
+    st.markdown(
+        """
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --trios-bg-1: #070b24;
+            --trios-bg-2: #13113b;
+            --trios-bg-3: #0b1738;
+            --trios-text: #f7f9ff;
+            --trios-muted: #b9c5e6;
+            --trios-card: rgba(255, 255, 255, 0.075);
+            --trios-card-border: rgba(255, 255, 255, 0.14);
+            --trios-glow: rgba(113, 173, 255, 0.34);
+            --trios-purple: rgba(164, 114, 255, 0.22);
+        }
+
+        html, body, [class*="css"] {
+            font-family: Inter, "Segoe UI", sans-serif;
+        }
+
+        [data-testid="stAppViewContainer"] {
+            background:
+                radial-gradient(circle at 12% 8%, var(--trios-purple) 0, transparent 30%),
+                radial-gradient(circle at 88% 15%, rgba(0, 214, 255, 0.15) 0, transparent 26%),
+                radial-gradient(circle at 52% 92%, rgba(85, 89, 255, 0.13) 0, transparent 32%),
+                linear-gradient(155deg, var(--trios-bg-1) 0%, var(--trios-bg-2) 48%, var(--trios-bg-3) 100%);
+            color: var(--trios-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        [data-testid="stAppViewContainer"]::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.43;
+            background-image:
+                radial-gradient(circle at 12% 22%, rgba(255,255,255,.9) 0 1px, transparent 1.7px),
+                radial-gradient(circle at 74% 17%, rgba(255,255,255,.75) 0 1px, transparent 1.6px),
+                radial-gradient(circle at 42% 78%, rgba(255,255,255,.65) 0 1px, transparent 1.5px),
+                radial-gradient(circle at 91% 68%, rgba(255,255,255,.8) 0 1px, transparent 1.6px);
+            background-size: 230px 230px, 310px 310px, 270px 270px, 360px 360px;
+            z-index: 0;
+        }
+
+        [data-testid="stHeader"] {
+            background: transparent;
+        }
+
+        .main .block-container {
+            max-width: 1100px;
+            padding: 3.2rem 2rem 4.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        [data-testid="stImage"] {
+            display: flex;
+            justify-content: center;
+            margin: 0 auto 1.25rem;
+        }
+
+        [data-testid="stImage"] img {
+            border-radius: 30px;
+            filter: drop-shadow(0 18px 42px rgba(0, 0, 0, .34));
+        }
+
+        h1, h2, h3 {
+            color: var(--trios-text) !important;
+            letter-spacing: -0.035em;
+            font-weight: 800;
+            text-shadow: 0 0 24px rgba(132, 170, 255, .14);
+        }
+
+        p, label, [data-testid="stCaptionContainer"] {
+            color: var(--trios-muted) !important;
+        }
+
+        [data-testid="stVerticalBlock"] > div:has(> .stButton) {
+            transition: transform .2s ease;
+        }
+
+        .stButton > button {
+            width: 100%;
+            min-height: 3.35rem;
+            border: 1px solid var(--trios-card-border);
+            border-radius: 18px;
+            color: #ffffff;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            background:
+                linear-gradient(135deg, rgba(255,255,255,.11), rgba(255,255,255,.045)),
+                rgba(9, 14, 39, .72);
+            box-shadow:
+                0 12px 30px rgba(0, 0, 0, .2),
+                inset 0 1px 0 rgba(255,255,255,.08);
+            backdrop-filter: blur(16px);
+            transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+        }
+
+        .stButton > button:hover {
+            transform: translateY(-2px);
+            border-color: rgba(153, 208, 255, .48);
+            box-shadow:
+                0 18px 34px rgba(0, 0, 0, .28),
+                0 0 28px var(--trios-glow),
+                inset 0 1px 0 rgba(255,255,255,.11);
+            background:
+                linear-gradient(135deg, rgba(117, 179, 255, .18), rgba(174, 119, 255, .13)),
+                rgba(14, 20, 51, .86);
+        }
+
+        .stButton > button:focus {
+            box-shadow:
+                0 0 0 2px rgba(116, 183, 255, .35),
+                0 14px 30px rgba(0, 0, 0, .22);
+        }
+
+        [data-testid="stTextInput"] input {
+            min-height: 3.1rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,.13);
+            color: #fff;
+            background: rgba(6, 11, 31, .48);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+        }
+
+        [data-testid="stTextInput"] input:focus {
+            border-color: rgba(126, 189, 255, .55);
+            box-shadow: 0 0 0 1px rgba(126, 189, 255, .22), 0 0 24px rgba(110, 160, 255, .13);
+        }
+
+        [data-testid="stAlert"] {
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,.1);
+            background: rgba(255,255,255,.055);
+            backdrop-filter: blur(14px);
+        }
+
+        [data-testid="stExpander"] {
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,.11);
+            background: rgba(255,255,255,.045);
+        }
+
+        hr {
+            border-color: rgba(255,255,255,.1) !important;
+        }
+
+        .trios-google-row {
+            display: flex;
+            align-items: stretch;
+            gap: .7rem;
+            margin: .2rem 0 .35rem;
+        }
+
+        .trios-google-icon {
+            width: 3.35rem;
+            min-width: 3.35rem;
+            height: 3.35rem;
+            border-radius: 18px;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(255,255,255,.14);
+            background: rgba(255,255,255,.08);
+            box-shadow:
+                0 12px 28px rgba(0,0,0,.2),
+                inset 0 1px 0 rgba(255,255,255,.1);
+            backdrop-filter: blur(14px);
+        }
+
+        .trios-google-icon svg {
+            width: 1.55rem;
+            height: 1.55rem;
+            display: block;
+        }
+
+        @media (max-width: 700px) {
+            .main .block-container {
+                padding: 2.25rem 1rem 3.25rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.55rem;
+            }
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def trios_google_icon():
+    st.markdown(
+        """
+        <div class="trios-google-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#EA4335" d="M12 10.2v3.9h5.45c-.24 1.26-.96 2.33-2.03 3.05l3.27 2.54c1.91-1.76 3.01-4.35 3.01-7.45 0-.71-.06-1.39-.18-2.04H12z"/>
+                <path fill="#4285F4" d="M12 21c2.73 0 5.02-.9 6.69-2.44l-3.27-2.54c-.91.61-2.07.98-3.42.98-2.63 0-4.86-1.78-5.66-4.17l-3.37 2.6C4.64 18.71 8.01 21 12 21z"/>
+                <path fill="#FBBC05" d="M6.34 12.83A5.99 5.99 0 0 1 6 11c0-.64.11-1.26.34-1.83l-3.37-2.6A10.13 10.13 0 0 0 2 11c0 1.63.39 3.17 1.08 4.43l3.26-2.6z"/>
+                <path fill="#34A853" d="M6.34 9.17C7.13 6.78 9.37 5 12 5c1.55 0 2.94.53 4.04 1.57l3.01-3.01C17.01 1.89 14.72 1 12 1 8.01 1 4.64 3.29 2.97 6.57l3.37 2.6z"/>
+            </svg>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+
+
 def show_logo():
     st.image("assets/trios_logo.png", width=180)
 
@@ -89,8 +310,12 @@ def show_entry():
         st.session_state.page = "about"
         st.rerun()
 
-    if st.button("🔵 ادامه با Google", use_container_width=True):
-        start_google_login("login")
+    google_col_icon, google_col_button = st.columns([1, 8], vertical_alignment="center")
+    with google_col_icon:
+        trios_google_icon()
+    with google_col_button:
+        if st.button("ادامه با Google", use_container_width=True, key="google_login_button"):
+            start_google_login("login")
 
     if st.button("✨ ساخت حساب با TRIOS", use_container_width=True):
         st.session_state.page = "register"
@@ -109,8 +334,12 @@ def show_recover():
     st.header("🔄 بازیابی حساب")
     st.write("روش ورود قبلی خودت را انتخاب کن.")
 
-    if st.button("🔵 بازیابی با Google", use_container_width=True):
-        start_google_login("recover")
+    google_col_icon, google_col_button = st.columns([1, 8], vertical_alignment="center")
+    with google_col_icon:
+        trios_google_icon()
+    with google_col_button:
+        if st.button("بازیابی با Google", use_container_width=True, key="google_recover_button"):
+            start_google_login("recover")
 
     if st.button("🔐 بازیابی با حساب TRIOS", use_container_width=True):
         st.session_state.page = "recover_trios"
