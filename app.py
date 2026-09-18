@@ -1110,10 +1110,12 @@ def process_google_identity():
     if flow == "recover":
         st.session_state.google_recovery_error = True
         st.session_state.page = "recover_google"
+        st.query_params["page"] = "recover_google"
         return
 
     st.session_state.google_identity = identity
     st.session_state.page = "google_profile"
+    st.query_params["page"] = "google_profile"
 
 
 def show_home():
@@ -1591,9 +1593,11 @@ if "user" in st.session_state:
         "recover_google", "google_profile"
     }:
         st.session_state.page = "dashboard"
+        st.query_params["page"] = "dashboard"
 else:
     if st.session_state.page in {"dashboard", "lab", "report", "profile"}:
         st.session_state.page = "home"
+        st.query_params["page"] = "home"
 
 
 page = st.session_state.page
