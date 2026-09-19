@@ -13,6 +13,21 @@ def make_configuration():
     return configuration
 
 
+def make_bot_configuration():
+    return BotConfiguration(
+        {
+            "fa": {"question": "فکر می‌کنی چه اتفاقی می‌افتد؟", "keywords": ["جذب", "نزدیک"]},
+            "en": {"question": "What do you think will happen?", "keywords": ["gravity", "closer"]},
+            "ar": {"question": "ماذا تعتقد أنه سيحدث؟", "keywords": ["جاذبية", "أقرب"]},
+            "zh": {"question": "你认为会发生什么？", "keywords": ["引力", "靠近"]},
+            "es": {"question": "¿Qué crees que sucederá?", "keywords": ["gravedad", "cerca"]},
+            "fr": {"question": "Que penses-tu qu'il va se passer ?", "keywords": ["gravité", "proche"]},
+            "de": {"question": "Was glaubst du, wird passieren?", "keywords": ["gravitation", "näher"]},
+            "ja": {"question": "何が起こると思いますか？", "keywords": ["重力", "近づく"]},
+        }
+    )
+
+
 def test_experiment_definition_stores_core_definition():
     configuration = make_configuration()
     rules = SelectionRules()
@@ -76,19 +91,15 @@ def test_experiment_definition_validates_inputs():
 
 
 def test_experiment_definition_accepts_bot_configuration():
-    configuration = make_configuration()
-    bot = BotConfiguration(
-        "فکر می‌کنی چه اتفاقی می‌افتد؟",
-        ["جذب", "نزدیک"],
-    )
-
+    bot = make_bot_configuration()
     definition = ExperimentDefinition(
         "gravity experiment",
-        configuration,
+        make_configuration(),
         bot_configuration=bot,
     )
 
     assert definition.bot_configuration is bot
+    assert definition.bot_configuration.question("en") == "What do you think, will happen?"
 
 
 def test_experiment_definition_rejects_invalid_bot_configuration():
