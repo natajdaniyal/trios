@@ -1,5 +1,6 @@
 import pytest
 
+from bot_configuration import BotConfiguration
 from experiment_definition import ExperimentDefinition
 from experiment_infrastructure import Experiment
 from parameter_rules import ParameterRule, SelectionRules
@@ -72,3 +73,28 @@ def test_experiment_definition_validates_inputs():
 
     with pytest.raises(TypeError):
         ExperimentDefinition("test", make_configuration(), object())
+
+
+def test_experiment_definition_accepts_bot_configuration():
+    configuration = make_configuration()
+    bot = BotConfiguration(
+        "فکر می‌کنی چه اتفاقی می‌افتد؟",
+        ["جذب", "نزدیک"],
+    )
+
+    definition = ExperimentDefinition(
+        "gravity experiment",
+        configuration,
+        bot_configuration=bot,
+    )
+
+    assert definition.bot_configuration is bot
+
+
+def test_experiment_definition_rejects_invalid_bot_configuration():
+    with pytest.raises(TypeError):
+        ExperimentDefinition(
+            "gravity experiment",
+            make_configuration(),
+            bot_configuration=object(),
+        )
