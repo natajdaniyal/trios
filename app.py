@@ -1067,17 +1067,14 @@ def google_identity():
     }
 
 
-VALID_PAGES = {
-    "home", "entry", "register", "recover", "recover_trios",
-    "recover_google", "google_profile", "dashboard", "profile",
-    "lab", "report", "about",
-}
+NAVIGATION_PAGES = {}
 
 
 def navigate(page):
-    st.session_state.page = page
-    st.query_params["page"] = page
-    st.rerun()
+    target = NAVIGATION_PAGES.get(page)
+    if target is None:
+        raise ValueError(f"Unknown TRIOS page: {page}")
+    st.switch_page(target)
 
 
 def start_google_login(flow):
@@ -1085,8 +1082,10 @@ def start_google_login(flow):
     st.login("google")
 
 
-def set_logged_in_user(data, welcome_message=None):
+def set_logged_in_user(data, welcome_message=None, new_account=False):
     st.session_state.user = data["username"]
+    st.session_state.pop("welcome_message", None)
+    st.session_state.new_account = new_account
     if welcome_message:
         st.session_state.welcome_message = welcome_message
     navigate("dashboard")
@@ -1105,6 +1104,7 @@ def process_google_identity():
         set_logged_in_user(
             profile,
             t("welcome_back", name=profile["username"]),
+            new_account=False,
         )
 
     if flow == "recover":
@@ -1289,7 +1289,11 @@ def show_recover_trios():
         except ValueError as exc:
             st.error(str(exc))
         else:
-            set_logged_in_user(data, t("welcome_back", name=data["username"]))
+            set_logged_in_user(
+                data,
+                t("welcome_back", name=data["username"]),
+                new_account=False,
+            )
 
     st.markdown("</div>", unsafe_allow_html=True)
     if st.button(t("back"), use_container_width=True, key="recover_trios_back"):
@@ -1348,7 +1352,11 @@ def show_register():
                     except ValueError as exc:
                         st.error(str(exc))
                     else:
-                        set_logged_in_user(data, t("welcome", name=data["username"]))
+                        set_logged_in_user(
+                            data,
+                            t("welcome", name=data["username"]),
+                            new_account=True,
+                        )
 
     st.divider()
 
@@ -1388,7 +1396,11 @@ def show_google_profile():
         else:
             st.session_state.pop("google_identity", None)
             st.session_state.pop("google_flow", None)
-            set_logged_in_user(data, t("welcome", name=data["username"]))
+            set_logged_in_user(
+                data,
+                t("welcome", name=data["username"]),
+                new_account=True,
+            )
 
     if st.button(t("logout_google"), use_container_width=True):
         st.logout()
@@ -1405,12 +1417,14 @@ def show_dashboard():
     with left:
         st.image("assets/trios_logo.png", width=94)
     with right:
+        is_new_account = st.session_state.pop("new_account", False)
         greeting = st.session_state.pop("welcome_message", None)
-        title = (
-            greeting
-            if greeting
-            else f'{t("dashboard_title")} <span class="trios-gradient-text">{username}</span>'
-        )
+        if is_new_account:
+            title = t("welcome", name=username)
+        elif greeting:
+            title = greeting
+        else:
+            title = f'{t("dashboard_title")} <span class="trios-gradient-text">{username}</span>'
         st.markdown(
             f"""
             <div class="trios-hero" style="padding:2.5rem 1.5rem 1.7rem;margin-top:0;">
@@ -1566,63 +1580,85 @@ def show_about():
     st.markdown("</div>", unsafe_allow_html=True)
 
     if st.button(t("back"), use_container_width=True, key="about_back"):
-        st.session_state.page = (
-            "dashboard" if "user" in st.session_state else "home"
-        )
-        st.rerun()
+        navigate("dashboard" if "user" in st.session_state else "home")
 
 
 apply_trios_design()
 apply_language_direction()
 
-requested_page = st.query_params.get("page")
-if requested_page not in VALID_PAGES:
-    requested_page = None
+NAVIGATION_PAGES.update(
+    {
+        "home": st.Page(show_home, title="TRIOS", default=True),
+        "entry": st.Page(show_entry, title=t("login_title"), url_path="login"),
+        "register": st.Page(show_register, title=t("register_title"), url_path="register"),
+        "recover": st.Page(show_recover, title=t("recover_title"), url_path="recover"),
+        "recover_trios": st.Page(
+            show_recover_trios,
+            title=t("recover_native_title"),
+            url_path="recover-trios",
+        ),
+        "recover_google": st.Page(
+            show_recover_google,
+            title=t("google_recovery_title"),
+            url_path="recover-google",
+        ),
+        "google_profile": st.Page(
+            show_google_profile,
+            title=t("profile_title"),
+            url_path="google-profile",
+        ),
+        "dashboard": st.Page(
+            show_dashboard,
+            title="Dashboard",
+            url_path="dashboard",
+        ),
+        "profile": st.Page(
+            show_profile,
+            title=t("profile"),
+            url_path="profile",
+        ),
+        "lab": st.Page(
+            show_lab,
+            title=t("lab_title"),
+            url_path="lab",
+        ),
+        "report": st.Page(
+            show_report,
+            title=t("report_title"),
+            url_path="report",
+        ),
+        "about": st.Page(
+            show_about,
+            title=t("about_title"),
+            url_path="about",
+        ),
+    }
+)
 
-if "page" not in st.session_state:
-    st.session_state.page = requested_page or "home"
-    st.query_params["page"] = st.session_state.page
-elif requested_page and requested_page != st.session_state.page:
-    st.session_state.page = requested_page
+navigation = st.navigation(
+    list(NAVIGATION_PAGES.values()),
+    position="hidden",
+)
 
 process_google_identity()
 
-if "user" in st.session_state:
-    if st.session_state.page in {
-        "home", "entry", "register", "recover", "recover_trios",
-        "recover_google", "google_profile"
-    }:
-        st.session_state.page = "dashboard"
-        st.query_params["page"] = "dashboard"
-else:
-    if st.session_state.page in {"dashboard", "lab", "report", "profile"}:
-        st.session_state.page = "home"
-        st.query_params["page"] = "home"
+if "user" in st.session_state and navigation.url_path in {
+    "",
+    "login",
+    "register",
+    "recover",
+    "recover-trios",
+    "recover-google",
+    "google-profile",
+}:
+    st.switch_page(NAVIGATION_PAGES["dashboard"])
 
+if "user" not in st.session_state and navigation.url_path in {
+    "dashboard",
+    "profile",
+    "lab",
+    "report",
+}:
+    st.switch_page(NAVIGATION_PAGES["home"])
 
-page = st.session_state.page
-
-if page == "home":
-    show_home()
-elif page == "entry":
-    show_entry()
-elif page == "recover":
-    show_recover()
-elif page == "recover_trios":
-    show_recover_trios()
-elif page == "recover_google":
-    show_recover_google()
-elif page == "register":
-    show_register()
-elif page == "google_profile":
-    show_google_profile()
-elif page == "dashboard":
-    show_dashboard()
-elif page == "profile":
-    show_profile()
-elif page == "lab":
-    show_lab()
-elif page == "report":
-    show_report()
-elif page == "about":
-    show_about()
+navigation.run()
