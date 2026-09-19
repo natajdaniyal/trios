@@ -1,6 +1,11 @@
 import pytest
 
-from bot_configuration import BotConfiguration, KeywordMatcher, normalize_text
+from bot_configuration import (
+    SUPPORTED_LANGUAGES,
+    BotConfiguration,
+    KeywordMatcher,
+    normalize_text,
+)
 from experiment_definition import ExperimentDefinition
 from physical_configuration import BodyPhysicalConfiguration, StagePhysicalConfiguration
 
@@ -11,91 +16,128 @@ def make_config():
     return configuration
 
 
-def test_bot_configuration_stores_question_and_keywords():
-    configuration = BotConfiguration(
-        "چه اتفاقی می‌افتد؟",
-        ["جذب", "نزدیک"],
-    )
+def make_translations():
+    return {
+        "fa": {"question": "چه اتفاقی می‌افتد؟", "keywords": ["جاذبه", "نزدیک"]},
+        "en": {"question": "What happens?", "keywords": ["gravity", "closer"]},
+        "ar": {"question": "ماذا يحدث؟", "keywords": ["جاذبية", "أقرب"]},
+        "zh": {"question": "会发生什么？", "keywords": ["引力", "靠近"]},
+        "es": {"question": "¿Qué sucede?", "keywords": ["gravedad", "cerca"]},
+        "fr": {"question": "Que se passe-t-il ?", "keywords": ["gravité", "proche"]},
+        "de": {"question": "Was passiert?", "keywords": ["gravitation", "näher"]},
+        "ja": {"question": "何が起こりますか？", "keywords": ["重力", "近づく"]},
+    }
 
-    assert configuration.question == "چه اتفاقی می‌افتد؟"
-    assert configuration.keywords == ("جذب", "نزدیک")
+
+def test_bot_configuration_stores_all_supported_languages():
+    configuration = BotConfiguration(make_translations())
+
+    assert configuration.languages() == SUPPORTED_LANGUAGES
+    assert configuration.question("fa") == "چه اتفاقی می‌افتد؟"
+    assert configuration.question("en") == "What happens?"
+    assert configuration.keywords("de") == ("gravitation", "näher")
     assert configuration.minimum_matches == 1
 
 
-def test_bot_configuration_rejects_empty_question_and_keywords():
-    with pytest.raises(ValueError):
-        BotConfiguration("", ["جذب"])
+def test_bot_configuration_rejects_missing_or_unsupported_languages():
+    translations = make_translations()
+    translations.pop("ja")
 
     with pytest.raises(ValueError):
-        BotConfiguration("سؤال", [])
+        BotConfiguration(translations)
+
+    translations = make_translations()
+    translations["it"] = {"question": "Cosa succede?", "keywords": ["gravità"]}
 
     with pytest.raises(ValueError):
-        BotConfiguration("سؤال", [""])
+        BotConfiguration(translations)
 
 
-def test_bot_configuration_deduplicates_keywords():
-    configuration = BotConfiguration(
-        "سؤال",
-        ["Gravity", "gravity", " جذب "],
-    )
-
-    assert configuration.keywords == ("Gravity", "جذب")
-
-
-def test_bot_configuration_validates_minimum_matches():
-    with pytest.raises(ValueError):
-        BotConfiguration("سؤال", ["a"], minimum_matches=0)
+def test_bot_configuration_rejects_invalid_localized_data():
+    translations = make_translations()
+    translations["fa"] = {"question": "", "keywords": ["جاذبه"]}
 
     with pytest.raises(ValueError):
-        BotConfiguration("سؤال", ["a"], minimum_matches=2)
+        BotConfiguration(translations)
 
-    with pytest.raises(TypeError):
-        BotConfiguration("سؤال", ["a"], minimum_matches=True)
+    translations = make_translations()
+    translations["en"] = {"question": "What happens?", "keywords": []}
+
+    with pytest.raises(ValueError):
+        BotConfiguration(translations)
+
+    translations = make_translations()
+    translations["en"] = {"question": "What happens?", "keywords": ["gravity"]}
+
+    with pytest.raises(ValueError):
+        BotConfiguration(translations, minimum_matches=2)
 
 
-def test_keyword_matcher_matches_any_keyword_by_default():
-    configuration = BotConfiguration("سؤال", ["جاذبه", "نزدیک"])
+def test_bot_configuration_deduplicates_keywords_per_language():
+    translations = make_translations()
+    translations["en"]["keywords"] = ["Gravity", "gravity", " closer "]
+
+    configuration = BotConfiguration(translations)
+
+    assert configuration.keywords("en") == ("Gravity", "closer")
+    assert configuration.keywords("fa") == ("جاذبه", "نزدیک")
+
+
+def test_bot_configuration_validates_language():
+    configuration = BotConfiguration(make_translations())
+
+    with pytest.raises(ValueError):
+        configuration.question("it")
+
+    with pytest.raises(ValueError):
+        configuration.keywords("it")
+
+
+def test_keyword_matcher_uses_selected_language_keywords():
+    configuration = BotConfiguration(make_translations())
     matcher = KeywordMatcher(configuration)
 
-    assert matcher.matches("دو جسم به خاطر جاذبه به هم نزدیک می‌شوند")
-    assert matcher.match_count("دو جسم به خاطر جاذبه حرکت می‌کنند") == 1
+    assert matcher.matches("دو جسم به خاطر جاذبه به هم نزدیک می‌شوند", "fa")
+    assert matcher.matches("The gravity makes the bodies closer.", "en")
+
+    assert not matcher.matches("The gravity makes the bodies closer.", "fa")
+    assert not matcher.matches("دو جسم به خاطر جاذبه به هم نزدیک می‌شوند", "en")
 
 
-def test_keyword_matcher_can_require_multiple_keywords():
+def test_keyword_matcher_can_require_multiple_keywords_per_language():
     configuration = BotConfiguration(
-        "سؤال",
-        ["جاذبه", "نزدیک", "هم"],
+        make_translations(),
         minimum_matches=2,
     )
     matcher = KeywordMatcher(configuration)
 
-    assert matcher.matches("به خاطر جاذبه به هم نزدیک می‌شوند")
-    assert not matcher.matches("فقط جاذبه")
+    assert matcher.matches("gravity makes them closer", "en")
+    assert not matcher.matches("gravity only", "en")
+    assert matcher.match_count("جاذبه و نزدیک", "fa") == 2
 
 
 def test_keyword_matcher_normalizes_case_and_persian_arabic_variants():
     assert normalize_text(" كِشِش  ي") == normalize_text("کِشِش ی")
 
-    configuration = BotConfiguration("سؤال", ["کشش گرانشی"])
+    translations = make_translations()
+    translations["fa"]["keywords"] = ["کشش گرانشی"]
+    configuration = BotConfiguration(translations)
     matcher = KeywordMatcher(configuration)
 
-    assert matcher.matches("کِشِش گرانشی")
+    assert matcher.matches("کِشِش گرانشی", "fa")
 
 
 def test_keyword_matcher_rejects_non_string_answer():
-    matcher = KeywordMatcher(BotConfiguration("سؤال", ["جاذبه"]))
+    matcher = KeywordMatcher(BotConfiguration(make_translations()))
 
     with pytest.raises(TypeError):
-        matcher.matches(None)
+        matcher.matches(None, "fa")
 
-    assert not matcher.matches("")
+    assert not matcher.matches("", "fa")
 
 
-def test_experiment_definition_accepts_bot_configuration():
-    bot = BotConfiguration(
-        "چه اتفاقی می‌افتد؟",
-        ["جذب", "نزدیک"],
-    )
+def test_experiment_definition_accepts_multilingual_bot_configuration():
+    bot = BotConfiguration(make_translations())
     definition = ExperimentDefinition(
         "gravity",
         make_config(),
@@ -103,6 +145,7 @@ def test_experiment_definition_accepts_bot_configuration():
     )
 
     assert definition.bot_configuration is bot
+    assert definition.bot_configuration.question("en") == "What happens?"
 
 
 def test_experiment_definition_rejects_invalid_bot_configuration():
