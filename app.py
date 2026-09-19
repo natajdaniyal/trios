@@ -1088,7 +1088,66 @@ def set_logged_in_user(data, welcome_message=None, new_account=False):
     st.session_state.new_account = new_account
     if welcome_message:
         st.session_state.welcome_message = welcome_message
+
+    try:
+        from cloud_storage import cloud_enabled, create_session
+
+        if cloud_enabled():
+            token = create_session(data["username"])
+            st.query_params["session"] = token
+    except Exception:
+        pass
+
     navigate("dashboard")
+
+
+def restore_web_session():
+    if "user" in st.session_state:
+        return
+
+    token = st.query_params.get("session")
+    if not token:
+        return
+
+    try:
+        from cloud_storage import cloud_enabled, get_session_user
+
+        if not cloud_enabled():
+            return
+
+        username = get_session_user(token)
+        if not username:
+            del st.query_params["session"]
+            return
+
+        profile = user_profile(username)
+        st.session_state.user = profile["username"]
+    except Exception:
+        return
+
+
+def clear_web_session():
+    token = st.query_params.get("session")
+
+    if token:
+        try:
+            from cloud_storage import cloud_enabled, delete_session
+
+            if cloud_enabled():
+                delete_session(token)
+        except Exception:
+            pass
+
+        try:
+            del st.query_params["session"]
+        except KeyError:
+            pass
+
+    st.session_state.pop("user", None)
+    st.session_state.pop("welcome_message", None)
+    st.session_state.pop("google_identity", None)
+    st.session_state.pop("google_flow", None)
+    st.session_state.pop("new_account", None)
 
 
 def process_google_identity():
@@ -1472,10 +1531,7 @@ def show_profile():
     st.subheader(t("account_management"))
 
     if st.button(t("logout_device"), use_container_width=True):
-        st.session_state.pop("user", None)
-        st.session_state.pop("welcome_message", None)
-        st.session_state.pop("google_identity", None)
-        st.session_state.pop("google_flow", None)
+        clear_web_session()
         if data.get("auth_method") == "google":
             st.logout()
         navigate("home")
@@ -1489,10 +1545,7 @@ def show_profile():
         if not confirm_delete:
             st.error(t("confirm_delete_error"))
         elif delete_user(username):
-            st.session_state.pop("user", None)
-            st.session_state.pop("welcome_message", None)
-            st.session_state.pop("google_identity", None)
-            st.session_state.pop("google_flow", None)
+            clear_web_session()
             if data.get("auth_method") == "google":
                 st.logout()
             navigate("home")
@@ -1645,6 +1698,7 @@ navigation = st.navigation(
     position="hidden",
 )
 
+restore_web_session()
 process_google_identity()
 
 if "user" not in st.session_state and navigation.url_path in {
