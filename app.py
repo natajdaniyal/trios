@@ -74,6 +74,288 @@ for code, overrides in {
 }.items():
     TRANSLATIONS[code] = {**TRANSLATIONS["en"], **overrides}
 
+
+TRANSLATIONS["fa"].update({
+    "github_eyebrow":"متن‌باز • TRIOS",
+    "github_title":"TRIOS در GitHub",
+    "github_copy":"پروژه را ببین، توسعه‌اش را دنبال کن و با ساختار TRIOS آشنا شو.",
+    "github_button":"مشاهده GitHub ↗",
+    "status_correct":"درست",
+    "status_incorrect":"نادرست",
+    "username_required":"نام کاربری نمی‌تواند خالی باشد.",
+    "password_required":"رمز عبور نمی‌تواند خالی باشد.",
+    "account_exists":"این حساب از قبل وجود دارد.",
+    "incorrect_password":"رمز عبور نادرست است.",
+    "google_identity_missing":"اطلاعات هویت Google موجود نیست.",
+    "google_account_exists":"این حساب Google از قبل یک حساب TRIOS دارد.",
+    "google_email_linked":"این حساب Google از قبل به یک حساب TRIOS متصل است."
+})
+
+TRANSLATIONS["en"].update({
+    "github_eyebrow":"OPEN SOURCE • TRIOS",
+    "github_title":"TRIOS on GitHub",
+    "github_copy":"Explore the project, follow its development, and see how TRIOS is built.",
+    "github_button":"View GitHub ↗",
+    "status_correct":"Correct",
+    "status_incorrect":"Incorrect",
+    "username_required":"Username cannot be empty.",
+    "password_required":"Password cannot be empty.",
+    "account_exists":"This account already exists.",
+    "incorrect_password":"Incorrect password.",
+    "google_identity_missing":"Google identity is missing.",
+    "google_account_exists":"This Google account already has a TRIOS account.",
+    "google_email_linked":"This Google account is already linked to a TRIOS account."
+})
+
+for code, overrides in {
+    "ar": {
+        "section_copy":"تم فصل الفيزياء والمحاكاة والتجارب وواجهة المستخدم بشكل واضح.",
+        "feature_motion_copy":"راقب تطور الأنظمة الجاذبية انطلاقًا من شروط أولية محددة بدقة.",
+        "feature_lab_copy":"حوّل فكرتك إلى تجربة قابلة للتكرار دون خلط العلم بواجهة المستخدم.",
+        "feature_results_copy":"شاهد القياسات وقارن السلوك وابنِ حدسك الفيزيائي من خلال المحاكاة.",
+        "footer":"TRIOS · مختبر محاكاة الأجسام الثلاثة",
+        "choose_login":"اختر طريقة تسجيل الدخول.",
+        "google_fast":"تسجيل سريع باستخدام Google",
+        "native_fast":"اسم المستخدم وكلمة المرور",
+        "recover_copy":"العودة إلى حساب موجود",
+        "recover_choose":"اختر طريقة تسجيل الدخول السابقة.",
+        "recover_google_copy":"استخدم حساب Google نفسه",
+        "recover_native_copy":"استخدم بيانات TRIOS الخاصة بك",
+        "recover_native_title":"تسجيل الدخول بحساب TRIOS",
+        "recover_notice":"أدخل اسم المستخدم وكلمة مرور حساب TRIOS الخاص بك.",
+        "username":"اسم المستخدم","password":"كلمة المرور","login_account":"تسجيل الدخول",
+        "register_title":"إنشاء حساب TRIOS","register":"إنشاء حساب","confirm_password":"تأكيد كلمة المرور","password_mismatch":"كلمتا المرور غير متطابقتين.",
+        "welcome":"مرحبًا، {name}!","welcome_back":"مرحبًا بعودتك، {name}!","profile_title":"إنشاء ملف TRIOS الشخصي",
+        "profile_google_done":"تم تسجيل الدخول باستخدام Google. اختر اسمًا لملف TRIOS الشخصي.",
+        "trios_username":"اسم مستخدم TRIOS","create_profile":"إنشاء الملف الشخصي","logout_google":"تسجيل الخروج من Google",
+        "dashboard_kicker":"مساحة TRIOS الشخصية","dashboard_title":"مرحبًا بعودتك،","dashboard_copy":"مساحة هادئة للتجربة والملاحظة والتفكير في الحركة.",
+        "path_title":"مسارك في TRIOS","path_copy":"يمكنك من هنا إدارة التجارب والتقارير وملفك الشخصي.",
+        "start_experiment":"بدء تجربة","start_experiment_copy":"ادخل إلى المختبر واستعد لتشغيل تجربة.",
+        "view_report":"عرض التقرير","report_copy":"راجع النتائج المسجلة لهذا الحساب.","profile_copy":"إدارة بيانات الحساب وإعدادات الأمان.",
+        "lab_notice":"بنية تشغيل تجارب TRIOS جاهزة. لم يتم تعريف التجارب التعليمية بعد.",
+        "report_title":"تقاريري","profile_info":"المعلومات الشخصية","account_management":"إدارة الحساب",
+        "logout_device":"تسجيل الخروج من هذا الجهاز","delete_account":"حذف الحساب نهائيًا",
+        "delete_warning":"حذف الحساب نهائي ولا يمكن التراجع عنه، وسيزيل البيانات المخزنة لهذا الحساب.",
+        "delete_confirm":"أريد حذف حسابي نهائيًا.","confirm_delete_error":"أكد حذف الحساب أولًا.","account_not_found":"لم يتم العثور على الحساب.",
+        "level":"المستوى","attempts":"المحاولات","correct":"الإجابات الصحيحة","accuracy":"الدقة",
+        "report_summary":"ملخص الأداء","experiments":"التجارب المسجلة","no_report":"لا يوجد تقرير مسجل لهذا الحساب حتى الآن.",
+        "about_short":"ماذا يفعل TRIOS؟","about_text_1":"TRIOS هو نظام لمحاكاة ومراقبة ودراسة الأنظمة الفيزيائية متعددة الأجسام مع التركيز على مسألة الأجسام الثلاثة.",
+        "about_text_2":"يتولى قلب الفيزياء القوانين والحسابات؛ وتدير المحاكاة الخطوات الزمنية؛ وتحفظ البنية الفيزيائية الشروط الأولية؛ وتدير بنية التجارب المراحل والنتائج.",
+        "about_text_3":"يحافظ هذا الفصل على عدم إعادة واجهة المستخدم تنفيذ منطق الفيزياء، ويسمح لـTRIOS بالنمو كبيئة علمية وتعليمية.",
+        "about_text_4":"صُمم TRIOS للتجارب القابلة للتكرار، مع فصل الشروط الفيزيائية والمحاكاة والقياس والتحقق.",
+        "about_notice":"يركز المشروع حاليًا على البنية التحتية والمعمارية؛ ولم تُبنَ التجارب التعليمية الحقيقية بعد.",
+        "google_recovery_title":"الاستعادة باستخدام Google","google_not_linked":"حساب Google هذا غير مرتبط بحساب TRIOS حتى الآن. سجّل الدخول بالطريقة السابقة لتجنب إنشاء حساب مكرر.",
+        "back_to_recovery":"العودة إلى الاستعادة","google_account":"حساب Google: {name}",
+        "github_eyebrow":"مفتوح المصدر • TRIOS","github_title":"TRIOS على GitHub","github_copy":"استكشف المشروع وتابع تطويره وتعرّف على كيفية بناء TRIOS.","github_button":"عرض GitHub ↗",
+        "status_correct":"صحيح","status_incorrect":"غير صحيح",
+        "username_required":"لا يمكن أن يكون اسم المستخدم فارغًا.","password_required":"لا يمكن أن تكون كلمة المرور فارغة.",
+        "account_exists":"هذا الحساب موجود بالفعل.","incorrect_password":"كلمة المرور غير صحيحة.",
+        "google_identity_missing":"هوية Google مفقودة.","google_account_exists":"هذا الحساب من Google لديه حساب TRIOS بالفعل.",
+        "google_email_linked":"حساب Google هذا مرتبط بالفعل بحساب TRIOS."
+    },
+    "zh": {
+        "section_copy":"物理、模拟、实验和用户界面彼此清晰分离。",
+        "feature_motion_copy":"从精确定义的初始条件出发，观察引力系统的演化。",
+        "feature_lab_copy":"把想法变成可重复的实验，同时保持科学与界面分离。",
+        "feature_results_copy":"查看测量结果、比较行为，并通过模拟建立物理直觉。",
+        "footer":"TRIOS · 三体模拟实验室",
+        "choose_login":"选择登录方式。",
+        "google_fast":"使用 Google 快速登录","native_fast":"用户名和密码","recover_copy":"找回已有账户",
+        "recover_choose":"选择你之前使用的登录方式。","recover_google_copy":"使用同一个 Google 账户",
+        "recover_native_copy":"使用 TRIOS 账户信息","recover_native_title":"使用 TRIOS 登录",
+        "recover_notice":"请输入 TRIOS 账户的用户名和密码。","username":"用户名","password":"密码","login_account":"登录",
+        "register_title":"创建 TRIOS 账户","register":"创建账户","confirm_password":"确认密码","password_mismatch":"两次密码不一致。",
+        "welcome":"欢迎，{name}！","welcome_back":"欢迎回来，{name}！","profile_title":"创建 TRIOS 个人资料",
+        "profile_google_done":"Google 登录成功。为你的 TRIOS 个人资料选择一个名称。",
+        "trios_username":"TRIOS 用户名","create_profile":"创建个人资料","logout_google":"退出 Google",
+        "dashboard_kicker":"TRIOS 工作区","dashboard_title":"欢迎回来，","dashboard_copy":"一个用于实验、观察和思考运动的安静空间。",
+        "path_title":"你的 TRIOS 路径","path_copy":"从这里管理实验、报告和个人资料。",
+        "start_experiment":"开始实验","start_experiment_copy":"进入实验室并准备运行实验。",
+        "view_report":"查看报告","report_copy":"查看此账户记录的实验结果。","profile_copy":"管理账户信息和安全设置。",
+        "lab_notice":"TRIOS 实验执行基础设施已准备就绪，教育实验尚未定义。",
+        "report_title":"我的报告","profile_info":"个人信息","account_management":"账户管理",
+        "logout_device":"退出此设备","delete_account":"永久删除账户",
+        "delete_warning":"删除账户是永久操作，将删除此账户存储的数据。",
+        "delete_confirm":"我要永久删除我的账户。","confirm_delete_error":"请先确认删除账户。","account_not_found":"未找到账户。",
+        "level":"等级","attempts":"尝试次数","correct":"正确回答","accuracy":"准确率",
+        "report_summary":"表现摘要","experiments":"已记录的实验","no_report":"此账户还没有报告记录。",
+        "about_short":"TRIOS 是什么？","about_text_1":"TRIOS 是一个用于模拟、观察和研究多体物理系统的系统，重点研究三体问题。",
+        "about_text_2":"物理核心负责定律和计算；模拟层管理时间步；物理配置保存初始条件；实验基础设施管理阶段和结果。",
+        "about_text_3":"这种分离让界面无需重新实现物理逻辑，也让 TRIOS 能够发展成为科学和教育环境。",
+        "about_text_4":"TRIOS 面向可重复实验设计，将物理条件、模拟、测量和验证分开。",
+        "about_notice":"项目目前专注于基础设施和架构；真正的教育实验尚未建立。",
+        "google_recovery_title":"使用 Google 恢复","google_not_linked":"此 Google 账户尚未关联 TRIOS 账户。请使用之前的方式登录，以避免创建重复账户。",
+        "back_to_recovery":"返回账户恢复","google_account":"Google 账户：{name}",
+        "github_eyebrow":"开源 • TRIOS","github_title":"TRIOS on GitHub","github_copy":"探索项目、跟进开发，并了解 TRIOS 的构建方式。","github_button":"查看 GitHub ↗",
+        "status_correct":"正确","status_incorrect":"不正确",
+        "username_required":"用户名不能为空。","password_required":"密码不能为空。","account_exists":"账户已存在。","incorrect_password":"密码不正确。",
+        "google_identity_missing":"缺少 Google 身份信息。","google_account_exists":"此 Google 账户已有 TRIOS 账户。","google_email_linked":"此 Google 账户已关联 TRIOS 账户。"
+    },
+    "es": {
+        "section_copy":"La física, la simulación, los experimentos y la interfaz están claramente separados.",
+        "feature_motion_copy":"Observa cómo evolucionan los sistemas gravitatorios desde condiciones iniciales precisas.",
+        "feature_lab_copy":"Convierte una idea en un experimento repetible sin mezclar la ciencia con la interfaz.",
+        "feature_results_copy":"Consulta las mediciones, compara comportamientos y desarrolla intuición física mediante la simulación.",
+        "footer":"TRIOS · laboratorio de simulación de tres cuerpos",
+        "choose_login":"Elige cómo quieres iniciar sesión.","google_fast":"Inicio rápido con Google","native_fast":"Nombre de usuario y contraseña",
+        "recover_copy":"Volver a una cuenta existente","recover_choose":"Elige tu método de inicio de sesión anterior.","recover_google_copy":"Usa la misma cuenta de Google",
+        "recover_native_copy":"Usa tus credenciales de TRIOS","recover_native_title":"Iniciar sesión con TRIOS","recover_notice":"Introduce el nombre de usuario y la contraseña de tu cuenta TRIOS.",
+        "username":"Nombre de usuario","password":"Contraseña","login_account":"Iniciar sesión","register_title":"Crear una cuenta de TRIOS","register":"Crear cuenta",
+        "confirm_password":"Confirmar contraseña","password_mismatch":"Las contraseñas no coinciden.","welcome":"¡Bienvenido, {name}!","welcome_back":"¡Bienvenido de nuevo, {name}!",
+        "profile_title":"Crear tu perfil de TRIOS","profile_google_done":"Has iniciado sesión con Google. Elige un nombre para tu perfil de TRIOS.",
+        "trios_username":"Nombre de usuario de TRIOS","create_profile":"Crear perfil","logout_google":"Cerrar sesión de Google",
+        "dashboard_kicker":"Espacio de TRIOS","dashboard_title":"Bienvenido de nuevo,","dashboard_copy":"Un espacio tranquilo para experimentar, observar y pensar sobre el movimiento.",
+        "path_title":"Tu recorrido en TRIOS","path_copy":"Gestiona experimentos, informes y tu perfil desde aquí.",
+        "start_experiment":"Iniciar experimento","start_experiment_copy":"Entra en el laboratorio y prepárate para ejecutar un experimento.",
+        "view_report":"Ver informe","report_copy":"Revisa los resultados registrados para esta cuenta.","profile_copy":"Gestiona los datos de la cuenta y la configuración de seguridad.",
+        "lab_notice":"La infraestructura de ejecución de TRIOS está lista. Los experimentos educativos todavía no están definidos.",
+        "report_title":"Mi informe","profile_info":"Información personal","account_management":"Gestión de la cuenta",
+        "logout_device":"Cerrar sesión en este dispositivo","delete_account":"Eliminar cuenta permanentemente",
+        "delete_warning":"Eliminar la cuenta es permanente y borra los datos almacenados de esta cuenta.",
+        "delete_confirm":"Quiero eliminar mi cuenta permanentemente.","confirm_delete_error":"Confirma primero la eliminación de la cuenta.","account_not_found":"Cuenta no encontrada.",
+        "level":"Nivel","attempts":"Intentos","correct":"Respuestas correctas","accuracy":"Precisión","report_summary":"Resumen del rendimiento",
+        "experiments":"Experimentos registrados","no_report":"Todavía no hay ningún informe registrado para esta cuenta.",
+        "about_short":"¿Qué hace TRIOS?","about_text_1":"TRIOS es un sistema para simular, observar y estudiar sistemas físicos de múltiples cuerpos, con especial atención al problema de los tres cuerpos.",
+        "about_text_2":"El núcleo físico contiene las leyes y cálculos; la simulación gestiona los pasos temporales; la configuración física guarda las condiciones iniciales; y la infraestructura de experimentos gestiona etapas y resultados.",
+        "about_text_3":"Esta separación evita que la interfaz tenga que volver a implementar la física y permite que TRIOS crezca como entorno científico y educativo.",
+        "about_text_4":"TRIOS está diseñado para experimentos repetibles, separando condiciones físicas, simulación, medición y validación.",
+        "about_notice":"El proyecto se centra actualmente en la infraestructura y la arquitectura; todavía no se han creado experimentos educativos reales.",
+        "google_recovery_title":"Recuperar con Google","google_not_linked":"Esta cuenta de Google aún no está vinculada a una cuenta de TRIOS. Inicia sesión con el método anterior para evitar crear una cuenta duplicada.",
+        "back_to_recovery":"Volver a recuperación","google_account":"Cuenta de Google: {name}",
+        "github_eyebrow":"CÓDIGO ABIERTO • TRIOS","github_title":"TRIOS en GitHub","github_copy":"Explora el proyecto, sigue su desarrollo y descubre cómo está construido TRIOS.","github_button":"Ver GitHub ↗",
+        "status_correct":"Correcto","status_incorrect":"Incorrecto",
+        "username_required":"El nombre de usuario no puede estar vacío.","password_required":"La contraseña no puede estar vacía.","account_exists":"La cuenta ya existe.","incorrect_password":"La contraseña es incorrecta.",
+        "google_identity_missing":"Falta la identidad de Google.","google_account_exists":"Esta cuenta de Google ya tiene una cuenta de TRIOS.","google_email_linked":"Esta cuenta de Google ya está vinculada a una cuenta de TRIOS."
+    },
+    "fr": {
+        "section_copy":"La physique, la simulation, les expériences et l’interface sont clairement séparées.",
+        "feature_motion_copy":"Observez l’évolution des systèmes gravitationnels à partir de conditions initiales précises.",
+        "feature_lab_copy":"Transformez une idée en expérience reproductible sans mélanger la science et l’interface.",
+        "feature_results_copy":"Consultez les mesures, comparez les comportements et développez votre intuition physique grâce à la simulation.",
+        "footer":"TRIOS · laboratoire de simulation à trois corps",
+        "choose_login":"Choisissez votre méthode de connexion.","google_fast":"Connexion rapide avec Google","native_fast":"Nom d’utilisateur et mot de passe",
+        "recover_copy":"Retrouver un compte existant","recover_choose":"Choisissez votre ancienne méthode de connexion.","recover_google_copy":"Utiliser le même compte Google",
+        "recover_native_copy":"Utiliser vos identifiants TRIOS","recover_native_title":"Se connecter avec TRIOS","recover_notice":"Saisissez le nom d’utilisateur et le mot de passe de votre compte TRIOS.",
+        "username":"Nom d’utilisateur","password":"Mot de passe","login_account":"Se connecter","register_title":"Créer un compte TRIOS","register":"Créer un compte",
+        "confirm_password":"Confirmer le mot de passe","password_mismatch":"Les mots de passe ne correspondent pas.","welcome":"Bienvenue, {name} !","welcome_back":"Bon retour, {name} !",
+        "profile_title":"Créer votre profil TRIOS","profile_google_done":"Connexion Google réussie. Choisissez un nom pour votre profil TRIOS.",
+        "trios_username":"Nom d’utilisateur TRIOS","create_profile":"Créer le profil","logout_google":"Se déconnecter de Google",
+        "dashboard_kicker":"Espace TRIOS","dashboard_title":"Bon retour,","dashboard_copy":"Un espace calme pour expérimenter, observer et réfléchir au mouvement.",
+        "path_title":"Votre parcours TRIOS","path_copy":"Gérez ici vos expériences, rapports et profil.",
+        "start_experiment":"Démarrer une expérience","start_experiment_copy":"Entrez dans le laboratoire et préparez-vous à lancer une expérience.",
+        "view_report":"Voir le rapport","report_copy":"Consultez les résultats enregistrés pour ce compte.","profile_copy":"Gérez les informations du compte et les paramètres de sécurité.",
+        "lab_notice":"L’infrastructure d’exécution de TRIOS est prête. Les expériences éducatives ne sont pas encore définies.",
+        "report_title":"Mon rapport","profile_info":"Informations personnelles","account_management":"Gestion du compte",
+        "logout_device":"Se déconnecter de cet appareil","delete_account":"Supprimer définitivement le compte",
+        "delete_warning":"La suppression du compte est définitive et efface les données stockées pour ce compte.",
+        "delete_confirm":"Je veux supprimer définitivement mon compte.","confirm_delete_error":"Confirmez d’abord la suppression du compte.","account_not_found":"Compte introuvable.",
+        "level":"Niveau","attempts":"Tentatives","correct":"Réponses correctes","accuracy":"Précision","report_summary":"Résumé des performances",
+        "experiments":"Expériences enregistrées","no_report":"Aucun rapport n’est encore enregistré pour ce compte.",
+        "about_short":"Que fait TRIOS ?","about_text_1":"TRIOS est un système destiné à simuler, observer et étudier des systèmes physiques à plusieurs corps, avec un accent sur le problème des trois corps.",
+        "about_text_2":"Le cœur physique contient les lois et les calculs ; la simulation gère les pas de temps ; la configuration physique stocke les conditions initiales ; l’infrastructure des expériences gère les étapes et les résultats.",
+        "about_text_3":"Cette séparation évite à l’interface de réimplémenter la physique et permet à TRIOS d’évoluer comme environnement scientifique et éducatif.",
+        "about_text_4":"TRIOS est conçu pour des expériences reproductibles, en séparant conditions physiques, simulation, mesure et validation.",
+        "about_notice":"Le projet se concentre actuellement sur l’infrastructure et l’architecture ; les véritables expériences éducatives n’ont pas encore été créées.",
+        "google_recovery_title":"Récupérer avec Google","google_not_linked":"Ce compte Google n’est pas encore lié à un compte TRIOS. Connectez-vous avec la méthode précédente pour éviter de créer un compte en double.",
+        "back_to_recovery":"Retour à la récupération","google_account":"Compte Google : {name}",
+        "github_eyebrow":"OPEN SOURCE • TRIOS","github_title":"TRIOS sur GitHub","github_copy":"Explorez le projet, suivez son développement et découvrez comment TRIOS est construit.","github_button":"Voir GitHub ↗",
+        "status_correct":"Correct","status_incorrect":"Incorrect",
+        "username_required":"Le nom d’utilisateur ne peut pas être vide.","password_required":"Le mot de passe ne peut pas être vide.","account_exists":"Ce compte existe déjà.","incorrect_password":"Mot de passe incorrect.",
+        "google_identity_missing":"L’identité Google est manquante.","google_account_exists":"Ce compte Google possède déjà un compte TRIOS.","google_email_linked":"Ce compte Google est déjà lié à un compte TRIOS."
+    },
+    "de": {
+        "section_copy":"Physik, Simulation, Experimente und Benutzeroberfläche sind klar voneinander getrennt.",
+        "feature_motion_copy":"Beobachte die Entwicklung gravitativer Systeme aus präzise definierten Anfangsbedingungen.",
+        "feature_lab_copy":"Verwandle eine Idee in ein wiederholbares Experiment, ohne Wissenschaft und Oberfläche zu vermischen.",
+        "feature_results_copy":"Sieh dir Messungen an, vergleiche Verhalten und entwickle physikalische Intuition durch Simulation.",
+        "footer":"TRIOS · Labor für Dreikörpersimulation",
+        "choose_login":"Wähle deine Anmeldemethode.","google_fast":"Schnelle Anmeldung mit Google","native_fast":"Benutzername und Passwort",
+        "recover_copy":"Zu einem bestehenden Konto zurückkehren","recover_choose":"Wähle deine bisherige Anmeldemethode.","recover_google_copy":"Dasselbe Google-Konto verwenden",
+        "recover_native_copy":"Deine TRIOS-Zugangsdaten verwenden","recover_native_title":"Mit TRIOS anmelden","recover_notice":"Gib den Benutzernamen und das Passwort deines TRIOS-Kontos ein.",
+        "username":"Benutzername","password":"Passwort","login_account":"Anmelden","register_title":"TRIOS-Konto erstellen","register":"Konto erstellen",
+        "confirm_password":"Passwort bestätigen","password_mismatch":"Die Passwörter stimmen nicht überein.","welcome":"Willkommen, {name}!","welcome_back":"Willkommen zurück, {name}!",
+        "profile_title":"TRIOS-Profil erstellen","profile_google_done":"Die Google-Anmeldung war erfolgreich. Wähle einen Namen für dein TRIOS-Profil.",
+        "trios_username":"TRIOS-Benutzername","create_profile":"Profil erstellen","logout_google":"Von Google abmelden",
+        "dashboard_kicker":"TRIOS-Arbeitsbereich","dashboard_title":"Willkommen zurück,","dashboard_copy":"Ein ruhiger Ort zum Experimentieren, Beobachten und Nachdenken über Bewegung.",
+        "path_title":"Dein TRIOS-Weg","path_copy":"Verwalte von hier aus Experimente, Berichte und dein Profil.",
+        "start_experiment":"Experiment starten","start_experiment_copy":"Betritt das Labor und bereite dich auf ein Experiment vor.",
+        "view_report":"Bericht anzeigen","report_copy":"Überprüfe die für dieses Konto gespeicherten Ergebnisse.","profile_copy":"Verwalte Kontodaten und Sicherheitseinstellungen.",
+        "lab_notice":"Die Ausführungsinfrastruktur von TRIOS ist bereit. Bildungs-Experimente sind noch nicht definiert.",
+        "report_title":"Mein Bericht","profile_info":"Persönliche Informationen","account_management":"Kontoverwaltung",
+        "logout_device":"Auf diesem Gerät abmelden","delete_account":"Konto dauerhaft löschen",
+        "delete_warning":"Das Löschen des Kontos ist dauerhaft und entfernt die gespeicherten Daten dieses Kontos.",
+        "delete_confirm":"Ich möchte mein Konto dauerhaft löschen.","confirm_delete_error":"Bestätige zuerst die Kontolöschung.","account_not_found":"Konto nicht gefunden.",
+        "level":"Level","attempts":"Versuche","correct":"Richtige Antworten","accuracy":"Genauigkeit","report_summary":"Leistungsübersicht",
+        "experiments":"Aufgezeichnete Experimente","no_report":"Für dieses Konto wurde noch kein Bericht aufgezeichnet.",
+        "about_short":"Was macht TRIOS?","about_text_1":"TRIOS ist ein System zum Simulieren, Beobachten und Untersuchen physikalischer Mehrkörpersysteme mit Fokus auf das Dreikörperproblem.",
+        "about_text_2":"Der Physikkern enthält Gesetze und Berechnungen; die Simulation verwaltet Zeitschritte; die physische Konfiguration speichert Anfangsbedingungen; die Experimentinfrastruktur verwaltet Phasen und Ergebnisse.",
+        "about_text_3":"Diese Trennung verhindert, dass die Oberfläche Physiklogik neu implementieren muss, und ermöglicht TRIOS als wissenschaftliche und pädagogische Umgebung zu wachsen.",
+        "about_text_4":"TRIOS ist für wiederholbare Experimente ausgelegt und trennt physische Bedingungen, Simulation, Messung und Validierung.",
+        "about_notice":"Das Projekt konzentriert sich derzeit auf Infrastruktur und Architektur; echte Bildungs-Experimente wurden noch nicht erstellt.",
+        "google_recovery_title":"Mit Google wiederherstellen","google_not_linked":"Dieses Google-Konto ist noch nicht mit einem TRIOS-Konto verknüpft. Melde dich mit der vorherigen Methode an, um ein doppeltes Konto zu vermeiden.",
+        "back_to_recovery":"Zurück zur Wiederherstellung","google_account":"Google-Konto: {name}",
+        "github_eyebrow":"OPEN SOURCE • TRIOS","github_title":"TRIOS auf GitHub","github_copy":"Entdecke das Projekt, verfolge die Entwicklung und erfahre, wie TRIOS aufgebaut ist.","github_button":"GitHub ansehen ↗",
+        "status_correct":"Richtig","status_incorrect":"Falsch",
+        "username_required":"Der Benutzername darf nicht leer sein.","password_required":"Das Passwort darf nicht leer sein.","account_exists":"Dieses Konto existiert bereits.","incorrect_password":"Falsches Passwort.",
+        "google_identity_missing":"Die Google-Identität fehlt.","google_account_exists":"Dieses Google-Konto hat bereits ein TRIOS-Konto.","google_email_linked":"Dieses Google-Konto ist bereits mit einem TRIOS-Konto verknüpft."
+    },
+    "ja": {
+        "section_copy":"物理、シミュレーション、実験、インターフェースを明確に分離しています。",
+        "feature_motion_copy":"正確に定義した初期条件から、重力系がどのように進化するかを観察します。",
+        "feature_lab_copy":"科学とインターフェースを混ぜずに、アイデアを再現可能な実験へ変えます。",
+        "feature_results_copy":"測定結果を見て挙動を比較し、シミュレーションから物理的な直感を身につけます。",
+        "footer":"TRIOS · 三体シミュレーション研究室",
+        "choose_login":"ログイン方法を選んでください。","google_fast":"Googleでクイックログイン","native_fast":"ユーザー名とパスワード",
+        "recover_copy":"既存のアカウントに戻る","recover_choose":"以前使用したログイン方法を選んでください。","recover_google_copy":"同じGoogleアカウントを使用",
+        "recover_native_copy":"TRIOSの認証情報を使用","recover_native_title":"TRIOSでログイン","recover_notice":"TRIOSアカウントのユーザー名とパスワードを入力してください。",
+        "username":"ユーザー名","password":"パスワード","login_account":"ログイン","register_title":"TRIOSアカウントを作成","register":"アカウントを作成",
+        "confirm_password":"パスワードを確認","password_mismatch":"パスワードが一致しません。","welcome":"ようこそ、{name}さん！","welcome_back":"おかえりなさい、{name}さん！",
+        "profile_title":"TRIOSプロフィールを作成","profile_google_done":"Googleでのログインに成功しました。TRIOSプロフィールの名前を選んでください。",
+        "trios_username":"TRIOSユーザー名","create_profile":"プロフィールを作成","logout_google":"Googleからログアウト",
+        "dashboard_kicker":"TRIOSワークスペース","dashboard_title":"おかえりなさい、","dashboard_copy":"実験し、観察し、運動について考えるための静かな空間です。",
+        "path_title":"TRIOSでのあなたの道","path_copy":"ここから実験、レポート、プロフィールを管理できます。",
+        "start_experiment":"実験を開始","start_experiment_copy":"ラボに入り、実験を実行する準備をします。",
+        "view_report":"レポートを見る","report_copy":"このアカウントに記録された結果を確認します。","profile_copy":"アカウント情報とセキュリティ設定を管理します。",
+        "lab_notice":"TRIOSの実験実行基盤は準備済みです。教育用実験はまだ定義されていません。",
+        "report_title":"マイレポート","profile_info":"個人情報","account_management":"アカウント管理",
+        "logout_device":"このデバイスからログアウト","delete_account":"アカウントを完全に削除",
+        "delete_warning":"アカウントの削除は永久的で、このアカウントに保存されたデータを削除します。",
+        "delete_confirm":"アカウントを完全に削除したい。","confirm_delete_error":"まずアカウント削除を確認してください。","account_not_found":"アカウントが見つかりません。",
+        "level":"レベル","attempts":"試行回数","correct":"正解","accuracy":"正確率","report_summary":"成績概要",
+        "experiments":"記録された実験","no_report":"このアカウントにはまだレポートがありません。",
+        "about_short":"TRIOSとは？","about_text_1":"TRIOSは、多体系の物理システムをシミュレーション、観察、研究するためのシステムで、三体問題を中心に扱います。",
+        "about_text_2":"物理コアは法則と計算を担当し、シミュレーションは時間ステップを管理し、物理設定は初期条件を保持し、実験基盤はステージと結果を管理します。",
+        "about_text_3":"この分離により、インターフェースが物理ロジックを再実装する必要がなくなり、TRIOSは科学・教育環境として成長できます。",
+        "about_text_4":"TRIOSは再現可能な実験向けに設計され、物理条件、シミュレーション、測定、検証を分離しています。",
+        "about_notice":"現在はインフラとアーキテクチャの完成に集中しており、実際の教育用実験はまだ作成されていません。",
+        "google_recovery_title":"Googleで復元","google_not_linked":"このGoogleアカウントはまだTRIOSアカウントにリンクされていません。重複アカウントを避けるため、以前の方法でログインしてください。",
+        "back_to_recovery":"復元に戻る","google_account":"Googleアカウント：{name}",
+        "github_eyebrow":"オープンソース • TRIOS","github_title":"GitHubのTRIOS","github_copy":"プロジェクトを見て、開発を追い、TRIOSの仕組みを確認できます。","github_button":"GitHubを見る ↗",
+        "status_correct":"正解","status_incorrect":"不正解",
+        "username_required":"ユーザー名は空にできません。","password_required":"パスワードは空にできません。","account_exists":"このアカウントはすでに存在します。","incorrect_password":"パスワードが正しくありません。",
+        "google_identity_missing":"Googleの本人情報がありません。","google_account_exists":"このGoogleアカウントにはすでにTRIOSアカウントがあります。","google_email_linked":"このGoogleアカウントはすでにTRIOSアカウントにリンクされています。"
+    }
+}.items():
+    TRANSLATIONS[code].update(overrides)
+
+
+ERROR_TRANSLATION_KEYS = {
+    "Username cannot be empty.": "username_required",
+    "Password cannot be empty.": "password_required",
+    "User account already exists.": "account_exists",
+    "User account does not exist.": "account_not_found",
+    "Incorrect password.": "incorrect_password",
+    "Google identity is missing.": "google_identity_missing",
+    "This Google account already has a TRIOS account.": "google_account_exists",
+    "This Google account is already linked to a TRIOS account.": "google_email_linked",
+}
+
+
+def localized_error(exc):
+    """Return a translated user-facing error while preserving unknown errors."""
+    message = str(exc)
+    return t(ERROR_TRANSLATION_KEYS.get(message, message))
+
 def current_language():
     return st.session_state.get("language", "fa")
 
@@ -1232,12 +1514,12 @@ def show_home():
         """
         <div class="trios-github">
             <div>
-                <div class="trios-github-eyebrow">OPEN SOURCE • TRIOS</div>
-                <h3>TRIOS on GitHub</h3>
-                <p>Explore the project, follow its development, and see how TRIOS is built.</p>
+                <div class="trios-github-eyebrow">{t("github_eyebrow")}</div>
+                <h3>{t("github_title")}</h3>
+                <p>{t("github_copy")}</p>
             </div>
             <a href="https://github.com/natajdaniyal/trios" target="_blank" rel="noopener noreferrer">
-                View GitHub ↗
+                {t("github_button")}
             </a>
         </div>
         """,
@@ -1343,7 +1625,7 @@ def show_recover_trios():
         try:
             data = recover_user(username, password)
         except ValueError as exc:
-            st.error(str(exc))
+            st.error(localized_error(exc))
         else:
             set_logged_in_user(
                 data,
@@ -1560,12 +1842,12 @@ def show_profile():
         """
         <div class="trios-github">
             <div>
-                <div class="trios-github-eyebrow">OPEN SOURCE • TRIOS</div>
-                <h3>TRIOS on GitHub</h3>
-                <p>Explore the project, follow its development, and see how TRIOS is built.</p>
+                <div class="trios-github-eyebrow">{t("github_eyebrow")}</div>
+                <h3>{t("github_title")}</h3>
+                <p>{t("github_copy")}</p>
             </div>
             <a href="https://github.com/natajdaniyal/trios" target="_blank" rel="noopener noreferrer">
-                View GitHub ↗
+                {t("github_button")}
             </a>
         </div>
         """,
@@ -1601,7 +1883,7 @@ def show_report():
     if data["experiments"]:
         st.subheader(t("experiments"))
         for experiment in data["experiments"]:
-            status = "Correct" if experiment["correct"] else "Incorrect"
+            status = t("status_correct") if experiment["correct"] else t("status_incorrect")
             st.write(f"**{experiment['name']}** — {status}")
     else:
         st.info(t("no_report"))
@@ -1662,7 +1944,7 @@ NAVIGATION_PAGES.update(
         ),
         "dashboard": st.Page(
             show_dashboard,
-            title="Dashboard",
+            title=t("dashboard_title"),
             url_path="dashboard",
             visibility="hidden",
         ),
