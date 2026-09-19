@@ -1109,13 +1109,10 @@ def process_google_identity():
 
     if flow == "recover":
         st.session_state.google_recovery_error = True
-        st.session_state.page = "recover_google"
-        st.query_params["page"] = "recover_google"
-        return
+        navigate("recover_google")
 
     st.session_state.google_identity = identity
-    st.session_state.page = "google_profile"
-    st.query_params["page"] = "google_profile"
+    navigate("google_profile")
 
 
 def show_home():
