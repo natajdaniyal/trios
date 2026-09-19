@@ -99,7 +99,7 @@ def test_experiment_definition_accepts_bot_configuration():
     )
 
     assert definition.bot_configuration is bot
-    assert definition.bot_configuration.question("en") == "What do you think, will happen?"
+    assert definition.bot_configuration.question("en") == "What do you think will happen?"
 
 
 def test_experiment_definition_rejects_invalid_bot_configuration():
