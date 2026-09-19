@@ -1,4 +1,6 @@
+import hashlib
 import json
+import secrets
 from pathlib import Path
 
 import streamlit as st
@@ -43,8 +45,82 @@ def _ensure_table():
             )
             """
         )
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS trios_sessions (
+                token_hash VARCHAR(64) PRIMARY KEY,
+                username VARCHAR(255) NOT NULL,
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            )
+            """
+        )
         conn.commit()
     _TABLE_READY = True
+
+
+def _hash_session_token(token):
+    return hashlib.sha256(token.encode("utf-8")).hexdigest()
+
+
+def create_session(username):
+    _ensure_table()
+    token = secrets.token_urlsafe(32)
+    token_hash = _hash_session_token(token)
+
+    with _connection() as conn:
+        conn.execute(
+            """
+            INSERT INTO trios_sessions (token_hash, username)
+            VALUES (%s, %s)
+            """,
+            (token_hash, username),
+        )
+        conn.commit()
+    return token
+
+
+def get_session_user(token):
+    if not token:
+        return None
+
+    _ensure_table()
+    token_hash = _hash_session_token(token)
+
+    with _connection() as conn:
+        row = conn.execute(
+            "SELECT username FROM trios_sessions WHERE token_hash = %s",
+            (token_hash,),
+        ).fetchone()
+
+    return row[0] if row else None
+
+
+def delete_session(token):
+    if not token:
+        return False
+
+    _ensure_table()
+    token_hash = _hash_session_token(token)
+
+    with _connection() as conn:
+        result = conn.execute(
+            "DELETE FROM trios_sessions WHERE token_hash = %s",
+            (token_hash,),
+        )
+        conn.commit()
+    return result.rowcount > 0
+
+
+def delete_sessions_for_user(username):
+    _ensure_table()
+
+    with _connection() as conn:
+        result = conn.execute(
+            "DELETE FROM trios_sessions WHERE username = %s",
+            (username,),
+        )
+        conn.commit()
+    return result.rowcount
 
 
 def _decode(row):
@@ -101,6 +177,10 @@ def delete_profile(username):
     with _connection() as conn:
         result = conn.execute(
             "DELETE FROM trios_profiles WHERE username = %s",
+            (username,),
+        )
+        conn.execute(
+            "DELETE FROM trios_sessions WHERE username = %s",
             (username,),
         )
         conn.commit()
