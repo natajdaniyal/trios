@@ -103,6 +103,7 @@ TRANSLATIONS["fa"].update({
     "session_count":"تعداد Sessionها",
     "active_window":"فعال در ۱۵ دقیقه گذشته",
     "refresh_stats":"تازه‌سازی",
+    "active_users_definition":"فعال یعنی حسابی که در حال حاضر Session معتبر TRIOS دارد.",
 })
 
 TRANSLATIONS["en"].update({
@@ -126,6 +127,7 @@ TRANSLATIONS["en"].update({
     "session_count":"Sessions",
     "active_window":"Active in the last {minutes} minutes",
     "refresh_stats":"Refresh",
+    "active_users_definition":"Active = accounts with a currently valid TRIOS session.",
 })
 
 for code, overrides in {
@@ -1817,8 +1819,9 @@ def show_dashboard():
             navigate("profile")
 
     st.markdown("<div style='height:.5rem'></div>", unsafe_allow_html=True)
-    if st.button(t("account_stats_title"), use_container_width=True, key="dashboard_account_stats"):
-        navigate("account_stats")
+    if _is_admin():
+        if st.button(t("account_stats_title"), use_container_width=True, key="dashboard_account_stats"):
+            navigate("account_stats")
 
 
 def show_profile():
@@ -1930,7 +1933,23 @@ def _touch_current_web_session():
         pass
 
 
+def _is_admin():
+    """Only the username configured in Streamlit secrets can access admin tools."""
+    user = st.session_state.get("user")
+    if not user:
+        return False
+    try:
+        admin_username = str(st.secrets["TRIOS_ADMIN_USERNAME"]).strip()
+    except Exception:
+        return False
+    return bool(admin_username) and str(user).strip() == admin_username
+
+
 def show_account_stats():
+    if not _is_admin():
+        navigate("dashboard")
+        return
+
     show_public_nav()
 
     st.markdown('<div class="trios-page-card">', unsafe_allow_html=True)
@@ -1939,22 +1958,20 @@ def show_account_stats():
 
     try:
         from cloud_storage import get_account_stats
-        stats = get_account_stats(15)
+        stats = get_account_stats()
     except Exception:
         st.error("Account statistics are temporarily unavailable.")
         st.markdown("</div>", unsafe_allow_html=True)
         return
 
-    c1, c2, c3 = st.columns(3, gap="medium")
+    c1, c2 = st.columns(2, gap="medium")
     with c1:
         st.metric(t("total_accounts"), stats["total_accounts"])
     with c2:
         st.metric(t("active_users"), stats["active_users"])
-    with c3:
-        st.metric(t("active_sessions"), stats["active_sessions"])
 
-    st.caption(t("active_window", minutes=stats["active_window_minutes"]))
-    st.caption(f'{t("session_count")}: {stats["total_sessions"]}')
+    st.caption(t("active_users_definition"))
+    st.caption(f'{t("active_sessions")}: {stats["active_sessions"]}')
 
     if st.button(t("refresh_stats"), use_container_width=True, key="refresh_account_stats"):
         st.rerun()
