@@ -1539,7 +1539,7 @@ def show_home():
             st.caption(t("feature_results_copy"))
 
     st.markdown(
-        """
+        f"""
         <div class="trios-github">
             <div>
                 <div class="trios-github-eyebrow">{t("github_eyebrow")}</div>
