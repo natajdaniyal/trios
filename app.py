@@ -1935,15 +1935,17 @@ def _touch_current_web_session():
 
 
 def _is_admin():
-    """Only the username configured in Streamlit secrets can access admin tools."""
-    user = st.session_state.get("user")
-    if not user:
+    """Only the designated Google-backed TRIOS owner can access admin tools."""
+    username = str(st.session_state.get("user", "")).strip()
+    if username.casefold() != "دانیال".casefold():
         return False
+
     try:
-        admin_username = str(st.secrets["TRIOS_ADMIN_USERNAME"]).strip()
-    except Exception:
+        data = user_profile(username)
+    except (ValueError, KeyError, TypeError):
         return False
-    return bool(admin_username) and str(user).strip() == admin_username
+
+    return data.get("auth_method") == "google"
 
 
 def show_account_stats():
