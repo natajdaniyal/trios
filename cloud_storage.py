@@ -149,11 +149,8 @@ def touch_session(token):
     return result.rowcount > 0
 
 
-def get_account_stats(active_window_minutes=15):
-    """Return aggregate account and recent activity statistics."""
-    if active_window_minutes <= 0:
-        raise ValueError("Active window must be greater than zero.")
-
+def get_account_stats():
+    """Return aggregate account statistics based on currently valid sessions."""
     _ensure_table()
 
     with _connection() as conn:
@@ -164,24 +161,18 @@ def get_account_stats(active_window_minutes=15):
                 (
                     SELECT COUNT(DISTINCT username)
                     FROM trios_sessions
-                    WHERE last_activity_at >= NOW() - (%s * INTERVAL '1 minute')
                 ) AS active_users,
                 (
                     SELECT COUNT(*)
                     FROM trios_sessions
-                    WHERE last_activity_at >= NOW() - (%s * INTERVAL '1 minute')
-                ) AS active_sessions,
-                (SELECT COUNT(*) FROM trios_sessions) AS total_sessions
-            """,
-            (active_window_minutes, active_window_minutes),
+                ) AS active_sessions
+            """
         ).fetchone()
 
     return {
         "total_accounts": row[0],
         "active_users": row[1],
         "active_sessions": row[2],
-        "total_sessions": row[3],
-        "active_window_minutes": active_window_minutes,
     }
 
 
