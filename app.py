@@ -1289,8 +1289,8 @@ def show_logo():
 
 
 def show_public_nav():
-    left, middle, language_col = st.columns(
-        [0.65, 3.15, 1.15],
+    left, middle, admin_col, language_col = st.columns(
+        [0.65, 2.75, 1.15, 1.15],
         vertical_alignment="center",
     )
 
@@ -1307,6 +1307,11 @@ def show_public_nav():
             """,
             unsafe_allow_html=True,
         )
+
+    with admin_col:
+        if _is_admin():
+            if st.button(t("account_stats_title"), use_container_width=True, key="nav_account_stats"):
+                navigate("account_stats")
 
     with language_col:
         show_language_selector("public_language")
