@@ -96,6 +96,13 @@ TRANSLATIONS["fa"].update({
     "google_identity_missing":"اطلاعات هویت Google موجود نیست.",
     "google_account_exists":"این حساب Google از قبل یک حساب TRIOS دارد.",
     "google_email_linked":"این حساب Google از قبل به یک حساب TRIOS متصل است."
+    "account_stats_title":"آمار حساب‌ها و فعالیت",
+    "total_accounts":"تعداد کل حساب‌ها",
+    "active_users":"کاربران فعال",
+    "active_sessions":"جلسه‌های فعال",
+    "session_count":"تعداد Sessionها",
+    "active_window":"فعال در ۱۵ دقیقه گذشته",
+    "refresh_stats":"تازه‌سازی",
 })
 
 TRANSLATIONS["en"].update({
@@ -111,7 +118,7 @@ TRANSLATIONS["en"].update({
     "incorrect_password":"Incorrect password.",
     "google_identity_missing":"Google identity is missing.",
     "google_account_exists":"This Google account already has a TRIOS account.",
-    "google_email_linked":"This Google account is already linked to a TRIOS account."
+    "google_email_linked":"This Google account is already linked to a TRIOS account.",
     "account_stats_title":"Account activity",
     "total_accounts":"Total accounts",
     "active_users":"Active users",
@@ -1907,6 +1914,18 @@ def show_report():
         navigate("dashboard")
 
 
+def _touch_current_web_session():
+    token = st.query_params.get("session")
+    if not token:
+        return
+    try:
+        from cloud_storage import cloud_enabled, touch_session
+        if cloud_enabled():
+            touch_session(token)
+    except Exception:
+        pass
+
+
 def show_account_stats():
     show_public_nav()
 
@@ -2032,6 +2051,7 @@ navigation = st.navigation(
 )
 
 restore_web_session()
+_touch_current_web_session()
 process_google_identity()
 
 if "user" not in st.session_state and navigation.url_path in {
