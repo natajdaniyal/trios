@@ -1462,17 +1462,20 @@ def clear_web_session():
 
 
 def process_google_identity():
-    """Map the authenticated Google identity to exactly one TRIOS profile."""
+    """Map the authenticated Google identity to a TRIOS profile."""
     if not google_is_logged_in() or "user" in st.session_state:
         return
 
     identity = google_identity()
+    flow = st.session_state.get("google_flow", "login")
+    st.session_state.google_identity = identity
 
-    if _is_admin():
-        navigate("account_stats")
+    # Admin Google authentication is intentionally independent from TRIOS
+    # account creation. The /admin page handles the authenticated state itself.
+    if flow == "admin":
+        return
 
     profile = google_profile(identity["sub"])
-    flow = st.session_state.get("google_flow", "login")
 
     if profile:
         set_logged_in_user(
@@ -1485,7 +1488,6 @@ def process_google_identity():
         st.session_state.google_recovery_error = True
         navigate("recover_google")
 
-    st.session_state.google_identity = identity
     navigate("google_profile")
 
 
