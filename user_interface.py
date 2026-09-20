@@ -8,7 +8,11 @@ console menu or depend on numeric menu choices.
 import json
 import os
 
-from tools.explorer import Profile
+
+def _local_profile(username):
+    """Load the legacy local Profile only when cloud storage is unavailable."""
+    from tools.explorer import Profile
+    return _local_profile(username)
 
 
 def _cloud_enabled():
@@ -35,7 +39,7 @@ def user_profile(username):
             raise ValueError("User account does not exist.")
         return data
 
-    profile = Profile(username)
+    profile = _local_profile(username)
     if not profile.exists():
         raise ValueError("User account does not exist.")
     return profile.load()
@@ -55,7 +59,7 @@ def authenticate_user(username, password):
             raise ValueError("Incorrect password.")
         return data
 
-    profile = Profile(username)
+    profile = _local_profile(username)
     if not profile.exists():
         raise ValueError("User account does not exist.")
     if not profile.check_password(password):
@@ -85,7 +89,7 @@ def create_user(username, password):
         save_profile(data)
         return data
 
-    profile = Profile(username)
+    profile = _local_profile(username)
     if not profile.create(password):
         raise ValueError("User account already exists.")
 
@@ -107,7 +111,7 @@ def _iter_profiles():
             continue
 
         username = filename[:-5]
-        profile = Profile(username)
+        profile = _local_profile(username)
         if profile.exists():
             try:
                 yield profile.load()
@@ -168,7 +172,7 @@ def create_google_user(username, google_sub, google_email=None, google_name=None
         save_profile(data)
         return data
 
-    profile = Profile(username)
+    profile = _local_profile(username)
     if not profile.create_google(google_sub, google_email, google_name):
         raise ValueError("User account already exists.")
 
@@ -177,11 +181,11 @@ def create_google_user(username, google_sub, google_email=None, google_name=None
 
 def restore_user_session():
     """Legacy console-session helper; web UI uses Streamlit session state."""
-    username = Profile("").get_session()
+    username = _local_profile("").get_session()
     if not username:
         return None
 
-    profile = Profile(username)
+    profile = _local_profile(username)
     if not profile.exists():
         profile.clear_session()
         return None
@@ -196,7 +200,7 @@ def user_report(username):
 
 def logout_user(username):
     """Clear the legacy local session for a user."""
-    profile = Profile(username)
+    profile = _local_profile(username)
     return profile.clear_session()
 
 
@@ -206,5 +210,5 @@ def delete_user(username):
         from cloud_storage import delete_profile
         return delete_profile(username)
 
-    profile = Profile(username)
+    profile = _local_profile(username)
     return profile.delete_account()
