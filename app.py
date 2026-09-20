@@ -1943,12 +1943,28 @@ def _touch_current_web_session():
         pass
 
 
+def _admin_email():
+    """Read the dedicated admin Google email from the supported secret locations."""
+    try:
+        direct = st.secrets.get("TRIOS_ADMIN_EMAIL")
+        if direct:
+            return str(direct).strip().casefold()
+
+        admin_block = st.secrets.get("admin", {})
+        if isinstance(admin_block, dict):
+            return str(admin_block.get("email", "")).strip().casefold()
+    except Exception:
+        return ""
+
+    return ""
+
+
 def _is_admin():
     """Admin access is independent from TRIOS accounts and is tied to one Google email."""
     if not bool(getattr(st.user, "is_logged_in", False)):
         return False
 
-    admin_email = str(st.secrets.get("TRIOS_ADMIN_EMAIL", "")).strip().casefold()
+    admin_email = _admin_email()
     google_email = str(getattr(st.user, "email", "")).strip().casefold()
 
     return bool(admin_email) and bool(google_email) and google_email == admin_email
