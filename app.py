@@ -96,7 +96,7 @@ TRANSLATIONS["fa"].update({
     "incorrect_password":"رمز عبور نادرست است.",
     "google_identity_missing":"اطلاعات هویت Google موجود نیست.",
     "google_account_exists":"این حساب Google از قبل یک حساب TRIOS دارد.",
-    "google_email_linked":"این حساب Google از قبل به یک حساب TRIOS متصل است."
+    "google_email_linked":"این حساب Google از قبل به یک حساب TRIOS متصل است.",
     "account_stats_title":"آمار حساب‌ها و فعالیت",
     "total_accounts":"تعداد کل حساب‌ها",
     "active_users":"کاربران فعال",
