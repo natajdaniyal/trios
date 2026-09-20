@@ -1462,6 +1462,10 @@ def process_google_identity():
         return
 
     identity = google_identity()
+
+    if _is_admin():
+        navigate("account_stats")
+
     profile = google_profile(identity["sub"])
     flow = st.session_state.get("google_flow", "login")
 
@@ -1935,22 +1939,19 @@ def _touch_current_web_session():
 
 
 def _is_admin():
-    """Only the designated Google-backed TRIOS owner can access admin tools."""
-    username = str(st.session_state.get("user", "")).strip()
-    if username.casefold() != "دانیال".casefold():
+    """Admin access is independent from TRIOS accounts and is tied to one Google email."""
+    if not bool(getattr(st.user, "is_logged_in", False)):
         return False
 
-    try:
-        data = user_profile(username)
-    except (ValueError, KeyError, TypeError):
-        return False
+    admin_email = str(st.secrets.get("TRIOS_ADMIN_EMAIL", "")).strip().casefold()
+    google_email = str(getattr(st.user, "email", "")).strip().casefold()
 
-    return data.get("auth_method") == "google"
+    return bool(admin_email) and bool(google_email) and google_email == admin_email
 
 
 def show_account_stats():
     if not _is_admin():
-        navigate("dashboard")
+        navigate("home")
         return
 
     show_public_nav()
@@ -2057,7 +2058,7 @@ NAVIGATION_PAGES.update(
         "account_stats": st.Page(
             show_account_stats,
             title=t("account_stats_title"),
-            url_path="account-stats",
+            url_path="admin",
             visibility="hidden",
         ),
         "about": st.Page(
