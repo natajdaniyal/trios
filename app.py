@@ -1944,19 +1944,31 @@ def _touch_current_web_session():
 
 
 def _admin_email():
-    """Read the dedicated admin Google email from the supported secret locations."""
+    """Read the admin Google email from common Streamlit Secrets locations."""
     try:
         direct = st.secrets.get("TRIOS_ADMIN_EMAIL")
         if direct:
             return str(direct).strip().casefold()
 
-        admin_block = st.secrets.get("admin", {})
-        if isinstance(admin_block, dict):
-            return str(admin_block.get("email", "")).strip().casefold()
+        for section_name in ("admin", "auth"):
+            section = st.secrets.get(section_name, {})
+            if isinstance(section, dict):
+                value = section.get("TRIOS_ADMIN_EMAIL") or section.get("email")
+                if value:
+                    return str(value).strip().casefold()
+
+        connections = st.secrets.get("connections", {})
+        if isinstance(connections, dict):
+            trios_db = connections.get("trios_db", {})
+            if isinstance(trios_db, dict):
+                value = trios_db.get("TRIOS_ADMIN_EMAIL")
+                if value:
+                    return str(value).strip().casefold()
     except Exception:
         return ""
 
     return ""
+
 
 
 def _is_admin():
@@ -1982,7 +1994,15 @@ def show_account_stats():
         return
 
     if not _is_admin():
-        st.error("Access denied.")
+        st.markdown('<div class="trios-page-card">', unsafe_allow_html=True)
+        render_icon("profile", size=32)
+        st.header("TRIOS Admin")
+        st.error("This Google account is not authorized for the private admin panel.")
+        if not _admin_email():
+            st.caption("Admin email is not configured in Streamlit Secrets.")
+        else:
+            st.caption("The Admin email is configured, but this Google account does not match it.")
+        st.markdown("</div>", unsafe_allow_html=True)
         return
 
     show_public_nav()
