@@ -1872,7 +1872,7 @@ def show_profile():
         navigate("dashboard")
 
     st.markdown(
-        """
+        f"""
         <div class="trios-github">
             <div>
                 <div class="trios-github-eyebrow">{t("github_eyebrow")}</div>
