@@ -1816,6 +1816,10 @@ def show_dashboard():
         if render_action_card("profile", t("profile"), t("profile_copy"), t("profile"), "dashboard_profile"):
             navigate("profile")
 
+    st.markdown("<div style='height:.5rem'></div>", unsafe_allow_html=True)
+    if st.button(t("account_stats_title"), use_container_width=True, key="dashboard_account_stats"):
+        navigate("account_stats")
+
 
 def show_profile():
     username = st.session_state.user
