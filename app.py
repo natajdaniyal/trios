@@ -1470,9 +1470,9 @@ def process_google_identity():
     flow = st.session_state.get("google_flow", "login")
     st.session_state.google_identity = identity
 
-    # Admin Google authentication is intentionally independent from TRIOS
-    # account creation. The /admin page handles the authenticated state itself.
-    if flow == "admin":
+    # The /admin route is a standalone Google-admin flow. Keep it there even
+    # if Streamlit did not preserve the temporary flow marker across OAuth.
+    if flow == "admin" or navigation.url_path == "admin":
         return
 
     profile = google_profile(identity["sub"])
