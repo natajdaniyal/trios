@@ -1971,8 +1971,18 @@ def _is_admin():
 
 
 def show_account_stats():
+    if not google_is_logged_in():
+        st.markdown('<div class="trios-page-card">', unsafe_allow_html=True)
+        render_icon("google", size=32)
+        st.header("TRIOS Admin")
+        st.caption("Sign in with the authorized Google account to continue.")
+        if st.button(t("google_login"), use_container_width=True, key="admin_google_login"):
+            start_google_login("admin")
+        st.markdown("</div>", unsafe_allow_html=True)
+        return
+
     if not _is_admin():
-        navigate("home")
+        st.error("Access denied.")
         return
 
     show_public_nav()
