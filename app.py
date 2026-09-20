@@ -44,6 +44,13 @@ TRANSLATIONS = {
         "level":"سطح","attempts":"تلاش‌ها","correct":"پاسخ درست","accuracy":"دقت","report_summary":"خلاصه عملکرد","experiments":"آزمایش‌های ثبت‌شده","no_report":"هنوز گزارشی برای این حساب ثبت نشده است.",
         "about_title":"TRIOS چیست؟","about_text_1":"TRIOS یک سامانه برای شبیه‌سازی، مشاهده و مطالعه‌ی سیستم‌های فیزیکی چندجسمی با تمرکز بر مسئله‌ی سه‌جسمی است.","about_text_2":"هسته‌ی فیزیک مسئول قوانین و محاسبات است؛ لایه‌ی شبیه‌سازی اجرای گام‌های زمانی را مدیریت می‌کند؛ پیکربندی فیزیکی شرایط اولیه را نگه می‌دارد؛ و زیرساخت آزمایش مراحل و نتایج را مدیریت می‌کند.","about_text_3":"این جداسازی باعث می‌شود رابط کاربری مجبور نباشد منطق فیزیک را دوباره پیاده‌سازی کند و TRIOS بتواند به‌عنوان یک ابزار مطالعاتی و آموزشی رشد کند.","about_text_4":"TRIOS برای آزمایش‌های تکرارپذیر طراحی شده است تا شرایط فیزیکی، اجرای شبیه‌سازی، اندازه‌گیری و اعتبارسنجی از هم تفکیک باشند.","about_notice":"فعلاً تمرکز پروژه روی تکمیل زیرساخت و معماری است؛ آزمایش‌های آموزشی واقعی در این مرحله ساخته نشده‌اند.",
         "google_recovery_title":"بازیابی با Google","google_not_linked":"این حساب Google هنوز به یک حساب TRIOS متصل نشده است. برای جلوگیری از ساخت حساب تکراری، ابتدا با روش قبلی حسابت وارد شو.","back_to_recovery":"بازگشت به بازیابی","google_account":"حساب Google: {name}"
+        "account_stats_title":"إحصاءات الحسابات والنشاط",
+        "total_accounts":"إجمالي الحسابات",
+        "active_users":"المستخدمون النشطون",
+        "active_sessions":"الجلسات النشطة",
+        "session_count":"الجلسات",
+        "active_window":"نشط خلال آخر {minutes} دقيقة",
+        "refresh_stats":"تحديث",
     },
     "en": {}
 }
@@ -105,6 +112,13 @@ TRANSLATIONS["en"].update({
     "google_identity_missing":"Google identity is missing.",
     "google_account_exists":"This Google account already has a TRIOS account.",
     "google_email_linked":"This Google account is already linked to a TRIOS account."
+    "account_stats_title":"Account activity",
+    "total_accounts":"Total accounts",
+    "active_users":"Active users",
+    "active_sessions":"Active sessions",
+    "session_count":"Sessions",
+    "active_window":"Active in the last {minutes} minutes",
+    "refresh_stats":"Refresh",
 })
 
 for code, overrides in {
@@ -1893,6 +1907,37 @@ def show_report():
         navigate("dashboard")
 
 
+def show_account_stats():
+    show_public_nav()
+
+    st.markdown('<div class="trios-page-card">', unsafe_allow_html=True)
+    render_icon("chart", size=32)
+    st.header(t("account_stats_title"))
+
+    try:
+        from cloud_storage import get_account_stats
+        stats = get_account_stats(15)
+    except Exception:
+        st.error("Account statistics are temporarily unavailable.")
+        st.markdown("</div>", unsafe_allow_html=True)
+        return
+
+    c1, c2, c3 = st.columns(3, gap="medium")
+    with c1:
+        st.metric(t("total_accounts"), stats["total_accounts"])
+    with c2:
+        st.metric(t("active_users"), stats["active_users"])
+    with c3:
+        st.metric(t("active_sessions"), stats["active_sessions"])
+
+    st.caption(t("active_window", minutes=stats["active_window_minutes"]))
+    st.caption(f'{t("session_count")}: {stats["total_sessions"]}')
+
+    if st.button(t("refresh_stats"), use_container_width=True, key="refresh_account_stats"):
+        st.rerun()
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
 def show_about():
     show_public_nav()
     st.markdown('<div class="trios-page-card">', unsafe_allow_html=True)
@@ -1964,6 +2009,12 @@ NAVIGATION_PAGES.update(
             show_report,
             title=t("report_title"),
             url_path="report",
+            visibility="hidden",
+        ),
+        "account_stats": st.Page(
+            show_account_stats,
+            title=t("account_stats_title"),
+            url_path="account-stats",
             visibility="hidden",
         ),
         "about": st.Page(
