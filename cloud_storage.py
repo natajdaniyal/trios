@@ -50,8 +50,34 @@ def _ensure_table():
             CREATE TABLE IF NOT EXISTS trios_sessions (
                 token_hash VARCHAR(64) PRIMARY KEY,
                 username VARCHAR(255) NOT NULL,
-                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                last_activity_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             )
+            """
+        )
+        conn.execute(
+            """
+            ALTER TABLE trios_sessions
+            ADD COLUMN IF NOT EXISTS last_activity_at TIMESTAMPTZ
+            """
+        )
+        conn.execute(
+            """
+            UPDATE trios_sessions
+            SET last_activity_at = created_at
+            WHERE last_activity_at IS NULL
+            """
+        )
+        conn.execute(
+            """
+            ALTER TABLE trios_sessions
+            ALTER COLUMN last_activity_at SET DEFAULT NOW()
+            """
+        )
+        conn.execute(
+            """
+            ALTER TABLE trios_sessions
+            ALTER COLUMN last_activity_at SET NOT NULL
             """
         )
         conn.commit()
@@ -70,8 +96,8 @@ def create_session(username):
     with _connection() as conn:
         conn.execute(
             """
-            INSERT INTO trios_sessions (token_hash, username)
-            VALUES (%s, %s)
+            INSERT INTO trios_sessions (token_hash, username, last_activity_at)
+            VALUES (%s, %s, NOW())
             """,
             (token_hash, username),
         )
@@ -91,8 +117,72 @@ def get_session_user(token):
             "SELECT username FROM trios_sessions WHERE token_hash = %s",
             (token_hash,),
         ).fetchone()
+        if row:
+            conn.execute(
+                "UPDATE trios_sessions SET last_activity_at = NOW() WHERE token_hash = %s",
+                (token_hash,),
+            )
+            conn.commit()
 
     return row[0] if row else None
+
+
+def touch_session(token):
+    """Refresh the activity timestamp for a valid web session."""
+    if not token:
+        return False
+
+    _ensure_table()
+    token_hash = _hash_session_token(token)
+
+    with _connection() as conn:
+        result = conn.execute(
+            """
+            UPDATE trios_sessions
+            SET last_activity_at = NOW()
+            WHERE token_hash = %s
+            """,
+            (token_hash,),
+        )
+        conn.commit()
+
+    return result.rowcount > 0
+
+
+def get_account_stats(active_window_minutes=15):
+    """Return aggregate account and recent activity statistics."""
+    if active_window_minutes <= 0:
+        raise ValueError("Active window must be greater than zero.")
+
+    _ensure_table()
+
+    with _connection() as conn:
+        row = conn.execute(
+            """
+            SELECT
+                (SELECT COUNT(*) FROM trios_profiles) AS total_accounts,
+                (
+                    SELECT COUNT(DISTINCT username)
+                    FROM trios_sessions
+                    WHERE last_activity_at >= NOW() - (%s * INTERVAL '1 minute')
+                ) AS active_users,
+                (
+                    SELECT COUNT(*)
+                    FROM trios_sessions
+                    WHERE last_activity_at >= NOW() - (%s * INTERVAL '1 minute')
+                ) AS active_sessions,
+                (SELECT COUNT(*) FROM trios_sessions) AS total_sessions
+            """,
+            (active_window_minutes, active_window_minutes),
+        ).fetchone()
+
+    return {
+        "total_accounts": row[0],
+        "active_users": row[1],
+        "active_sessions": row[2],
+        "total_sessions": row[3],
+        "active_window_minutes": active_window_minutes,
+    }
 
 
 def delete_session(token):
