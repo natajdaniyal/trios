@@ -1946,30 +1946,23 @@ def _touch_current_web_session():
 
 
 def _admin_email():
-    """Read the admin Google email from common Streamlit Secrets locations."""
+    """Read the admin Google email from Streamlit Secrets without exposing it."""
     try:
-        direct = st.secrets.get("TRIOS_ADMIN_EMAIL")
-        if direct:
-            return str(direct).strip().casefold()
+        secrets = st.secrets.to_dict()
 
-        for section_name in ("admin", "auth"):
-            section = st.secrets.get(section_name, {})
-            if isinstance(section, dict):
-                value = section.get("TRIOS_ADMIN_EMAIL") or section.get("email")
-                if value:
-                    return str(value).strip().casefold()
+        def find_email(value):
+            if isinstance(value, dict):
+                for key, item in value.items():
+                    if str(key).strip().casefold() == "trios_admin_email":
+                        return str(item).strip().casefold()
+                    found = find_email(item)
+                    if found:
+                        return found
+            return ""
 
-        connections = st.secrets.get("connections", {})
-        if isinstance(connections, dict):
-            trios_db = connections.get("trios_db", {})
-            if isinstance(trios_db, dict):
-                value = trios_db.get("TRIOS_ADMIN_EMAIL")
-                if value:
-                    return str(value).strip().casefold()
+        return find_email(secrets)
     except Exception:
         return ""
-
-    return ""
 
 
 
