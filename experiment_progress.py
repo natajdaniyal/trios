@@ -13,6 +13,7 @@ def default_experiment_progress():
     return {
         "coins": 0,
         "completed_stages": {},
+        "unlocked_hints": {},
     }
 
 
@@ -34,6 +35,10 @@ def ensure_experiment_progress(profile):
     if not isinstance(completed_stages, dict):
         progress["completed_stages"] = {}
 
+    unlocked_hints = progress.get("unlocked_hints")
+    if not isinstance(unlocked_hints, dict):
+        progress["unlocked_hints"] = {}
+
     normalized = {}
     for experiment_id, stages in progress["completed_stages"].items():
         if isinstance(stages, (list, tuple, set)):
@@ -45,6 +50,20 @@ def ensure_experiment_progress(profile):
                 }
             )
     progress["completed_stages"] = normalized
+
+    normalized_hints = {}
+    for experiment_id, stages in progress["unlocked_hints"].items():
+        if isinstance(stages, (list, tuple, set)):
+            normalized_hints[str(experiment_id)] = sorted(
+                {
+                    int(stage)
+                    for stage in stages
+                    if isinstance(stage, int)
+                    and not isinstance(stage, bool)
+                    and stage > 0
+                }
+            )
+    progress["unlocked_hints"] = normalized_hints
     return progress
 
 
@@ -104,6 +123,45 @@ def complete_stage(profile, experiment_id, stage_number, reward=DEFAULT_STAGE_RE
     progress["coins"] += reward
 
     return {"completed_now": True, "coins_awarded": reward}
+
+
+
+def has_hint(profile, experiment_id, stage_number):
+    """Return whether the hint for a stage has already been unlocked."""
+    _validate_ids(experiment_id, stage_number)
+    progress = ensure_experiment_progress(profile)
+    return stage_number in progress["unlocked_hints"].get(experiment_id, [])
+
+
+def unlock_hint(profile, experiment_id, stage_number, cost=DEFAULT_HINT_COST):
+    """Unlock a stage hint once, charging coins only on the first purchase."""
+    _validate_ids(experiment_id, stage_number)
+
+    if (
+        not isinstance(cost, int)
+        or isinstance(cost, bool)
+        or cost <= 0
+    ):
+        raise ValueError("cost must be a positive integer.")
+
+    progress = ensure_experiment_progress(profile)
+
+    if not is_stage_unlocked(profile, experiment_id, stage_number):
+        raise ValueError("Stage is locked.")
+
+    unlocked = progress["unlocked_hints"].setdefault(experiment_id, [])
+
+    if stage_number in unlocked:
+        return {"unlocked_now": False, "coins_spent": 0}
+
+    if progress["coins"] < cost:
+        return {"unlocked_now": False, "coins_spent": 0}
+
+    progress["coins"] -= cost
+    unlocked.append(stage_number)
+    unlocked.sort()
+
+    return {"unlocked_now": True, "coins_spent": cost}
 
 
 def spend_hint(profile, cost=DEFAULT_HINT_COST):
