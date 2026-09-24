@@ -1,4 +1,13 @@
+import sys
+from pathlib import Path
+
 import streamlit as st
+
+_PROJECT_ROOT = Path(__file__).resolve().parent
+for _module_dir in ("core", "simulation", "validation", "tools"):
+    _module_path = str(_PROJECT_ROOT / _module_dir)
+    if _module_path not in sys.path:
+        sys.path.insert(0, _module_path)
 
 from user_interface import (
     create_google_user,
