@@ -28,7 +28,7 @@ def _database_url():
 def _connection():
     import psycopg
 
-    return psycopg.connect(_database_url())
+    return psycopg.connect(_database_url(), connect_timeout=8)
 
 
 def _ensure_table():
