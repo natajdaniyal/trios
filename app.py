@@ -2,6 +2,7 @@ import sys
 from pathlib import Path
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 _PROJECT_ROOT = Path(__file__).resolve().parent
 for _module_dir in ("core", "simulation", "validation", "tools"):
@@ -28,6 +29,23 @@ from first_experiment_runtime import (
 )
 
 MAX_VISIBLE_EXPERIMENT_STEPS = 10
+
+_MAGNET_LAB_COMPONENT = components.declare_component(
+    "trios_magnet_lab",
+    path=str(_PROJECT_ROOT / "magnet_lab_component"),
+)
+
+
+def _render_magnet_lab(magnets, positions, disabled=False, key=None):
+    return _MAGNET_LAB_COMPONENT(
+        magnets=magnets,
+        positions=positions,
+        disabled=disabled,
+        default=positions,
+        key=key,
+    )
+
+
 
 
 st.set_page_config(
@@ -2450,6 +2468,7 @@ def _reset_first_experiment_challenge():
     st.session_state.pop("first_experiment_simulation_started", None)
     st.session_state.pop("first_experiment_simulation_steps", None)
     st.session_state.pop(f"first_experiment_prediction_input_{index}", None)
+    st.session_state.pop("first_experiment_positions", None)
     st.session_state.experiment_hint_visible = False
 
 
@@ -2497,68 +2516,55 @@ def _render_game_styles():
     )
 
 
-def _magnetic_scene_html(challenge, result=None):
-    initial_simulation = build_experiment_one_scenario(challenge.scenario_id)
-    initial_positions = {
-        body.name: body.position.x for body in initial_simulation.bodies
-    }
-    current_positions = dict(initial_positions)
-    if result is not None:
-        current_positions.update(
-            {body["name"]: body["position_x"] for body in result.bodies}
-        )
-
+def _magnet_visual_definition(challenge):
     if challenge.scenario_id == "opposite-poles":
-        note = t("scene_attract")
-        magnets = (("A", "s", "n"), ("B", "s", "n"))
-        segment_pairs = (("A", "B"),)
-    elif challenge.scenario_id == "same-poles":
-        note = t("scene_repel")
-        magnets = (("A", "s", "n"), ("B", "n", "s"))
-        segment_pairs = (("A", "B"),)
-    else:
-        note = t("scene_three")
-        magnets = (("A", "s", "n"), ("B", "s", "n"), ("C", "n", "s"))
-        segment_pairs = (("A", "B"), ("B", "C"))
-
-    base_extent = max(abs(x) for x in initial_positions.values()) + 1.0
-    extent = max(
-        base_extent,
-        max(abs(x) for x in current_positions.values()) + 0.75,
-    )
-
-    def scene_x(position):
-        ratio = (position + extent) / (2 * extent)
-        return max(6.0, min(94.0, 8.0 + ratio * 84.0))
-
-    positions = {
-        name: scene_x(x)
-        for name, x in current_positions.items()
-    }
-
-    force_lines = []
-    for left_name, right_name in segment_pairs:
-        left = min(positions[left_name], positions[right_name])
-        width = max(2.0, abs(positions[right_name] - positions[left_name]))
-        force_lines.append(
-            f'<div class="trios-force-line" style="left:{left:.2f}%;width:{width:.2f}%;"></div>'
+        return (
+            {"name": "A", "left_pole": "S", "right_pole": "N"},
+            {"name": "B", "left_pole": "N", "right_pole": "S"},
         )
-
-    magnet_html = "".join(
-        f'<div class="trios-magnet" style="left:{positions[name]:.2f}%;">'
-        f'<div class="mag-half {left_pole}">{left_pole.upper()}</div>'
-        f'<div class="mag-half {right_pole}">{right_pole.upper()}</div>'
-        f'<small>{name}</small></div>'
-        for name, left_pole, right_pole in magnets
-    )
-
-    physics_live = " physics-live" if result is not None else ""
+    if challenge.scenario_id == "same-poles":
+        return (
+            {"name": "A", "left_pole": "S", "right_pole": "N"},
+            {"name": "B", "left_pole": "N", "right_pole": "S"},
+        )
     return (
-        f'<div class="trios-scene{physics_live}">'
-        f'<div class="trios-scene-title">TRIOS · {t("scene_setup")}</div>'
-        f'<div class="trios-scene-note">{note}</div>'
-        f'{"".join(force_lines)}{magnet_html}</div>'
+        {"name": "A", "left_pole": "S", "right_pole": "N"},
+        {"name": "B", "left_pole": "N", "right_pole": "S"},
+        {"name": "C", "left_pole": "S", "right_pole": "N"},
     )
+
+
+def _get_first_experiment_positions(challenge):
+    positions = st.session_state.get("first_experiment_positions")
+    if not isinstance(positions, dict):
+        simulation = build_experiment_one_scenario(challenge.scenario_id)
+        positions = {body.name: body.position.x for body in simulation.bodies}
+        st.session_state.first_experiment_positions = dict(positions)
+    return dict(positions)
+
+
+def _render_first_experiment_lab(challenge, index, positions, disabled=False):
+    value = _render_magnet_lab(
+        magnets=_magnet_visual_definition(challenge),
+        positions=positions,
+        disabled=disabled,
+        key=f"magnet_lab_{index}",
+    )
+    if isinstance(value, dict):
+        cleaned = {}
+        for magnet in _magnet_visual_definition(challenge):
+            name = magnet["name"]
+            raw = value.get(name, positions.get(name))
+            cleaned[name] = (
+                float(raw)
+                if isinstance(raw, (int, float)) and not isinstance(raw, bool)
+                else float(positions[name])
+            )
+        st.session_state.first_experiment_positions = cleaned
+        return cleaned
+    return positions
+
+
 
 def _render_game_hud(profile,index,total):
     progress=ensure_experiment_progress(profile)
@@ -2747,9 +2753,22 @@ def _render_first_experiment():
     revealed = bool(st.session_state.get("first_experiment_result_revealed"))
     prediction_submitted = bool(st.session_state.get("first_experiment_prediction_submitted"))
     result = st.session_state.get("first_experiment_result")
+    initial_positions = _get_first_experiment_positions(challenge)
+    if prediction_submitted:
+        initial_positions = _render_first_experiment_lab(
+            challenge,
+            index,
+            initial_positions,
+            disabled=steps > 0 or revealed,
+        )
+
 
     if prediction_submitted and steps > 0:
-        result = run_challenge(challenge, steps=steps)
+        result = run_challenge(
+            challenge,
+            steps=steps,
+            initial_positions=initial_positions,
+        )
         st.session_state.first_experiment_result = result
         st.session_state.first_experiment_simulation_started = True
 
@@ -2818,7 +2837,9 @@ def _render_first_experiment():
                 key=f"first_experiment_show_result_{index}",
             ):
                 st.session_state.first_experiment_result = run_challenge(
-                    challenge, steps=steps
+                    challenge,
+                    steps=steps,
+                    initial_positions=initial_positions,
                 )
                 st.session_state.first_experiment_result_revealed = True
                 st.rerun()
