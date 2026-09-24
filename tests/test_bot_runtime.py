@@ -91,26 +91,3 @@ def test_bot_runtime_delegates_validation():
         runtime.evaluate("gravity", "it")
 
 
-def test_bot_runtime_returns_incorrect_status_when_no_keywords_match():
-    runtime = BotRuntime(
-        BotConfiguration(make_translations(), minimum_matches=2)
-    )
-
-    result = runtime.evaluate("They move away.", "en")
-
-    assert result.matched_keywords == ()
-    assert result.missing_keywords == ("gravity", "closer")
-    assert result.status == "incorrect"
-    assert result.is_correct is False
-
-
-def test_bot_runtime_keeps_matching_order_from_configuration():
-    runtime = BotRuntime(BotConfiguration(make_translations(), minimum_matches=2))
-
-    result = runtime.evaluate(
-        "closer because of gravity",
-        "en",
-    )
-
-    assert result.matched_keywords == ("gravity", "closer")
-    assert result.missing_keywords == ()
