@@ -28,7 +28,7 @@ function render(){
 positions=Object.assign({},args.positions||{});root.innerHTML="";
 const lab=document.createElement("div");lab.className="lab";
 const grid=document.createElement("div");grid.className="grid";lab.appendChild(grid);
-const hint=document.createElement("div");hint.className="hint";hint.textContent=args.disabled?"آزمایش در حال اجراست":"آهنربا را بگیر و جابه‌جا کن";lab.appendChild(hint);
+const hint=document.createElement("div");hint.className="hint";hint.textContent=args.disabled?"Experiment is running":(args.hint||"Drag a magnet to choose its position");lab.appendChild(hint);
 for(const [text,cls] of [["-4","left"],["+4","right"]]){const a=document.createElement("div");a.className="axis "+cls;a.textContent=text;lab.appendChild(a)}
 for(const m of (args.magnets||[])){
 const el=document.createElement("div");el.className="magnet"+(args.disabled?" disabled":"");el.style.left=px(Number(positions[m.name]||0),lab)+"px";
