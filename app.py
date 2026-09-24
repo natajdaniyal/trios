@@ -2797,7 +2797,14 @@ def _show_first_experiment_result(challenge):
         return
 
     st.success(t("simulation_complete"))
-    st.markdown(_magnetic_scene_html(challenge, result=result), unsafe_allow_html=True)
+    st.markdown(
+        _magnetic_scene_html(
+            challenge,
+            result=result,
+            initial_positions=st.session_state.get("first_experiment_positions"),
+        ),
+        unsafe_allow_html=True,
+    )
 
     with st.expander(t("details"), expanded=False):
         for body in result.bodies:
@@ -2877,7 +2884,11 @@ def _render_first_experiment():
         st.session_state.first_experiment_simulation_started = True
 
     st.markdown(
-        _magnetic_scene_html(challenge, result=result),
+        _magnetic_scene_html(
+            challenge,
+            result=result,
+            initial_positions=initial_positions,
+        ),
         unsafe_allow_html=True,
     )
     st.markdown("<div style='height:.8rem'></div>", unsafe_allow_html=True)
