@@ -1367,15 +1367,21 @@ def render_action_card(icon, title, description, button_label, callback_key):
 
 
 def google_is_logged_in():
-    return bool(getattr(st.user, "is_logged_in", False))
+    try:
+        return bool(getattr(st.user, "is_logged_in", False))
+    except Exception:
+        return False
 
 
 def google_identity():
-    return {
-        "sub": getattr(st.user, "sub", None),
-        "email": getattr(st.user, "email", ""),
-        "name": getattr(st.user, "name", ""),
-    }
+    try:
+        return {
+            "sub": getattr(st.user, "sub", None),
+            "email": getattr(st.user, "email", ""),
+            "name": getattr(st.user, "name", ""),
+        }
+    except Exception:
+        return {"sub": None, "email": "", "name": ""}
 
 
 NAVIGATION_PAGES = {}
@@ -1973,13 +1979,15 @@ def _admin_email():
 
 def _is_admin():
     """Admin access is independent from TRIOS accounts and is tied to one Google email."""
-    if not bool(getattr(st.user, "is_logged_in", False)):
+    try:
+        if not bool(getattr(st.user, "is_logged_in", False)):
+            return False
+
+        admin_email = _admin_email()
+        google_email = str(getattr(st.user, "email", "")).strip().casefold()
+        return bool(admin_email) and bool(google_email) and google_email == admin_email
+    except Exception:
         return False
-
-    admin_email = _admin_email()
-    google_email = str(getattr(st.user, "email", "")).strip().casefold()
-
-    return bool(admin_email) and bool(google_email) and google_email == admin_email
 
 
 def show_account_stats():
