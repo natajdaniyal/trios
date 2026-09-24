@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 from math import hypot
 
-from angular_momentum import AngularMomentumSystem
-from center_of_mass import CenterOfMassSystem
-from energy import EnergySystem
-from momentum import MomentumSystem
+from validation.angular_momentum import AngularMomentumSystem
+from validation.center_of_mass import CenterOfMassSystem
+from validation.energy import EnergySystem
+from validation.momentum import MomentumSystem
 
 
 @dataclass(frozen=True)
