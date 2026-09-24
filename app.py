@@ -1475,7 +1475,12 @@ def process_google_identity():
     if flow == "admin" or navigation.url_path == "admin":
         return
 
-    profile = google_profile(identity["sub"])
+    try:
+        profile = google_profile(identity["sub"])
+    except Exception:
+        # A database/network problem must not prevent the public TRIOS page
+        # from rendering. The user can retry the sign-in flow later.
+        return
 
     if profile:
         set_logged_in_user(
