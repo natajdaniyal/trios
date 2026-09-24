@@ -19,6 +19,7 @@ from user_interface import (
 )
 from experiment_progress import complete_stage, ensure_experiment_progress, is_stage_completed
 from first_experiment import FIRST_EXPERIMENT_ID
+from experiment_scenarios import build_experiment_one_scenario
 from first_experiment_runtime import (
     first_stage_challenge,
     first_stage_challenge_count,
@@ -678,6 +679,9 @@ GAME_TRANSLATIONS = {
     "de": {"experiments_title":"Experimente","experiments_copy":"Wähle ein Experiment und entdecke es Schritt für Schritt.","experiment_one_name":"Warum ist das Dreikörperproblem schwierig?","experiment_one_copy":"Drei kurze Magnet-Aufgaben, von zwei Körpern zu drei gleichzeitigen Wechselwirkungen.","stage_label":"Stufe","stage_one_name":"Mehrfache Wechselwirkungen","three_challenges":"3 Aufgaben","play_experiment":"Experiment starten","continue_experiment":"Experiment fortsetzen","replay_experiment":"Nochmal spielen","locked_stage":"Gesperrt","locked_stage_copy":"Wird nach Abschluss der vorherigen Stufe freigeschaltet.","coins":"Münzen","progress":"Fortschritt","challenge_label":"Aufgabe","bot_label":"TRIOS-Bot","prediction_saved_copy":"Vorhersage gespeichert. Jetzt ist das Experiment dran.","simulation_ready":"Die echte Simulation ist bereit.","simulation_complete":"Simulation abgeschlossen.","scene_setup":"Ausgangsaufbau","scene_attract":"Gegenpole → Anziehung","scene_repel":"Gleichpole → Abstoßung","scene_three":"Drei Körper → gleichzeitige Effekte","back_to_experiments":"Zurück zu den Experimenten","hint_unlocked_badge":"💡 Hinweis freigeschaltet","stage_reward":"Stufenbelohnung: +{amount} Münzen","details":"Simulationsdetails","lab_notice":"Stufe 1 ist aktiv: drei praktische Aufgaben mit zwei und drei Magneten."},
     "ja": {"experiments_title":"実験","experiments_copy":"実験を選び、ステップごとに発見しよう。","experiment_one_name":"なぜ三体問題は難しいのでしょうか？","experiment_one_copy":"2つの物体から3つの同時相互作用まで、3つの磁石チャレンジ。","stage_label":"ステージ","stage_one_name":"複数の相互作用","three_challenges":"3チャレンジ","play_experiment":"実験を始める","continue_experiment":"実験を続ける","replay_experiment":"もう一度","locked_stage":"ロック中","locked_stage_copy":"前のステージを完了すると解放されます。","coins":"コイン","progress":"進行","challenge_label":"チャレンジ","bot_label":"TRIOS-Bot","prediction_saved_copy":"予想を保存しました。次に実験を行います。","simulation_ready":"実際のシミュレーションの準備ができました。","simulation_complete":"シミュレーション完了。","scene_setup":"初期配置","scene_attract":"反対の極 → 引き合う","scene_repel":"同じ極 → 反発する","scene_three":"3つの物体 → 同時に影響し合う","back_to_experiments":"実験一覧に戻る","hint_unlocked_badge":"💡 ヒント解放済み","stage_reward":"ステージ報酬：+{amount}コイン","details":"シミュレーション詳細","lab_notice":"ステージ1が公開中：2つと3つの磁石を使った3つの実験チャレンジ。"},
 }
+
+for _code, _labels in GAME_TRANSLATIONS.items():
+    TRANSLATIONS[_code].update(_labels)
 
 for _code, _labels in {
     "fa": {
