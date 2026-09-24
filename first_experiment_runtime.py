@@ -42,6 +42,7 @@ def run_challenge(
     steps=DEFAULT_CHALLENGE_STEPS,
     time_step=DEFAULT_CHALLENGE_TIME_STEP,
     force_engine=None,
+    initial_positions=None,
 ):
     """Run one challenge's real physical scenario and return its final state."""
     if not isinstance(challenge, ExperimentChallenge):
@@ -60,6 +61,7 @@ def run_challenge(
     simulation = build_experiment_one_scenario(
         challenge.scenario_id,
         time_step=time_step,
+        positions=initial_positions,
     )
     if force_engine is not None:
         simulation.force_engine = force_engine
