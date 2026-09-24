@@ -164,7 +164,6 @@ class BotConfiguration:
         language = self._validate_language(language)
         return self._translations[language]["keywords"]
 
-    @staticmethod
     def answer(self, language):
         """Return the configured final answer for a language."""
         language = self._validate_language(language)
