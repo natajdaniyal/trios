@@ -9,6 +9,9 @@ from bot_configuration import BotConfiguration
 from experiment_challenge import ExperimentChallenge
 
 
+FIRST_EXPERIMENT_ID = "three-body-is-hard"
+
+
 def _challenge(
     challenge_id,
     scenario_id,
