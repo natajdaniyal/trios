@@ -2422,7 +2422,7 @@ def _render_experiment_controls():
                     st.success(f"{t('hint_unlocked_badge')}: {context['hint_text']}")
                     st.session_state.experiment_hint_visible = True
                 else:
-                    if st.button(f"{t('experiment_hint')} · 5", use_container_width=True, key="experiment_buy_hint")
+                    if st.button(f"{t('experiment_hint')} · 5", use_container_width=True, key="experiment_buy_hint"):
                         purchase = unlock_hint(profile, context["experiment_id"], context["stage_number"])
                         if purchase["unlocked_now"]:
                             _save_current_profile(profile)
