@@ -7,7 +7,7 @@ measurements, and optional scientific validation.
 
 from experiment_infrastructure import Experiment, ExperimentResult
 from simulation.physical_configuration_adapter import simulation_from_stage
-from system_validation import PhysicalStateSnapshot
+from validation.system_validation import PhysicalStateSnapshot
 
 
 def simulations_from_experiment(experiment, time_step=1, force_engine=None):
