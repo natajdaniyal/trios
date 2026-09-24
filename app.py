@@ -2328,7 +2328,10 @@ def _reset_first_experiment_challenge():
     st.session_state.pop("first_experiment_prediction_language", None)
     st.session_state.pop("first_experiment_prediction_submitted", None)
     st.session_state.pop(f"first_experiment_prediction_input_{index}", None)
-    st.session_state.experimdef _render_game_styles():
+    st.session_state.experiment_hint_visible = False
+
+
+def _render_game_styles():
     st.markdown(
         """
         <style>
