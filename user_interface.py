@@ -12,7 +12,7 @@ import os
 def _local_profile(username):
     """Load the legacy local Profile only when cloud storage is unavailable."""
     from tools.explorer import Profile
-    return _local_profile(username)
+    return Profile(username)
 
 
 def _cloud_enabled():
