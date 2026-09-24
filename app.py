@@ -363,6 +363,101 @@ for code, overrides in {
     TRANSLATIONS[code].update(overrides)
 
 
+
+EXPERIMENT_CONTROL_TRANSLATIONS = {
+    "fa": {
+        "experiment_stop": "⏸️ استپ",
+        "experiment_exit": "🚪 خروج",
+        "experiment_retry": "🔄 تکرار",
+        "experiment_continue": "▶️ ادامه",
+        "experiment_hint": "💡 راهنمایی",
+        "hint_not_ready": "راهنمایی این مرحله هنوز تعریف نشده است.",
+        "hint_already_unlocked": "راهنمایی این مرحله قبلاً باز شده است.",
+        "hint_no_coins": "سکه کافی برای دریافت راهنمایی نداری.",
+        "experiment_retry_requested": "مرحله برای شروع دوباره آماده شد.",
+    },
+    "en": {
+        "experiment_stop": "⏸️ Stop",
+        "experiment_exit": "🚪 Exit",
+        "experiment_retry": "🔄 Retry",
+        "experiment_continue": "▶️ Continue",
+        "experiment_hint": "💡 Hint",
+        "hint_not_ready": "The hint for this stage has not been defined yet.",
+        "hint_already_unlocked": "The hint for this stage is already unlocked.",
+        "hint_no_coins": "You do not have enough coins for this hint.",
+        "experiment_retry_requested": "The stage is ready to restart.",
+    },
+    "ar": {
+        "experiment_stop": "⏸️ إيقاف",
+        "experiment_exit": "🚪 خروج",
+        "experiment_retry": "🔄 إعادة",
+        "experiment_continue": "▶️ متابعة",
+        "experiment_hint": "💡 تلميح",
+        "hint_not_ready": "لم يتم تعريف تلميح هذه المرحلة بعد.",
+        "hint_already_unlocked": "تلميح هذه المرحلة مفتوح بالفعل.",
+        "hint_no_coins": "ليس لديك ما يكفي من العملات لهذا التلميح.",
+        "experiment_retry_requested": "المرحلة جاهزة للبدء من جديد.",
+    },
+    "zh": {
+        "experiment_stop": "⏸️ 暂停",
+        "experiment_exit": "🚪 退出",
+        "experiment_retry": "🔄 重试",
+        "experiment_continue": "▶️ 继续",
+        "experiment_hint": "💡 提示",
+        "hint_not_ready": "此阶段的提示尚未定义。",
+        "hint_already_unlocked": "此阶段的提示已经解锁。",
+        "hint_no_coins": "你的金币不足，无法获得提示。",
+        "experiment_retry_requested": "此阶段已准备好重新开始。",
+    },
+    "es": {
+        "experiment_stop": "⏸️ Pausa",
+        "experiment_exit": "🚪 Salir",
+        "experiment_retry": "🔄 Repetir",
+        "experiment_continue": "▶️ Continuar",
+        "experiment_hint": "💡 Pista",
+        "hint_not_ready": "La pista de esta etapa aún no está definida.",
+        "hint_already_unlocked": "La pista de esta etapa ya está desbloqueada.",
+        "hint_no_coins": "No tienes suficientes monedas para esta pista.",
+        "experiment_retry_requested": "La etapa está lista para comenzar de nuevo.",
+    },
+    "fr": {
+        "experiment_stop": "⏸️ Stop",
+        "experiment_exit": "🚪 Quitter",
+        "experiment_retry": "🔄 Recommencer",
+        "experiment_continue": "▶️ Continuer",
+        "experiment_hint": "💡 Indice",
+        "hint_not_ready": "L’indice de cette étape n’est pas encore défini.",
+        "hint_already_unlocked": "L’indice de cette étape est déjà débloqué.",
+        "hint_no_coins": "Vous n’avez pas assez de pièces pour cet indice.",
+        "experiment_retry_requested": "L’étape est prête à recommencer.",
+    },
+    "de": {
+        "experiment_stop": "⏸️ Stopp",
+        "experiment_exit": "🚪 Verlassen",
+        "experiment_retry": "🔄 Wiederholen",
+        "experiment_continue": "▶️ Weiter",
+        "experiment_hint": "💡 Hinweis",
+        "hint_not_ready": "Der Hinweis für diese Stufe ist noch nicht definiert.",
+        "hint_already_unlocked": "Der Hinweis für diese Stufe ist bereits freigeschaltet.",
+        "hint_no_coins": "Du hast nicht genug Münzen für diesen Hinweis.",
+        "experiment_retry_requested": "Die Stufe ist zum Neustart bereit.",
+    },
+    "ja": {
+        "experiment_stop": "⏸️ 停止",
+        "experiment_exit": "🚪 終了",
+        "experiment_retry": "🔄 リトライ",
+        "experiment_continue": "▶️ 続ける",
+        "experiment_hint": "💡 ヒント",
+        "hint_not_ready": "このステージのヒントはまだ定義されていません。",
+        "hint_already_unlocked": "このステージのヒントはすでに解放されています。",
+        "hint_no_coins": "このヒントを受け取るためのコインが足りません。",
+        "experiment_retry_requested": "ステージをもう一度開始する準備ができました。",
+    },
+}
+
+for _code, _labels in EXPERIMENT_CONTROL_TRANSLATIONS.items():
+    TRANSLATIONS[_code].update(_labels)
+
 ERROR_TRANSLATION_KEYS = {
     "Username cannot be empty.": "username_required",
     "Password cannot be empty.": "password_required",
@@ -1929,6 +2024,123 @@ def show_profile():
     )
 
 
+
+def _save_current_profile(data):
+    """Persist a modified web profile to the active storage backend."""
+    if _cloud():
+        from cloud_storage import save_profile
+        save_profile(data)
+        return
+
+    _local_profile(data["username"]).save(data)
+
+
+def _experiment_stage_context():
+    """Return the active experiment/stage context stored by the experiment UI."""
+    experiment_id = st.session_state.get("current_experiment_id")
+    stage_number = st.session_state.get("current_stage_number")
+    hint_text = st.session_state.get("current_stage_hint")
+
+    if not experiment_id or not isinstance(stage_number, int) or stage_number < 1:
+        return None
+
+    return {
+        "experiment_id": experiment_id,
+        "stage_number": stage_number,
+        "hint_text": hint_text,
+    }
+
+
+def _render_experiment_controls():
+    """Render the persistent controls used inside every experiment stage."""
+    from experiment_progress import has_hint, unlock_hint
+
+    context = _experiment_stage_context()
+    has_active_stage = context is not None
+
+    stop_col, hint_col = st.columns([1, 1], gap="medium")
+
+    with stop_col:
+        if st.button(
+            t("experiment_stop"),
+            use_container_width=True,
+            key="experiment_stop_button",
+        ):
+            st.session_state.experiment_stop_menu = True
+
+    with hint_col:
+        if st.button(
+            t("experiment_hint"),
+            use_container_width=True,
+            key="experiment_hint_button",
+            disabled=not has_active_stage,
+        ):
+            profile = user_profile(st.session_state.user)
+            if not context["hint_text"]:
+                st.info(t("hint_not_ready"))
+            elif has_hint(
+                profile,
+                context["experiment_id"],
+                context["stage_number"],
+            ):
+                st.session_state.experiment_hint_visible = True
+            else:
+                purchase = unlock_hint(
+                    profile,
+                    context["experiment_id"],
+                    context["stage_number"],
+                )
+                if purchase["unlocked_now"]:
+                    _save_current_profile(profile)
+                    st.session_state.experiment_hint_visible = True
+                else:
+                    st.warning(t("hint_no_coins"))
+
+    if st.session_state.get("experiment_hint_visible") and context and context["hint_text"]:
+        st.info(f"💡 {context['hint_text']}")
+
+    if st.session_state.get("experiment_stop_menu"):
+        st.markdown(
+            '<div class="trios-page-card" style="margin-top:1rem;">',
+            unsafe_allow_html=True,
+        )
+        st.subheader(t("experiment_stop"))
+
+        exit_col, retry_col, continue_col = st.columns(3, gap="small")
+
+        with exit_col:
+            if st.button(
+                t("experiment_exit"),
+                use_container_width=True,
+                key="experiment_exit_button",
+            ):
+                st.session_state.experiment_stop_menu = False
+                st.session_state.experiment_hint_visible = False
+                navigate("dashboard")
+
+        with retry_col:
+            if st.button(
+                t("experiment_retry"),
+                use_container_width=True,
+                key="experiment_retry_button",
+            ):
+                st.session_state.experiment_stop_menu = False
+                st.session_state.experiment_hint_visible = False
+                st.session_state.experiment_retry_requested = True
+                st.rerun()
+
+        with continue_col:
+            if st.button(
+                t("experiment_continue"),
+                use_container_width=True,
+                key="experiment_continue_button",
+            ):
+                st.session_state.experiment_stop_menu = False
+                st.rerun()
+
+        st.markdown("</div>", unsafe_allow_html=True)
+
+
 def show_lab():
     show_public_nav()
     st.markdown('<div class="trios-page-card">', unsafe_allow_html=True)
@@ -1936,7 +2148,10 @@ def show_lab():
     st.header(t("lab_title"))
     st.info(t("lab_notice"))
     st.markdown("</div>", unsafe_allow_html=True)
-    if st.button(t("back"), use_container_width=True):
+
+    _render_experiment_controls()
+
+    if st.button(t("back"), use_container_width=True, key="lab_back"):
         navigate("dashboard")
 
 
