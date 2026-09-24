@@ -677,7 +677,80 @@ GAME_TRANSLATIONS = {
     "ja": {"experiments_title":"実験","experiments_copy":"実験を選び、ステップごとに発見しよう。","experiment_one_name":"なぜ三体問題は難しいのでしょうか？","experiment_one_copy":"2つの物体から3つの同時相互作用まで、3つの磁石チャレンジ。","stage_label":"ステージ","stage_one_name":"複数の相互作用","three_challenges":"3チャレンジ","play_experiment":"実験を始める","continue_experiment":"実験を続ける","replay_experiment":"もう一度","locked_stage":"ロック中","locked_stage_copy":"前のステージを完了すると解放されます。","coins":"コイン","progress":"進行","challenge_label":"チャレンジ","bot_label":"TRIOS-Bot","prediction_saved_copy":"予想を保存しました。次に実験を行います。","simulation_ready":"実際のシミュレーションの準備ができました。","simulation_complete":"シミュレーション完了。","scene_setup":"初期配置","scene_attract":"反対の極 → 引き合う","scene_repel":"同じ極 → 反発する","scene_three":"3つの物体 → 同時に影響し合う","back_to_experiments":"実験一覧に戻る","hint_unlocked_badge":"💡 ヒント解放済み","stage_reward":"ステージ報酬：+{amount}コイン","details":"シミュレーション詳細","lab_notice":"ステージ1が公開中：2つと3つの磁石を使った3つの実験チャレンジ。"},
 }
 
-for _code, _labels in GAME_TRANSLATIONS.items():
+for _code, _labels in {
+    "fa": {
+        "simulation_running":"آزمایش در حال اجراست…",
+        "show_result":"نمایش نتیجه",
+        "run_experiment":"انجام آزمایش",
+        "submit_prediction":"ثبت پیش‌بینی",
+        "prediction_required":"اول پیش‌بینی خودت را بنویس.",
+        "next_challenge":"چالش بعدی",
+        "retry_challenge":"تکرار چالش",
+    },
+    "en": {
+        "simulation_running":"The experiment is running…",
+        "show_result":"Show result",
+        "run_experiment":"Run experiment",
+        "submit_prediction":"Submit prediction",
+        "prediction_required":"Write your prediction first.",
+        "next_challenge":"Next challenge",
+        "retry_challenge":"Retry challenge",
+    },
+    "ar": {
+        "simulation_running":"التجربة قيد التشغيل…",
+        "show_result":"عرض النتيجة",
+        "run_experiment":"إجراء التجربة",
+        "submit_prediction":"إرسال التوقع",
+        "prediction_required":"اكتب توقعك أولًا.",
+        "next_challenge":"التحدي التالي",
+        "retry_challenge":"إعادة التحدي",
+    },
+    "zh": {
+        "simulation_running":"实验正在运行…",
+        "show_result":"显示结果",
+        "run_experiment":"进行实验",
+        "submit_prediction":"提交预测",
+        "prediction_required":"请先写下你的预测。",
+        "next_challenge":"下一个挑战",
+        "retry_challenge":"重试挑战",
+    },
+    "es": {
+        "simulation_running":"El experimento está en marcha…",
+        "show_result":"Mostrar resultado",
+        "run_experiment":"Realizar experimento",
+        "submit_prediction":"Enviar predicción",
+        "prediction_required":"Escribe primero tu predicción.",
+        "next_challenge":"Siguiente desafío",
+        "retry_challenge":"Repetir desafío",
+    },
+    "fr": {
+        "simulation_running":"L'expérience est en cours…",
+        "show_result":"Afficher le résultat",
+        "run_experiment":"Faire l'expérience",
+        "submit_prediction":"Envoyer la prédiction",
+        "prediction_required":"Écris d'abord ta prédiction.",
+        "next_challenge":"Défi suivant",
+        "retry_challenge":"Réessayer le défi",
+    },
+    "de": {
+        "simulation_running":"Das Experiment läuft…",
+        "show_result":"Ergebnis anzeigen",
+        "run_experiment":"Experiment durchführen",
+        "submit_prediction":"Vorhersage senden",
+        "prediction_required":"Gib zuerst deine Vorhersage ein.",
+        "next_challenge":"Nächste Aufgabe",
+        "retry_challenge":"Aufgabe wiederholen",
+    },
+    "ja": {
+        "simulation_running":"実験を実行中…",
+        "show_result":"結果を見る",
+        "run_experiment":"実験を行う",
+        "submit_prediction":"予想を送信",
+        "prediction_required":"まず予想を書いてください。",
+        "next_challenge":"次のチャレンジ",
+        "retry_challenge":"チャレンジを再試行",
+    },
+}.items():
     TRANSLATIONS[_code].update(_labels)
 
 ERROR_TRANSLATION_KEYS = {
@@ -1580,6 +1653,46 @@ def trios_icon(kind, size=28):
                 <circle cx="24" cy="15.5" r="1.8" fill="#F0A4FF"/>
             </svg>
         ''',
+        "play": f'''
+            <svg width="{size}" height="{size}" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="24" cy="24" r="17" stroke="#82E4FF" stroke-width="2.4"/>
+                <path d="M20 16.5L33 24L20 31.5V16.5Z" fill="#C19DFF"/>
+            </svg>
+        ''',
+        "pause": f'''
+            <svg width="{size}" height="{size}" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="24" cy="24" r="17" stroke="#82E4FF" stroke-width="2.4"/>
+                <path d="M19 16V32M29 16V32" stroke="#C19DFF" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+        ''',
+        "hint": f'''
+            <svg width="{size}" height="{size}" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17 27.5C14.6 25.5 13.2 22.5 13.6 19.1C14.2 14.2 18.2 10.7 23.2 10.3C29.6 9.8 35 14.8 35 21C35 24.6 33.3 27.1 31 29.3C29.4 30.8 28 32.1 28 35H20C20 32.1 18.6 29.9 17 27.5Z" stroke="#8CE5FF" stroke-width="2.2" stroke-linejoin="round"/>
+                <path d="M19.5 39H28.5M21 34.8H27" stroke="#C29CFF" stroke-width="2.4" stroke-linecap="round"/>
+            </svg>
+        ''',
+        "coin": f'''
+            <svg width="{size}" height="{size}" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="24" cy="24" r="15" stroke="#FFD27A" stroke-width="2.5"/>
+                <circle cx="24" cy="24" r="10" stroke="#F0B968" stroke-width="1.8" opacity=".8"/>
+                <path d="M24 16V32M20.5 19.5H26C27.7 19.5 29 20.7 29 22.2C29 23.7 27.7 24.5 26 24.5H22C20.3 24.5 19 25.3 19 26.8C19 28.3 20.3 29.5 22 29.5H28" stroke="#FFF0B8" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        ''',
+        "target": f'''
+            <svg width="{size}" height="{size}" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="24" cy="24" r="16" stroke="#82E4FF" stroke-width="2.3"/>
+                <circle cx="24" cy="24" r="9" stroke="#C29DFF" stroke-width="2.1"/>
+                <circle cx="24" cy="24" r="3.2" fill="#F0A6FF"/>
+            </svg>
+        ''',
+        "robot": f'''
+            <svg width="{size}" height="{size}" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="10" y="14" width="28" height="24" rx="8" stroke="#82E4FF" stroke-width="2.3"/>
+                <path d="M24 8V14M19 24H19.1M29 24H29.1M17 31H31" stroke="#C29DFF" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="19" cy="24" r="2" fill="#82E4FF"/>
+                <circle cx="29" cy="24" r="2" fill="#E99DFF"/>
+            </svg>
+        ''',
         "google": f'''
             <svg width="{size}" height="{size}" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                 <path fill="#4285F4" d="M44.5 24.5c0-1.6-.1-2.8-.4-4.1H24v7.7h11.8c-.2 1.9-1.9 4.8-5.2 6.8l-.1.3 6.5 5c4.1-3.8 6.5-9.4 6.5-15.7z"/>
@@ -2324,9 +2437,11 @@ def _reset_first_experiment_challenge():
     index = st.session_state.get("first_experiment_challenge_index", 0)
     st.session_state.pop("first_experiment_evaluation", None)
     st.session_state.pop("first_experiment_result", None)
+    st.session_state.pop("first_experiment_result_revealed", None)
     st.session_state.pop("first_experiment_prediction", None)
     st.session_state.pop("first_experiment_prediction_language", None)
     st.session_state.pop("first_experiment_prediction_submitted", None)
+    st.session_state.pop("first_experiment_simulation_started", None)
     st.session_state.pop(f"first_experiment_prediction_input_{index}", None)
     st.session_state.experiment_hint_visible = False
 
@@ -2337,31 +2452,48 @@ def _render_game_styles():
         <style>
         .trios-game-shell{max-width:1120px;margin:1rem auto 0;}
         .trios-game-hud{display:flex;gap:.65rem;align-items:center;flex-wrap:wrap;margin:.75rem 0 1rem;}
-        .trios-hud-chip{padding:.55rem .85rem;border-radius:999px;border:1px solid rgba(183,210,255,.15);background:rgba(255,255,255,.055);color:#edf4ff;box-shadow:inset 0 1px 0 rgba(255,255,255,.05);font-size:.88rem;}
-        .trios-hud-chip strong{color:#fff;}
+        .trios-hud-chip{display:flex;align-items:center;gap:.45rem;padding:.55rem .85rem;border-radius:999px;border:1px solid rgba(183,210,255,.15);background:rgba(255,255,255,.055);color:#edf4ff;box-shadow:inset 0 1px 0 rgba(255,255,255,.05);font-size:.88rem;}
+        .trios-hud-chip svg{flex:0 0 auto;}
         .trios-bot-card{display:flex;gap:1rem;align-items:flex-start;padding:1rem 1.1rem;border-radius:22px;border:1px solid rgba(132,195,255,.2);background:linear-gradient(145deg,rgba(81,180,255,.1),rgba(180,113,255,.08)),rgba(9,14,33,.72);box-shadow:0 16px 40px rgba(0,0,0,.18);margin-bottom:1rem;}
-        .trios-bot-avatar{flex:0 0 46px;width:46px;height:46px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(145deg,#83e7ff,#bd92ff);color:#0b1020;font-size:1.35rem;box-shadow:0 0 24px rgba(121,205,255,.22);}
+        .trios-bot-avatar{flex:0 0 46px;width:46px;height:46px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(131,231,255,.18),rgba(189,146,255,.18));border:1px solid rgba(174,219,255,.18);}
         .trios-bot-copy strong{display:block;color:#fff;margin-bottom:.2rem;}
         .trios-bot-copy span{color:#d9e4ff;line-height:1.55;}
-        .trios-scene{position:relative;min-height:330px;overflow:hidden;border-radius:28px;border:1px solid rgba(159,209,255,.18);background:radial-gradient(circle at 50% 42%,rgba(95,193,255,.1),transparent 35%),radial-gradient(circle at 18% 20%,rgba(190,126,255,.08),transparent 20%),linear-gradient(180deg,rgba(9,15,36,.92),rgba(7,11,27,.96));box-shadow:0 26px 70px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.05);}
-        .trios-scene::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 12% 22%,rgba(255,255,255,.36) 0 1px,transparent 1.5px),radial-gradient(circle at 31% 68%,rgba(255,255,255,.22) 0 1px,transparent 1.5px),radial-gradient(circle at 73% 18%,rgba(255,255,255,.28) 0 1px,transparent 1.5px),radial-gradient(circle at 87% 61%,rgba(255,255,255,.24) 0 1px,transparent 1.5px);pointer-events:none;}
+        .trios-scene{position:relative;min-height:340px;overflow:hidden;border-radius:28px;border:1px solid rgba(159,209,255,.18);background:radial-gradient(circle at 50% 42%,rgba(95,193,255,.1),transparent 35%),radial-gradient(circle at 18% 20%,rgba(190,126,255,.08),transparent 20%),linear-gradient(180deg,rgba(9,15,36,.92),rgba(7,11,27,.96));box-shadow:0 26px 70px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.05);}
+        .trios-scene::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 12% 22%,rgba(255,255,255,.36) 0 1px,transparent 1.5px),radial-gradient(circle at 31% 68%,rgba(255,255,255,.22) 0 1px,transparent 1.5px),radial-gradient(circle at 73% 18%,rgba(255,255,255,.28) 0 1px,transparent 1.5px),radial-gradient(circle at 87% 61%,rgba(255,255,255,.24) 0 1px,transparent 1.5px),radial-gradient(circle at 57% 81%,rgba(255,255,255,.2) 0 1px,transparent 1.5px);pointer-events:none;}
         .trios-scene-title{position:absolute;left:1rem;top:.9rem;color:#b6c9ef;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;}
         .trios-scene-note{position:absolute;right:1rem;top:.85rem;padding:.45rem .7rem;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#e9f0ff;font-size:.78rem;}
-        .trios-force-line{position:absolute;top:54%;height:2px;background:linear-gradient(90deg,transparent,rgba(134,223,255,.72),transparent);filter:drop-shadow(0 0 8px rgba(115,205,255,.55));}
-        .trios-force-line.two{left:31%;width:38%;}.trios-force-line.three-a{left:18%;width:24%;}.trios-force-line.three-b{left:58%;width:24%;}
-        .trios-magnet{position:absolute;top:43%;width:84px;height:84px;transform:translate(-50%,-50%);border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:1.4rem;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.35);border:2px solid rgba(255,255,255,.32);box-shadow:0 0 0 8px rgba(255,255,255,.025),0 0 36px rgba(106,202,255,.16);}
-        .trios-magnet.n{background:radial-gradient(circle at 35% 30%,#6ff0ff,#278ed7 62%,#164f92);}.trios-magnet.s{background:radial-gradient(circle at 35% 30%,#ffb6ef,#cf55ac 62%,#73386b);}
-        .trios-magnet small{position:absolute;bottom:-1.7rem;font-size:.72rem;font-weight:700;color:#aebddd;}
-        .trios-magnet.attract-a{left:38%;animation:triosAttractA 2.7s ease-in-out infinite alternate;}.trios-magnet.attract-b{left:62%;animation:triosAttractB 2.7s ease-in-out infinite alternate;}
-        .trios-magnet.repel-a{left:36%;animation:triosRepelA 2.7s ease-in-out infinite alternate;}.trios-magnet.repel-b{left:64%;animation:triosRepelB 2.7s ease-in-out infinite alternate;}
-        .trios-magnet.three-a{left:24%;animation:triosThreeA 2.9s ease-in-out infinite alternate;}.trios-magnet.three-b{left:50%;animation:triosThreeB 2.9s ease-in-out infinite alternate;}.trios-magnet.three-c{left:76%;animation:triosThreeC 2.9s ease-in-out infinite alternate;}
-        @keyframes triosAttractA{to{left:45%;}}@keyframes triosAttractB{to{left:55%;}}@keyframes triosRepelA{to{left:29%;}}@keyframes triosRepelB{to{left:71%;}}@keyframes triosThreeA{to{left:20%;}}@keyframes triosThreeB{to{top:49%;}}@keyframes triosThreeC{to{left:80%;}}
+        .trios-force-line{position:absolute;top:53%;height:2px;background:linear-gradient(90deg,transparent,rgba(134,223,255,.72),transparent);filter:drop-shadow(0 0 8px rgba(115,205,255,.55));opacity:.25;}
+        .trios-force-line.two{left:30%;width:40%;}.trios-force-line.three-a{left:17%;width:27%;}.trios-force-line.three-b{left:56%;width:27%;}
+        .trios-magnet{position:absolute;top:47%;width:150px;height:52px;transform:translate(-50%,-50%);display:flex;overflow:visible;border-radius:12px;border:2px solid rgba(255,255,255,.24);box-shadow:0 10px 28px rgba(0,0,0,.34),0 0 30px rgba(101,204,255,.1);transition:filter .3s;}
+        .trios-magnet .mag-half{width:50%;height:100%;display:grid;place-items:center;font-size:1rem;font-weight:900;color:#fff;letter-spacing:.04em;}
+        .trios-magnet .mag-half.n{background:linear-gradient(145deg,#ff667a,#ba304f);}
+        .trios-magnet .mag-half.s{background:linear-gradient(145deg,#4eafff,#24579c);}
+        .trios-magnet .mag-half:first-child{border-radius:10px 0 0 10px;}.trios-magnet .mag-half:last-child{border-radius:0 10px 10px 0;}
+        .trios-magnet small{position:absolute;left:50%;bottom:-1.7rem;transform:translateX(-50%);font-size:.72rem;font-weight:700;color:#aebddd;white-space:nowrap;}
+        .trios-scene.is-running .trios-force-line{opacity:1;}
+        .trios-scene.is-running .attract-a{animation:triosAttractA 2.8s ease-in-out infinite alternate;}
+        .trios-scene.is-running .attract-b{animation:triosAttractB 2.8s ease-in-out infinite alternate;}
+        .trios-scene.is-running .repel-a{animation:triosRepelA 2.8s ease-in-out infinite alternate;}
+        .trios-scene.is-running .repel-b{animation:triosRepelB 2.8s ease-in-out infinite alternate;}
+        .trios-scene.is-running .three-a{animation:triosThreeA 2.9s ease-in-out infinite alternate;}
+        .trios-scene.is-running .three-b{animation:triosThreeB 2.9s ease-in-out infinite alternate;}
+        .trios-scene.is-running .three-c{animation:triosThreeC 2.9s ease-in-out infinite alternate;}
+        .trios-magnet.attract-a{left:38%;}.trios-magnet.attract-b{left:62%;}
+        .trios-magnet.repel-a{left:36%;}.trios-magnet.repel-b{left:64%;}
+        .trios-magnet.three-a{left:24%;}.trios-magnet.three-b{left:50%;}.trios-magnet.three-c{left:76%;}
+        @keyframes triosAttractA{to{left:45%;}}@keyframes triosAttractB{to{left:55%;}}
+        @keyframes triosRepelA{to{left:29%;}}@keyframes triosRepelB{to{left:71%;}}
+        @keyframes triosThreeA{to{left:20%;}}@keyframes triosThreeB{to{top:52%;}}@keyframes triosThreeC{to{left:80%;}}
         .trios-hint-pill{margin:.65rem 0;padding:.7rem 1rem;border-radius:16px;background:rgba(255,193,92,.08);border:1px solid rgba(255,193,92,.18);color:#ffe7ae;}
         .trios-choice-card{padding:1.1rem;border-radius:22px;border:1px solid rgba(164,204,255,.14);background:rgba(255,255,255,.035);}
         .trios-stage-track{height:8px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.07);margin:.6rem 0 .2rem;}
         .trios-stage-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#67e8ff,#a87cff,#ef8cff);box-shadow:0 0 18px rgba(127,185,255,.28);}
-        div[data-testid="stTextArea"] textarea{color:#f7f9ff!important;caret-color:#9fe9ff!important;background:rgba(255,255,255,.06)!important;border-color:rgba(183,210,255,.18)!important;}
-        div[data-testid="stTextArea"] textarea::placeholder{color:rgba(224,234,255,.5)!important;}
+        div[data-testid="stTextArea"] textarea,
+        div[data-testid="stTextArea"] textarea:focus,
+        [data-baseweb="textarea"] textarea,
+        [data-baseweb="textarea"] textarea:focus,
+        textarea{color:#f7f9ff!important;-webkit-text-fill-color:#f7f9ff!important;caret-color:#9fe9ff!important;background:rgba(255,255,255,.07)!important;border-color:rgba(183,210,255,.22)!important;font-size:1rem!important;line-height:1.6!important;}
+        div[data-testid="stTextArea"] textarea::placeholder{color:rgba(224,234,255,.55)!important;-webkit-text-fill-color:rgba(224,234,255,.55)!important;}
         div[data-testid="stTextArea"] label{color:#eef4ff!important;}
         </style>
         """,
@@ -2369,21 +2501,31 @@ def _render_game_styles():
     )
 
 
-def _magnetic_scene_html(challenge):
+def _magnetic_scene_html(challenge, running=False):
     if challenge.scenario_id == "opposite-poles":
         note=t("scene_attract")
-        magnets=(("A","N","attract-a"),("B","S","attract-b"))
+        magnets=(("A","s","n", "attract-a"),("B","s","n","attract-b"))
         line='<div class="trios-force-line two"></div>'
     elif challenge.scenario_id == "same-poles":
         note=t("scene_repel")
-        magnets=(("A","N","repel-a"),("B","N","repel-b"))
+        magnets=(("A","s","n","repel-a"),("B","n","s","repel-b"))
         line='<div class="trios-force-line two"></div>'
     else:
         note=t("scene_three")
-        magnets=(("A","N","three-a"),("B","S","three-b"),("C","N","three-c"))
+        magnets=(("A","s","n","three-a"),("B","s","n","three-b"),("C","n","s","three-c"))
         line='<div class="trios-force-line three-a"></div><div class="trios-force-line three-b"></div>'
-    magnet_html="".join(f'<div class="trios-magnet {pole.lower()} {motion}">{pole}<small>{name}</small></div>' for name,pole,motion in magnets)
-    return '<div class="trios-scene">'+f'<div class="trios-scene-title">TRIOS · {t("scene_setup")}</div><div class="trios-scene-note">{note}</div>'+line+magnet_html+'</div>'
+
+    magnet_html="".join(
+        f'<div class="trios-magnet {motion}"><div class="mag-half {left_pole}">{left_pole.upper()}</div><div class="mag-half {right_pole}">{right_pole.upper()}</div><small>{name}</small></div>'
+        for name,left_pole,right_pole,motion in magnets
+    )
+    state_class="is-running" if running else ""
+    return (
+        f'<div class="trios-scene {state_class}">'
+        f'<div class="trios-scene-title">TRIOS · {t("scene_setup")}</div>'
+        f'<div class="trios-scene-note">{note}</div>'
+        f'{line}{magnet_html}</div>'
+    )
 
 
 def _render_game_hud(profile,index,total):
@@ -2391,13 +2533,57 @@ def _render_game_hud(profile,index,total):
     coins=progress["coins"]
     percent=int(((index+1)/total)*100)
     st.markdown(
-        f'<div class="trios-game-hud"><div class="trios-hud-chip">🧪 <strong>{t("stage_label")} 1</strong></div>'
-        f'<div class="trios-hud-chip">🎯 <strong>{t("challenge_label")} {index+1}/{total}</strong></div>'
-        f'<div class="trios-hud-chip">🪙 <strong>{coins}</strong> {t("coins")}</div>'
+        f'<div class="trios-game-hud">'
+        f'<div class="trios-hud-chip">{trios_icon("lab",18)}<strong>{t("stage_label")} 1</strong></div>'
+        f'<div class="trios-hud-chip">{trios_icon("target",18)}<strong>{t("challenge_label")} {index+1}/{total}</strong></div>'
+        f'<div class="trios-hud-chip">{trios_icon("coin",18)}<strong>{coins}</strong> {t("coins")}</div>'
         f'<div style="flex:1;min-width:180px;"><div style="display:flex;justify-content:space-between;color:#9fb0d3;font-size:.78rem;"><span>{t("progress")}</span><span>{percent}%</span></div>'
         f'<div class="trios-stage-track"><div class="trios-stage-fill" style="width:{percent}%"></div></div></div></div>',
         unsafe_allow_html=True,
     )
+
+
+def show_experiments():
+    profile=user_profile(st.session_state.user)
+    progress=ensure_experiment_progress(profile)
+    completed=is_stage_completed(profile,FIRST_EXPERIMENT_ID,1)
+    current_index=st.session_state.get("first_experiment_challenge_index",0)
+
+    show_public_nav()
+    _render_game_styles()
+    st.markdown('<div class="trios-game-shell">',unsafe_allow_html=True)
+    st.markdown(f'<div class="trios-page-card" style="margin-top:0;"><div class="trios-kicker"><span class="trios-kicker-dot"></span>{t("experiments_title")}</div><h1>{t("experiments_title")}</h1><p class="trios-hero-copy">{t("experiments_copy")}</p></div>',unsafe_allow_html=True)
+
+    with st.container(border=True):
+        st.markdown(f'<div class="trios-choice-card"><div style="font-size:.78rem;color:#8fa5cc;text-transform:uppercase;letter-spacing:.08em;">{t("stage_label")} 1 · {t("three_challenges")}</div><h2 style="margin:.4rem 0;">{t("experiment_one_name")}</h2><p style="color:#b8c5e2;">{t("experiment_one_copy")}</p></div>',unsafe_allow_html=True)
+        current=min(current_index+1,3)
+        st.progress(1.0 if completed else current/3)
+        st.caption(f'{t("coins")}: {progress["coins"]}')
+        label=t("replay_experiment") if completed else (t("continue_experiment") if st.session_state.get("current_experiment_id")==FIRST_EXPERIMENT_ID else t("play_experiment"))
+        st.markdown(f'<div style="display:flex;align-items:center;gap:.5rem;margin:.65rem 0 .35rem;">{trios_icon("rocket",20)}<strong>{label}</strong></div>', unsafe_allow_html=True)
+        if st.button(label,use_container_width=True,key="experiment_one_open"):
+            st.session_state.current_experiment_id=FIRST_EXPERIMENT_ID
+            st.session_state.current_stage_number=1
+            st.session_state.first_experiment_active=True
+            if completed:
+                st.session_state.first_experiment_challenge_index=0
+                st.session_state.first_experiment_completion_recorded=True
+                _reset_first_experiment_challenge()
+            navigate("lab")
+
+    with st.container(border=True):
+        st.markdown(
+            f'<div class="trios-choice-card" style="opacity:.56;">'
+            f'<div style="font-size:.78rem;color:#8fa5cc;text-transform:uppercase;letter-spacing:.08em;">'
+            f'{trios_icon("lock",18)} {t("stage_label")} 2 · {t("locked_stage")}</div>'
+            f'<h3 style="margin:.4rem 0;">{t("locked_stage")}</h3>'
+            f'<p style="color:#aab7d1;">{t("locked_stage_copy")}</p></div>',
+            unsafe_allow_html=True,
+        )
+
+    if st.button(t("back"),use_container_width=True,key="experiments_back"):
+        navigate("dashboard")
+    st.markdown("</div>",unsafe_allow_html=True)
 
 
 def show_experiments():
@@ -2435,8 +2621,6 @@ def show_experiments():
     st.markdown("</div>",unsafe_allow_html=True)
 
 
-ent_hint_visible = False
-
 
 def _init_first_experiment():
     if st.session_state.get("current_experiment_id") != FIRST_EXPERIMENT_ID:
@@ -2469,7 +2653,8 @@ def _show_first_experiment_result(challenge):
         return
 
     st.success(t("simulation_complete"))
-    st.markdown(_magnetic_scene_html(challenge), unsafe_allow_html=True)
+    st.markdown(_magnetic_scene_html(challenge, running=False), unsafe_allow_html=True)
+
     with st.expander(t("details"), expanded=False):
         for body in result.bodies:
             st.write(
@@ -2503,7 +2688,8 @@ def _render_first_experiment():
             f'<p>{t("stage_reward", amount=st.session_state.get("first_experiment_last_reward", 0))}</p></div>',
             unsafe_allow_html=True,
         )
-        if st.button(f"🚀 {t('replay_experiment')}", use_container_width=True, key="first_experiment_retry_stage"):
+        st.markdown(f'<div style="display:flex;align-items:center;gap:.5rem;">{trios_icon("refresh",20)}<strong>{t("replay_experiment")}</strong></div>', unsafe_allow_html=True)
+        if st.button(t("replay_experiment"), use_container_width=True, key="first_experiment_retry_stage"):
             st.session_state.first_experiment_active = True
             st.session_state.first_experiment_challenge_index = 0
             st.session_state.first_experiment_completion_recorded = True
@@ -2515,13 +2701,16 @@ def _render_first_experiment():
     _render_game_hud(profile, index, total)
 
     st.markdown(
-        f'<div class="trios-bot-card"><div class="trios-bot-avatar">🤖</div>'
+        f'<div class="trios-bot-card"><div class="trios-bot-avatar">{trios_icon("robot",28)}</div>'
         f'<div class="trios-bot-copy"><strong>{t("bot_label")}</strong>'
         f'<span>{challenge.question(current_language())}</span></div></div>',
         unsafe_allow_html=True,
     )
 
-    st.markdown(_magnetic_scene_html(challenge), unsafe_allow_html=True)
+    running = bool(st.session_state.get("first_experiment_simulation_started"))
+    revealed = bool(st.session_state.get("first_experiment_result_revealed"))
+
+    st.markdown(_magnetic_scene_html(challenge, running=running and not revealed), unsafe_allow_html=True)
     st.markdown("<div style='height:.8rem'></div>", unsafe_allow_html=True)
 
     prediction_key = f"first_experiment_prediction_input_{index}"
@@ -2530,43 +2719,15 @@ def _render_first_experiment():
         placeholder=t("prediction_placeholder"),
         key=prediction_key,
         height=120,
+        disabled=running or revealed,
     )
 
-    submitted = st.session_state.get("first_experiment_prediction_submitted")
+    submitted = bool(st.session_state.get("first_experiment_prediction_submitted"))
     result = st.session_state.get("first_experiment_result")
 
-    if submitted:
-        st.success(t("prediction_saved_copy"))
-        if result is None:
-            st.info(t("simulation_ready"))
-            if st.button(f"▶️ {t('run_experiment')}", use_container_width=True, key=f"first_experiment_run_{index}"):
-                st.session_state.first_experiment_result = run_challenge(challenge)
-                st.session_state.experiment_hint_visible = False
-                st.rerun()
-        else:
-            _show_first_experiment_result(challenge)
-            evaluation = st.session_state.get("first_experiment_evaluation")
-            if evaluation is not None and evaluation.is_correct:
-                if index + 1 < total:
-                    if st.button(f"➡️ {t('next_challenge')}", use_container_width=True, key=f"first_experiment_next_{index}"):
-                        st.session_state.first_experiment_challenge_index = index + 1
-                        _reset_first_experiment_challenge()
-                        st.rerun()
-                else:
-                    if not st.session_state.get("first_experiment_completion_recorded"):
-                        completion = complete_stage(profile, FIRST_EXPERIMENT_ID, 1)
-                        _save_current_profile(profile)
-                        st.session_state.first_experiment_completion_recorded = True
-                        st.session_state.first_experiment_last_reward = completion["coins_awarded"]
-                    st.session_state.first_experiment_active = False
-                    st.session_state.first_experiment_stage_completed = True
-                    st.rerun()
-            else:
-                if st.button(f"🔄 {t('retry_challenge')}", use_container_width=True, key=f"first_experiment_retry_{index}"):
-                    _reset_first_experiment_challenge()
-                    st.rerun()
-    else:
-        if st.button(f"✨ {t('submit_prediction')}", use_container_width=True, key=f"first_experiment_submit_{index}"):
+    if not submitted:
+        st.markdown(f'<div style="display:flex;align-items:center;gap:.5rem;margin:.25rem 0 .35rem;">{trios_icon("target",20)}<strong>{t("prediction_label")}</strong></div>', unsafe_allow_html=True)
+        if st.button(t("submit_prediction"), use_container_width=True, key=f"first_experiment_submit_{index}"):
             if not prediction.strip():
                 st.warning(t("prediction_required"))
             else:
@@ -2576,6 +2737,49 @@ def _render_first_experiment():
                     challenge, prediction, current_language()
                 )
                 st.session_state.first_experiment_prediction_submitted = True
+                st.rerun()
+        return
+
+    if not running and result is None:
+        st.info(t("prediction_saved_copy"))
+        st.markdown(f'<div style="display:flex;align-items:center;gap:.5rem;margin:.35rem 0;">{trios_icon("play",20)}<strong>{t("run_experiment")}</strong></div>', unsafe_allow_html=True)
+        if st.button(t("run_experiment"), use_container_width=True, key=f"first_experiment_run_{index}"):
+            st.session_state.first_experiment_result = run_challenge(challenge)
+            st.session_state.first_experiment_simulation_started = True
+            st.session_state.first_experiment_result_revealed = False
+            st.session_state.experiment_hint_visible = False
+            st.rerun()
+        return
+
+    if running and result is not None and not revealed:
+        st.info(t("simulation_running"))
+        st.markdown(f'<div style="display:flex;align-items:center;gap:.5rem;margin:.4rem 0;">{trios_icon("play",20)}<strong>{t("simulation_running")}</strong></div>', unsafe_allow_html=True)
+        if st.button(t("show_result"), use_container_width=True, key=f"first_experiment_show_result_{index}"):
+            st.session_state.first_experiment_result_revealed = True
+            st.rerun()
+        return
+
+    if revealed and result is not None:
+        _show_first_experiment_result(challenge)
+        evaluation = st.session_state.get("first_experiment_evaluation")
+        if evaluation is not None and evaluation.is_correct:
+            if index + 1 < total:
+                if st.button(t("next_challenge"), use_container_width=True, key=f"first_experiment_next_{index}"):
+                    st.session_state.first_experiment_challenge_index = index + 1
+                    _reset_first_experiment_challenge()
+                    st.rerun()
+            else:
+                if not st.session_state.get("first_experiment_completion_recorded"):
+                    completion = complete_stage(profile, FIRST_EXPERIMENT_ID, 1)
+                    _save_current_profile(profile)
+                    st.session_state.first_experiment_completion_recorded = True
+                    st.session_state.first_experiment_last_reward = completion["coins_awarded"]
+                st.session_state.first_experiment_active = False
+                st.session_state.first_experiment_stage_completed = True
+                st.rerun()
+        else:
+            if st.button(t("retry_challenge"), use_container_width=True, key=f"first_experiment_retry_{index}"):
+                _reset_first_experiment_challenge()
                 st.rerun()
 
 
