@@ -36,11 +36,12 @@ _MAGNET_LAB_COMPONENT = components.declare_component(
 )
 
 
-def _render_magnet_lab(magnets, positions, disabled=False, key=None):
+def _render_magnet_lab(magnets, positions, disabled=False, hint=None, key=None):
     return _MAGNET_LAB_COMPONENT(
         magnets=magnets,
         positions=positions,
         disabled=disabled,
+        hint=hint,
         default=positions,
         key=key,
     )
@@ -2548,6 +2549,7 @@ def _render_first_experiment_lab(challenge, index, positions, disabled=False):
         magnets=_magnet_visual_definition(challenge),
         positions=positions,
         disabled=disabled,
+        hint=t("experiment_drag_hint"),
         key=f"magnet_lab_{index}",
     )
     if isinstance(value, dict):
@@ -2772,10 +2774,6 @@ def _render_first_experiment():
         st.session_state.first_experiment_result = result
         st.session_state.first_experiment_simulation_started = True
 
-    st.markdown(
-        _magnetic_scene_html(challenge, result=result),
-        unsafe_allow_html=True,
-    )
     st.markdown("<div style='height:.8rem'></div>", unsafe_allow_html=True)
 
     prediction_key = f"first_experiment_prediction_input_{index}"
