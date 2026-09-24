@@ -17,10 +17,8 @@ class BotEvaluationResult:
     language: str
     answer: str
     matched_keywords: tuple[str, ...]
-    missing_keywords: tuple[str, ...]
     match_count: int
     required_matches: int
-    status: str
     is_correct: bool
 
 
@@ -46,30 +44,14 @@ class BotRuntime:
         matched_keywords = tuple(
             self._matcher.matched_keywords(answer, language)
         )
-        configured_keywords = self.configuration.keywords(language)
-        missing_keywords = tuple(
-            keyword
-            for keyword in configured_keywords
-            if keyword not in matched_keywords
-        )
-
         match_count = len(matched_keywords)
         required_matches = self.configuration.minimum_matches
-
-        if match_count >= required_matches:
-            status = "correct"
-        elif match_count > 0:
-            status = "partial"
-        else:
-            status = "incorrect"
 
         return BotEvaluationResult(
             language=language,
             answer=answer,
             matched_keywords=matched_keywords,
-            missing_keywords=missing_keywords,
             match_count=match_count,
             required_matches=required_matches,
-            status=status,
-            is_correct=status == "correct",
+            is_correct=match_count >= required_matches,
         )
