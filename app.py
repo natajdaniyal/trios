@@ -1497,9 +1497,12 @@ def process_google_identity():
 
     if flow == "recover":
         st.session_state.google_recovery_error = True
-        navigate("recover_google")
+        if navigation.url_path != "recover-google":
+            navigate("recover_google")
+        return
 
-    navigate("google_profile")
+    if navigation.url_path != "google-profile":
+        navigate("google_profile")
 
 
 def show_home():
