@@ -128,6 +128,9 @@ class BotConfiguration:
             localized_data[language] = {
                 "question": question.strip(),
                 "keywords": tuple(normalized_keywords),
+                "answer": str(localized.get("answer", "")).strip(),
+                "explanation": str(localized.get("explanation", "")).strip(),
+                "hint": str(localized.get("hint", "")).strip(),
             }
 
         self._translations = localized_data
@@ -140,6 +143,9 @@ class BotConfiguration:
             language: {
                 "question": data["question"],
                 "keywords": data["keywords"],
+                "answer": data["answer"],
+                "explanation": data["explanation"],
+                "hint": data["hint"],
             }
             for language, data in self._translations.items()
         }
@@ -157,6 +163,22 @@ class BotConfiguration:
         """Return the experiment-specific Bot keywords for a language."""
         language = self._validate_language(language)
         return self._translations[language]["keywords"]
+
+    @staticmethod
+    def answer(self, language):
+        """Return the configured final answer for a language."""
+        language = self._validate_language(language)
+        return self._translations[language]["answer"]
+
+    def explanation(self, language):
+        """Return the configured explanation for a language."""
+        language = self._validate_language(language)
+        return self._translations[language]["explanation"]
+
+    def hint(self, language):
+        """Return the configured hint for a language."""
+        language = self._validate_language(language)
+        return self._translations[language]["hint"]
 
     @staticmethod
     def _validate_language(language):
