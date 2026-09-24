@@ -4,7 +4,7 @@ from bot_configuration import BotConfiguration
 from experiment_infrastructure import Experiment, ExperimentResult, ExperimentStage
 from physical_configuration import BodyPhysicalConfiguration, StagePhysicalConfiguration
 from experiment_execution import run_experiment
-from system_validation import ConservationValidator
+from validation.system_validation import ConservationValidator
 
 
 def make_configuration(*bodies):
