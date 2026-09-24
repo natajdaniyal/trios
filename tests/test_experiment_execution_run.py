@@ -1,5 +1,6 @@
 import pytest
 
+from bot_configuration import BotConfiguration
 from experiment_infrastructure import Experiment, ExperimentResult, ExperimentStage
 from physical_configuration import BodyPhysicalConfiguration, StagePhysicalConfiguration
 from experiment_execution import run_experiment
@@ -118,3 +119,61 @@ def test_run_experiment_rejects_invalid_step_count():
         run_experiment(experiment, steps_per_stage=True)
     with pytest.raises(ValueError):
         run_experiment(experiment, steps_per_stage=-1)
+
+
+def make_bot_configuration():
+    return BotConfiguration({
+        "fa": {"question": "چه اتفاقی می‌افتد؟", "keywords": ["جذب", "نزدیک"]},
+        "en": {"question": "What will happen?", "keywords": ["gravity", "closer"]},
+        "ar": {"question": "ماذا سيحدث؟", "keywords": ["جاذبية", "أقرب"]},
+        "zh": {"question": "会发生什么？", "keywords": ["引力", "靠近"]},
+        "es": {"question": "¿Qué pasará?", "keywords": ["gravedad", "cerca"]},
+        "fr": {"question": "Que se passera-t-il ?", "keywords": ["gravité", "proche"]},
+        "de": {"question": "Was wird passieren?", "keywords": ["gravitation", "näher"]},
+        "ja": {"question": "何が起こりますか？", "keywords": ["重力", "近づく"]},
+    })
+
+
+def test_run_experiment_evaluates_configured_bot():
+    experiment = Experiment(
+        "bot-experiment",
+        bot_configuration=make_bot_configuration(),
+    )
+    experiment.add_stage(
+        ExperimentStage("stage-1", make_configuration(make_body("A")))
+    )
+
+    result = run_experiment(
+        experiment,
+        steps_per_stage=0,
+        bot_answer="گرانش باعث می‌شود اجسام به هم نزدیک شوند.",
+        bot_language="fa",
+    )
+
+    assert result.has_bot_evaluation()
+    assert result.get_bot_evaluation().is_correct is True
+    assert result.get_bot_evaluation().language == "fa"
+
+
+def test_run_experiment_requires_bot_answer_when_bot_is_configured():
+    experiment = Experiment(
+        "bot-experiment",
+        bot_configuration=make_bot_configuration(),
+    )
+    experiment.add_stage(
+        ExperimentStage("stage-1", make_configuration(make_body("A")))
+    )
+
+    with pytest.raises(ValueError):
+        run_experiment(experiment, steps_per_stage=0)
+
+
+def test_run_experiment_requires_bot_inputs_together():
+    experiment = Experiment("bot-experiment")
+
+    with pytest.raises(ValueError):
+        run_experiment(
+            experiment,
+            steps_per_stage=0,
+            bot_answer="gravity",
+        )
