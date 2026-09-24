@@ -1402,6 +1402,7 @@ def start_google_login(flow):
 def set_logged_in_user(data, welcome_message=None, new_account=False):
     st.session_state.user = data["username"]
     st.session_state.pop("welcome_message", None)
+    st.session_state.welcome_kind = "new" if new_account else "returning"
     st.session_state.new_account = new_account
     if welcome_message:
         st.session_state.welcome_message = welcome_message
@@ -1465,6 +1466,7 @@ def clear_web_session():
     st.session_state.pop("google_identity", None)
     st.session_state.pop("google_flow", None)
     st.session_state.pop("new_account", None)
+    st.session_state.pop("welcome_kind", None)
 
 
 def process_google_identity():
@@ -1757,8 +1759,23 @@ def show_register():
 
 
 def show_google_profile():
-    show_public_nav()
     identity = st.session_state.get("google_identity", google_identity())
+
+    try:
+        existing_profile = google_profile(identity.get("sub"))
+    except Exception:
+        st.error("TRIOS could not verify the Google account right now. Please refresh and try again.")
+        return
+
+    if existing_profile:
+        set_logged_in_user(
+            existing_profile,
+            t("welcome_back", name=existing_profile["username"]),
+            new_account=False,
+        )
+        return
+
+    show_public_nav()
 
     st.markdown('<div class="trios-page-card">', unsafe_allow_html=True)
     render_icon("google", size=30)
@@ -1804,10 +1821,13 @@ def show_dashboard():
     with left:
         st.image("assets/trios_logo.png", width=94)
     with right:
-        is_new_account = st.session_state.pop("new_account", False)
+        welcome_kind = st.session_state.pop("welcome_kind", None)
+        st.session_state.pop("new_account", None)
         greeting = st.session_state.pop("welcome_message", None)
-        if is_new_account:
+        if welcome_kind == "new":
             title = t("welcome", name=username)
+        elif welcome_kind == "returning":
+            title = t("welcome_back", name=username)
         elif greeting:
             title = greeting
         else:
