@@ -665,6 +665,21 @@ FIRST_EXPERIMENT_TRANSLATIONS = {
 for _code, _labels in FIRST_EXPERIMENT_TRANSLATIONS.items():
     TRANSLATIONS[_code].update(_labels)
 
+
+GAME_TRANSLATIONS = {
+    "fa": {"experiments_title":"آزمایش‌ها","experiments_copy":"آزمایش را انتخاب کن و قدم‌به‌قدم کشفش کن.","experiment_one_name":"چرا مسئلهٔ سه‌جسمی سخت است؟","experiment_one_copy":"سه چالش کوتاه با آهنرباها؛ از دو جسم شروع کن و به برهم‌کنش سه جسم برس.","stage_label":"مرحله","stage_one_name":"برهم‌کنش‌های چندگانه","three_challenges":"۳ چالش","play_experiment":"شروع آزمایش","continue_experiment":"ادامه آزمایش","replay_experiment":"اجرای دوباره","locked_stage":"قفل","locked_stage_copy":"بعد از کامل شدن مرحلهٔ قبلی باز می‌شود.","coins":"سکه","progress":"پیشرفت","challenge_label":"چالش","bot_label":"TRIOS-Bot","prediction_saved_copy":"پیش‌بینی ثبت شد. حالا زمان آزمایش است.","simulation_ready":"شبیه‌سازی واقعی آماده است.","simulation_complete":"شبیه‌سازی انجام شد.","scene_setup":"چیدمان اولیه","scene_attract":"قطب‌های مخالف → جذب","scene_repel":"قطب‌های هم‌نام → دفع","scene_three":"سه جسم → چند اثر هم‌زمان","back_to_experiments":"بازگشت به آزمایش‌ها","hint_unlocked_badge":"💡 راهنما باز است","stage_reward":"پاداش مرحله: +{amount} سکه","details":"جزئیات شبیه‌سازی","lab_notice":"مرحلهٔ اول آماده است: سه چالش عملی دربارهٔ برهم‌کنش دو و سه آهنربا."},
+    "en": {"experiments_title":"Experiments","experiments_copy":"Choose an experiment and discover it step by step.","experiment_one_name":"Why is the three-body problem hard?","experiment_one_copy":"Three short magnet challenges: start with two bodies and reach three-body interaction.","stage_label":"Stage","stage_one_name":"Multiple interactions","three_challenges":"3 challenges","play_experiment":"Start experiment","continue_experiment":"Continue experiment","replay_experiment":"Replay","locked_stage":"Locked","locked_stage_copy":"Unlocks after the previous stage is complete.","coins":"Coins","progress":"Progress","challenge_label":"Challenge","bot_label":"TRIOS-Bot","prediction_saved_copy":"Prediction saved. Now it is time to run the experiment.","simulation_ready":"Real simulation is ready.","simulation_complete":"Simulation complete.","scene_setup":"Initial setup","scene_attract":"Opposite poles → attraction","scene_repel":"Like poles → repulsion","scene_three":"Three bodies → simultaneous effects","back_to_experiments":"Back to experiments","hint_unlocked_badge":"💡 Hint unlocked","stage_reward":"Stage reward: +{amount} coins","details":"Simulation details","lab_notice":"Stage 1 is live: three hands-on challenges about two- and three-magnet interactions."},
+    "ar": {"experiments_title":"التجارب","experiments_copy":"اختر تجربة واكتشفها خطوة بخطوة.","experiment_one_name":"لماذا تصبح مسألة الأجسام الثلاثة صعبة؟","experiment_one_copy":"ثلاثة تحديات قصيرة بالمغناطيسات، من جسمين إلى تفاعل ثلاثة أجسام.","stage_label":"المرحلة","stage_one_name":"تفاعلات متعددة","three_challenges":"3 تحديات","play_experiment":"بدء التجربة","continue_experiment":"متابعة التجربة","replay_experiment":"إعادة التجربة","locked_stage":"مغلق","locked_stage_copy":"يُفتح بعد إكمال المرحلة السابقة.","coins":"العملات","progress":"التقدم","challenge_label":"التحدي","bot_label":"TRIOS-Bot","prediction_saved_copy":"تم حفظ توقعك. حان الآن وقت التجربة.","simulation_ready":"المحاكاة الحقيقية جاهزة.","simulation_complete":"اكتملت المحاكاة.","scene_setup":"الإعداد الأولي","scene_attract":"أقطاب متعاكسة → تجاذب","scene_repel":"أقطاب متشابهة → تنافر","scene_three":"ثلاثة أجسام → تأثيرات متزامنة","back_to_experiments":"العودة إلى التجارب","hint_unlocked_badge":"💡 التلميح مفتوح","stage_reward":"مكافأة المرحلة: +{amount} عملة","details":"تفاصيل المحاكاة","lab_notice":"المرحلة الأولى جاهزة: ثلاثة تحديات عملية عن تفاعل مغناطيسين وثلاثة مغناطيسات."},
+    "zh": {"experiments_title":"实验","experiments_copy":"选择一个实验，一步一步探索。","experiment_one_name":"为什么三体问题很难？","experiment_one_copy":"三个简短的磁铁挑战，从两个物体开始，进入三个物体的相互作用。","stage_label":"阶段","stage_one_name":"多重相互作用","three_challenges":"3 个挑战","play_experiment":"开始实验","continue_experiment":"继续实验","replay_experiment":"再次实验","locked_stage":"已锁定","locked_stage_copy":"完成上一阶段后解锁。","coins":"金币","progress":"进度","challenge_label":"挑战","bot_label":"TRIOS-Bot","prediction_saved_copy":"预测已保存。现在开始实验。","simulation_ready":"真实模拟已准备好。","simulation_complete":"模拟完成。","scene_setup":"初始设置","scene_attract":"异名磁极 → 吸引","scene_repel":"同名磁极 → 排斥","scene_three":"三个物体 → 同时受到影响","back_to_experiments":"返回实验","hint_unlocked_badge":"💡 提示已解锁","stage_reward":"阶段奖励：+{amount} 金币","details":"模拟详情","lab_notice":"第 1 阶段已经开放：三个关于两个和三个磁铁相互作用的实践挑战。"},
+    "es": {"experiments_title":"Experimentos","experiments_copy":"Elige un experimento y descúbrelo paso a paso.","experiment_one_name":"¿Por qué es difícil el problema de tres cuerpos?","experiment_one_copy":"Tres desafíos cortos con imanes, desde dos cuerpos hasta la interacción de tres cuerpos.","stage_label":"Etapa","stage_one_name":"Interacciones múltiples","three_challenges":"3 desafíos","play_experiment":"Empezar experimento","continue_experiment":"Continuar experimento","replay_experiment":"Repetir","locked_stage":"Bloqueada","locked_stage_copy":"Se desbloquea al completar la etapa anterior.","coins":"Monedas","progress":"Progreso","challenge_label":"Desafío","bot_label":"TRIOS-Bot","prediction_saved_copy":"Predicción guardada. Ahora realiza el experimento.","simulation_ready":"La simulación real está lista.","simulation_complete":"Simulación completada.","scene_setup":"Configuración inicial","scene_attract":"Polos opuestos → atracción","scene_repel":"Polos iguales → repulsión","scene_three":"Tres cuerpos → efectos simultáneos","back_to_experiments":"Volver a experimentos","hint_unlocked_badge":"💡 Pista desbloqueada","stage_reward":"Recompensa: +{amount} monedas","details":"Detalles de simulación","lab_notice":"La Etapa 1 está activa: tres desafíos prácticos con dos y tres imanes."},
+    "fr": {"experiments_title":"Expériences","experiments_copy":"Choisis une expérience et découvre-la étape par étape.","experiment_one_name":"Pourquoi le problème à trois corps est-il difficile ?","experiment_one_copy":"Trois petits défis avec des aimants, de deux corps à trois interactions.","stage_label":"Étape","stage_one_name":"Interactions multiples","three_challenges":"3 défis","play_experiment":"Commencer","continue_experiment":"Continuer","replay_experiment":"Rejouer","locked_stage":"Verrouillée","locked_stage_copy":"Se débloque après l’étape précédente.","coins":"Pièces","progress":"Progression","challenge_label":"Défi","bot_label":"TRIOS-Bot","prediction_saved_copy":"Prédiction enregistrée. Fais maintenant l’expérience.","simulation_ready":"La simulation réelle est prête.","simulation_complete":"Simulation terminée.","scene_setup":"Configuration initiale","scene_attract":"Pôles opposés → attraction","scene_repel":"Pôles identiques → répulsion","scene_three":"Trois corps → effets simultanés","back_to_experiments":"Retour aux expériences","hint_unlocked_badge":"💡 Indice débloqué","stage_reward":"Récompense : +{amount} pièces","details":"Détails de la simulation","lab_notice":"L’étape 1 est disponible : trois défis pratiques avec deux et trois aimants."},
+    "de": {"experiments_title":"Experimente","experiments_copy":"Wähle ein Experiment und entdecke es Schritt für Schritt.","experiment_one_name":"Warum ist das Dreikörperproblem schwierig?","experiment_one_copy":"Drei kurze Magnet-Aufgaben, von zwei Körpern zu drei gleichzeitigen Wechselwirkungen.","stage_label":"Stufe","stage_one_name":"Mehrfache Wechselwirkungen","three_challenges":"3 Aufgaben","play_experiment":"Experiment starten","continue_experiment":"Experiment fortsetzen","replay_experiment":"Nochmal spielen","locked_stage":"Gesperrt","locked_stage_copy":"Wird nach Abschluss der vorherigen Stufe freigeschaltet.","coins":"Münzen","progress":"Fortschritt","challenge_label":"Aufgabe","bot_label":"TRIOS-Bot","prediction_saved_copy":"Vorhersage gespeichert. Jetzt ist das Experiment dran.","simulation_ready":"Die echte Simulation ist bereit.","simulation_complete":"Simulation abgeschlossen.","scene_setup":"Ausgangsaufbau","scene_attract":"Gegenpole → Anziehung","scene_repel":"Gleichpole → Abstoßung","scene_three":"Drei Körper → gleichzeitige Effekte","back_to_experiments":"Zurück zu den Experimenten","hint_unlocked_badge":"💡 Hinweis freigeschaltet","stage_reward":"Stufenbelohnung: +{amount} Münzen","details":"Simulationsdetails","lab_notice":"Stufe 1 ist aktiv: drei praktische Aufgaben mit zwei und drei Magneten."},
+    "ja": {"experiments_title":"実験","experiments_copy":"実験を選び、ステップごとに発見しよう。","experiment_one_name":"なぜ三体問題は難しいのでしょうか？","experiment_one_copy":"2つの物体から3つの同時相互作用まで、3つの磁石チャレンジ。","stage_label":"ステージ","stage_one_name":"複数の相互作用","three_challenges":"3チャレンジ","play_experiment":"実験を始める","continue_experiment":"実験を続ける","replay_experiment":"もう一度","locked_stage":"ロック中","locked_stage_copy":"前のステージを完了すると解放されます。","coins":"コイン","progress":"進行","challenge_label":"チャレンジ","bot_label":"TRIOS-Bot","prediction_saved_copy":"予想を保存しました。次に実験を行います。","simulation_ready":"実際のシミュレーションの準備ができました。","simulation_complete":"シミュレーション完了。","scene_setup":"初期配置","scene_attract":"反対の極 → 引き合う","scene_repel":"同じ極 → 反発する","scene_three":"3つの物体 → 同時に影響し合う","back_to_experiments":"実験一覧に戻る","hint_unlocked_badge":"💡 ヒント解放済み","stage_reward":"ステージ報酬：+{amount}コイン","details":"シミュレーション詳細","lab_notice":"ステージ1が公開中：2つと3つの磁石を使った3つの実験チャレンジ。"},
+}
+
+for _code, _labels in GAME_TRANSLATIONS.items():
+    TRANSLATIONS[_code].update(_labels)
+
 ERROR_TRANSLATION_KEYS = {
     "Username cannot be empty.": "username_required",
     "Password cannot be empty.": "password_required",
@@ -2157,8 +2172,8 @@ def show_dashboard():
 
     c1, c2, c3 = st.columns(3, gap="medium")
     with c1:
-        if render_action_card("rocket", t("start_experiment"), t("start_experiment_copy"), t("start_experiment"), "dashboard_lab"):
-            navigate("lab")
+        if render_action_card("rocket", t("experiments_title"), t("experiments_copy"), t("play_experiment"), "dashboard_lab"):
+            navigate("experiments")
     with c2:
         if render_action_card("chart", t("view_report"), t("report_copy"), t("view_report"), "dashboard_report"):
             navigate("report")
@@ -2259,93 +2274,50 @@ def _experiment_stage_context():
 
 
 def _render_experiment_controls():
-    """Render the persistent controls used inside every experiment stage."""
+    """Render compact experiment controls in the game HUD."""
     from experiment_progress import has_hint, unlock_hint
 
     context = _experiment_stage_context()
     has_active_stage = context is not None
-
-    stop_col, hint_col = st.columns([1, 1], gap="medium")
+    stop_col, hint_col, spacer = st.columns([1.2, 1.2, 5.6], gap="small")
 
     with stop_col:
-        if st.button(
-            t("experiment_stop"),
-            use_container_width=True,
-            key="experiment_stop_button",
-        ):
-            st.session_state.experiment_stop_menu = True
+        with st.popover(f"⏸️ {t('experiment_stop')}", use_container_width=True):
+            st.caption(t("experiment_stop"))
+            if st.button(t("experiment_exit"), use_container_width=True, key="experiment_exit_button"):
+                st.session_state.experiment_hint_visible = False
+                st.session_state.first_experiment_active = False
+                navigate("experiments")
+            if st.button(t("experiment_retry"), use_container_width=True, key="experiment_retry_button"):
+                st.session_state.experiment_hint_visible = False
+                st.session_state.first_experiment_active = True
+                st.session_state.first_experiment_challenge_index = 0
+                _reset_first_experiment_challenge()
+                st.rerun()
+            if st.button(t("experiment_continue"), use_container_width=True, key="experiment_continue_button"):
+                st.rerun()
 
     with hint_col:
-        if st.button(
-            t("experiment_hint"),
-            use_container_width=True,
-            key="experiment_hint_button",
-            disabled=not has_active_stage,
-        ):
-            profile = user_profile(st.session_state.user)
-            if not context["hint_text"]:
+        with st.popover(f"💡 {t('experiment_hint')}", use_container_width=True):
+            if not has_active_stage or not context["hint_text"]:
                 st.info(t("hint_not_ready"))
-            elif has_hint(
-                profile,
-                context["experiment_id"],
-                context["stage_number"],
-            ):
-                st.session_state.experiment_hint_visible = True
             else:
-                purchase = unlock_hint(
-                    profile,
-                    context["experiment_id"],
-                    context["stage_number"],
-                )
-                if purchase["unlocked_now"]:
-                    _save_current_profile(profile)
+                profile = user_profile(st.session_state.user)
+                if has_hint(profile, context["experiment_id"], context["stage_number"]):
+                    st.success(f"{t('hint_unlocked_badge')}: {context['hint_text']}")
                     st.session_state.experiment_hint_visible = True
                 else:
-                    st.warning(t("hint_no_coins"))
+                    if st.button(f"{t('experiment_hint')} · 5 🪙", use_container_width=True, key="experiment_buy_hint"):
+                        purchase = unlock_hint(profile, context["experiment_id"], context["stage_number"])
+                        if purchase["unlocked_now"]:
+                            _save_current_profile(profile)
+                            st.session_state.experiment_hint_visible = True
+                            st.rerun()
+                        else:
+                            st.warning(t("hint_no_coins"))
 
     if st.session_state.get("experiment_hint_visible") and context and context["hint_text"]:
-        st.info(f"💡 {context['hint_text']}")
-
-    if st.session_state.get("experiment_stop_menu"):
-        st.markdown(
-            '<div class="trios-page-card" style="margin-top:1rem;">',
-            unsafe_allow_html=True,
-        )
-        st.subheader(t("experiment_stop"))
-
-        exit_col, retry_col, continue_col = st.columns(3, gap="small")
-
-        with exit_col:
-            if st.button(
-                t("experiment_exit"),
-                use_container_width=True,
-                key="experiment_exit_button",
-            ):
-                st.session_state.experiment_stop_menu = False
-                st.session_state.experiment_hint_visible = False
-                navigate("dashboard")
-
-        with retry_col:
-            if st.button(
-                t("experiment_retry"),
-                use_container_width=True,
-                key="experiment_retry_button",
-            ):
-                st.session_state.experiment_stop_menu = False
-                st.session_state.experiment_hint_visible = False
-                st.session_state.experiment_retry_requested = True
-                st.rerun()
-
-        with continue_col:
-            if st.button(
-                t("experiment_continue"),
-                use_container_width=True,
-                key="experiment_continue_button",
-            ):
-                st.session_state.experiment_stop_menu = False
-                st.rerun()
-
-        st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown(f'<div class="trios-hint-pill">💡 {context["hint_text"]}</div>', unsafe_allow_html=True)
 
 
 def _reset_first_experiment_challenge():
@@ -2356,7 +2328,111 @@ def _reset_first_experiment_challenge():
     st.session_state.pop("first_experiment_prediction_language", None)
     st.session_state.pop("first_experiment_prediction_submitted", None)
     st.session_state.pop(f"first_experiment_prediction_input_{index}", None)
-    st.session_state.experiment_hint_visible = False
+    st.session_state.experimdef _render_game_styles():
+    st.markdown(
+        """
+        <style>
+        .trios-game-shell{max-width:1120px;margin:1rem auto 0;}
+        .trios-game-hud{display:flex;gap:.65rem;align-items:center;flex-wrap:wrap;margin:.75rem 0 1rem;}
+        .trios-hud-chip{padding:.55rem .85rem;border-radius:999px;border:1px solid rgba(183,210,255,.15);background:rgba(255,255,255,.055);color:#edf4ff;box-shadow:inset 0 1px 0 rgba(255,255,255,.05);font-size:.88rem;}
+        .trios-hud-chip strong{color:#fff;}
+        .trios-bot-card{display:flex;gap:1rem;align-items:flex-start;padding:1rem 1.1rem;border-radius:22px;border:1px solid rgba(132,195,255,.2);background:linear-gradient(145deg,rgba(81,180,255,.1),rgba(180,113,255,.08)),rgba(9,14,33,.72);box-shadow:0 16px 40px rgba(0,0,0,.18);margin-bottom:1rem;}
+        .trios-bot-avatar{flex:0 0 46px;width:46px;height:46px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(145deg,#83e7ff,#bd92ff);color:#0b1020;font-size:1.35rem;box-shadow:0 0 24px rgba(121,205,255,.22);}
+        .trios-bot-copy strong{display:block;color:#fff;margin-bottom:.2rem;}
+        .trios-bot-copy span{color:#d9e4ff;line-height:1.55;}
+        .trios-scene{position:relative;min-height:330px;overflow:hidden;border-radius:28px;border:1px solid rgba(159,209,255,.18);background:radial-gradient(circle at 50% 42%,rgba(95,193,255,.1),transparent 35%),radial-gradient(circle at 18% 20%,rgba(190,126,255,.08),transparent 20%),linear-gradient(180deg,rgba(9,15,36,.92),rgba(7,11,27,.96));box-shadow:0 26px 70px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.05);}
+        .trios-scene::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 12% 22%,rgba(255,255,255,.36) 0 1px,transparent 1.5px),radial-gradient(circle at 31% 68%,rgba(255,255,255,.22) 0 1px,transparent 1.5px),radial-gradient(circle at 73% 18%,rgba(255,255,255,.28) 0 1px,transparent 1.5px),radial-gradient(circle at 87% 61%,rgba(255,255,255,.24) 0 1px,transparent 1.5px);pointer-events:none;}
+        .trios-scene-title{position:absolute;left:1rem;top:.9rem;color:#b6c9ef;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;}
+        .trios-scene-note{position:absolute;right:1rem;top:.85rem;padding:.45rem .7rem;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#e9f0ff;font-size:.78rem;}
+        .trios-force-line{position:absolute;top:54%;height:2px;background:linear-gradient(90deg,transparent,rgba(134,223,255,.72),transparent);filter:drop-shadow(0 0 8px rgba(115,205,255,.55));}
+        .trios-force-line.two{left:31%;width:38%;}.trios-force-line.three-a{left:18%;width:24%;}.trios-force-line.three-b{left:58%;width:24%;}
+        .trios-magnet{position:absolute;top:43%;width:84px;height:84px;transform:translate(-50%,-50%);border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:1.4rem;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.35);border:2px solid rgba(255,255,255,.32);box-shadow:0 0 0 8px rgba(255,255,255,.025),0 0 36px rgba(106,202,255,.16);}
+        .trios-magnet.n{background:radial-gradient(circle at 35% 30%,#6ff0ff,#278ed7 62%,#164f92);}.trios-magnet.s{background:radial-gradient(circle at 35% 30%,#ffb6ef,#cf55ac 62%,#73386b);}
+        .trios-magnet small{position:absolute;bottom:-1.7rem;font-size:.72rem;font-weight:700;color:#aebddd;}
+        .trios-magnet.attract-a{left:38%;animation:triosAttractA 2.7s ease-in-out infinite alternate;}.trios-magnet.attract-b{left:62%;animation:triosAttractB 2.7s ease-in-out infinite alternate;}
+        .trios-magnet.repel-a{left:36%;animation:triosRepelA 2.7s ease-in-out infinite alternate;}.trios-magnet.repel-b{left:64%;animation:triosRepelB 2.7s ease-in-out infinite alternate;}
+        .trios-magnet.three-a{left:24%;animation:triosThreeA 2.9s ease-in-out infinite alternate;}.trios-magnet.three-b{left:50%;animation:triosThreeB 2.9s ease-in-out infinite alternate;}.trios-magnet.three-c{left:76%;animation:triosThreeC 2.9s ease-in-out infinite alternate;}
+        @keyframes triosAttractA{to{left:45%;}}@keyframes triosAttractB{to{left:55%;}}@keyframes triosRepelA{to{left:29%;}}@keyframes triosRepelB{to{left:71%;}}@keyframes triosThreeA{to{left:20%;}}@keyframes triosThreeB{to{top:49%;}}@keyframes triosThreeC{to{left:80%;}}
+        .trios-hint-pill{margin:.65rem 0;padding:.7rem 1rem;border-radius:16px;background:rgba(255,193,92,.08);border:1px solid rgba(255,193,92,.18);color:#ffe7ae;}
+        .trios-choice-card{padding:1.1rem;border-radius:22px;border:1px solid rgba(164,204,255,.14);background:rgba(255,255,255,.035);}
+        .trios-stage-track{height:8px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.07);margin:.6rem 0 .2rem;}
+        .trios-stage-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#67e8ff,#a87cff,#ef8cff);box-shadow:0 0 18px rgba(127,185,255,.28);}
+        div[data-testid="stTextArea"] textarea{color:#f7f9ff!important;caret-color:#9fe9ff!important;background:rgba(255,255,255,.06)!important;border-color:rgba(183,210,255,.18)!important;}
+        div[data-testid="stTextArea"] textarea::placeholder{color:rgba(224,234,255,.5)!important;}
+        div[data-testid="stTextArea"] label{color:#eef4ff!important;}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def _magnetic_scene_html(challenge):
+    if challenge.scenario_id == "opposite-poles":
+        note=t("scene_attract")
+        magnets=(("A","N","attract-a"),("B","S","attract-b"))
+        line='<div class="trios-force-line two"></div>'
+    elif challenge.scenario_id == "same-poles":
+        note=t("scene_repel")
+        magnets=(("A","N","repel-a"),("B","N","repel-b"))
+        line='<div class="trios-force-line two"></div>'
+    else:
+        note=t("scene_three")
+        magnets=(("A","N","three-a"),("B","S","three-b"),("C","N","three-c"))
+        line='<div class="trios-force-line three-a"></div><div class="trios-force-line three-b"></div>'
+    magnet_html="".join(f'<div class="trios-magnet {pole.lower()} {motion}">{pole}<small>{name}</small></div>' for name,pole,motion in magnets)
+    return '<div class="trios-scene">'+f'<div class="trios-scene-title">TRIOS · {t("scene_setup")}</div><div class="trios-scene-note">{note}</div>'+line+magnet_html+'</div>'
+
+
+def _render_game_hud(profile,index,total):
+    progress=ensure_experiment_progress(profile)
+    coins=progress["coins"]
+    percent=int(((index+1)/total)*100)
+    st.markdown(
+        f'<div class="trios-game-hud"><div class="trios-hud-chip">🧪 <strong>{t("stage_label")} 1</strong></div>'
+        f'<div class="trios-hud-chip">🎯 <strong>{t("challenge_label")} {index+1}/{total}</strong></div>'
+        f'<div class="trios-hud-chip">🪙 <strong>{coins}</strong> {t("coins")}</div>'
+        f'<div style="flex:1;min-width:180px;"><div style="display:flex;justify-content:space-between;color:#9fb0d3;font-size:.78rem;"><span>{t("progress")}</span><span>{percent}%</span></div>'
+        f'<div class="trios-stage-track"><div class="trios-stage-fill" style="width:{percent}%"></div></div></div></div>',
+        unsafe_allow_html=True,
+    )
+
+
+def show_experiments():
+    profile=user_profile(st.session_state.user)
+    progress=ensure_experiment_progress(profile)
+    completed=is_stage_completed(profile,FIRST_EXPERIMENT_ID,1)
+    current_index=st.session_state.get("first_experiment_challenge_index",0)
+
+    show_public_nav()
+    _render_game_styles()
+    st.markdown('<div class="trios-game-shell">',unsafe_allow_html=True)
+    st.markdown(f'<div class="trios-page-card" style="margin-top:0;"><div class="trios-kicker"><span class="trios-kicker-dot"></span>{t("experiments_title")}</div><h1>{t("experiments_title")}</h1><p class="trios-hero-copy">{t("experiments_copy")}</p></div>',unsafe_allow_html=True)
+
+    with st.container(border=True):
+        st.markdown(f'<div class="trios-choice-card"><div style="font-size:.78rem;color:#8fa5cc;text-transform:uppercase;letter-spacing:.08em;">{t("stage_label")} 1 · {t("three_challenges")}</div><h2 style="margin:.4rem 0;">{t("experiment_one_name")}</h2><p style="color:#b8c5e2;">{t("experiment_one_copy")}</p></div>',unsafe_allow_html=True)
+        current=min(current_index+1,3)
+        st.progress(1.0 if completed else current/3)
+        st.caption(f'🪙 {progress["coins"]} {t("coins")}')
+        label=t("replay_experiment") if completed else (t("continue_experiment") if st.session_state.get("current_experiment_id")==FIRST_EXPERIMENT_ID else t("play_experiment"))
+        if st.button(f"🚀 {label}",use_container_width=True,key="experiment_one_open"):
+            st.session_state.current_experiment_id=FIRST_EXPERIMENT_ID
+            st.session_state.current_stage_number=1
+            st.session_state.first_experiment_active=True
+            if completed:
+                st.session_state.first_experiment_challenge_index=0
+                st.session_state.first_experiment_completion_recorded=True
+                _reset_first_experiment_challenge()
+            navigate("lab")
+
+    with st.container(border=True):
+        st.markdown(f'<div class="trios-choice-card" style="opacity:.56;"><div style="font-size:.78rem;color:#8fa5cc;text-transform:uppercase;letter-spacing:.08em;">{t("stage_label")} 2 · 🔒 {t("locked_stage")}</div><h3 style="margin:.4rem 0;">{t("locked_stage")}</h3><p style="color:#aab7d1;">{t("locked_stage_copy")}</p></div>',unsafe_allow_html=True)
+
+    if st.button(t("back"),use_container_width=True,key="experiments_back"):
+        navigate("dashboard")
+    st.markdown("</div>",unsafe_allow_html=True)
+
+
+ent_hint_visible = False
 
 
 def _init_first_experiment():
@@ -2364,8 +2440,10 @@ def _init_first_experiment():
         st.session_state.current_experiment_id = FIRST_EXPERIMENT_ID
         st.session_state.current_stage_number = 1
         st.session_state.first_experiment_challenge_index = 0
-        st.session_state.first_experiment_active = False
+        st.session_state.first_experiment_active = True
         st.session_state.first_experiment_stage_completed = False
+        st.session_state.first_experiment_completion_recorded = False
+        st.session_state.first_experiment_last_reward = 0
         _reset_first_experiment_challenge()
 
     profile = user_profile(st.session_state.user)
@@ -2377,15 +2455,8 @@ def _init_first_experiment():
         return profile
 
     st.session_state.first_experiment_active = True
-    challenge = first_stage_challenge(
-        st.session_state.get("first_experiment_challenge_index", 0)
-    )
-
-    # The hint is a single stage-level purchase. Keep one fixed hint for the
-    # whole stage rather than silently granting a different hint per challenge.
-    st.session_state.current_stage_hint = first_stage_challenge(0).hint(
-        current_language()
-    )
+    challenge = first_stage_challenge(st.session_state.get("first_experiment_challenge_index", 0))
+    st.session_state.current_stage_hint = challenge.hint(current_language())
     return profile
 
 
@@ -2394,15 +2465,15 @@ def _show_first_experiment_result(challenge):
     if result is None:
         return
 
-    st.success(t("experiment_done"))
-    st.subheader(t("final_state"))
-
-    for body in result.bodies:
-        st.write(
-            f"**{body['name']}** — "
-            f"x = {body['position_x']:.3f}, y = {body['position_y']:.3f}, "
-            f"vx = {body['velocity_x']:.3f}, vy = {body['velocity_y']:.3f}"
-        )
+    st.success(t("simulation_complete"))
+    st.markdown(_magnetic_scene_html(challenge), unsafe_allow_html=True)
+    with st.expander(t("details"), expanded=False):
+        for body in result.bodies:
+            st.write(
+                f"**{body['name']}** — x = {body['position_x']:.3f}, "
+                f"y = {body['position_y']:.3f}, vx = {body['velocity_x']:.3f}, "
+                f"vy = {body['velocity_y']:.3f}"
+            )
 
     evaluation = st.session_state.get("first_experiment_evaluation")
     if evaluation is None:
@@ -2413,162 +2484,107 @@ def _show_first_experiment_result(challenge):
     else:
         st.error(t("bot_result_incorrect"))
 
-    st.markdown(
-        f"**{t('bot_answer_label')}:** "
-        f"{challenge.answer(current_language())}"
-    )
-    st.markdown(
-        f"**{t('bot_explanation_label')}:** "
-        f"{challenge.explanation(current_language())}"
-    )
+    st.markdown(f"**{t('bot_answer_label')}:** {challenge.answer(current_language())}")
+    st.markdown(f"**{t('bot_explanation_label')}:** {challenge.explanation(current_language())}")
 
 
 def _render_first_experiment():
     profile = _init_first_experiment()
+    index = st.session_state.get("first_experiment_challenge_index", 0)
+    total = first_stage_challenge_count()
 
-    if st.session_state.get("first_experiment_stage_completed") and not st.session_state.get(
-        "first_experiment_active", False
-    ):
+    if st.session_state.get("first_experiment_stage_completed") and not st.session_state.get("first_experiment_active", False):
         st.markdown(
             f'<div class="trios-page-card"><h2>{t("stage_complete")}</h2>'
-            f'<p>{t("stage_complete_copy")}</p></div>',
+            f'<p>{t("stage_complete_copy")}</p>'
+            f'<p>{t("stage_reward", amount=st.session_state.get("first_experiment_last_reward", 0))}</p></div>',
             unsafe_allow_html=True,
         )
-
-        progress = ensure_experiment_progress(profile)
-        stages = progress.get("completed_stages", {}).get(FIRST_EXPERIMENT_ID, [])
-        if 1 in stages:
-            st.caption(
-                t(
-                    "coins_earned",
-                    amount=10,
-                )
-            )
-
-        if st.button(
-            t("retry_stage"),
-            use_container_width=True,
-            key="first_experiment_retry_stage",
-        ):
+        if st.button(f"🚀 {t('replay_experiment')}", use_container_width=True, key="first_experiment_retry_stage"):
             st.session_state.first_experiment_active = True
             st.session_state.first_experiment_challenge_index = 0
+            st.session_state.first_experiment_completion_recorded = True
             _reset_first_experiment_challenge()
             st.rerun()
         return
 
-    index = st.session_state.get("first_experiment_challenge_index", 0)
     challenge = first_stage_challenge(index)
-    total = first_stage_challenge_count()
+    _render_game_hud(profile, index, total)
 
-    st.markdown('<div class="trios-page-card">', unsafe_allow_html=True)
-    st.caption(f"{t('stage_one')} · {t('challenge_progress', current=index + 1, total=total)}")
-    st.header(t("first_experiment_title"))
-    st.subheader(challenge.question(current_language()))
+    st.markdown(
+        f'<div class="trios-bot-card"><div class="trios-bot-avatar">🤖</div>'
+        f'<div class="trios-bot-copy"><strong>{t("bot_label")}</strong>'
+        f'<span>{challenge.question(current_language())}</span></div></div>',
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(_magnetic_scene_html(challenge), unsafe_allow_html=True)
+    st.markdown("<div style='height:.8rem'></div>", unsafe_allow_html=True)
 
     prediction_key = f"first_experiment_prediction_input_{index}"
     prediction = st.text_area(
         t("prediction_label"),
         placeholder=t("prediction_placeholder"),
         key=prediction_key,
-        height=130,
+        height=120,
     )
 
-    if st.session_state.get("first_experiment_prediction_submitted"):
-        st.info(t("prediction_saved"))
+    submitted = st.session_state.get("first_experiment_prediction_submitted")
+    result = st.session_state.get("first_experiment_result")
 
-        if st.session_state.get("first_experiment_result") is None:
-            if st.button(
-                t("run_experiment"),
-                use_container_width=True,
-                key=f"first_experiment_run_{index}",
-            ):
+    if submitted:
+        st.success(t("prediction_saved_copy"))
+        if result is None:
+            st.info(t("simulation_ready"))
+            if st.button(f"▶️ {t('run_experiment')}", use_container_width=True, key=f"first_experiment_run_{index}"):
                 st.session_state.first_experiment_result = run_challenge(challenge)
                 st.session_state.experiment_hint_visible = False
                 st.rerun()
         else:
             _show_first_experiment_result(challenge)
-
             evaluation = st.session_state.get("first_experiment_evaluation")
             if evaluation is not None and evaluation.is_correct:
                 if index + 1 < total:
-                    if st.button(
-                        t("next_challenge"),
-                        use_container_width=True,
-                        key=f"first_experiment_next_{index}",
-                    ):
+                    if st.button(f"➡️ {t('next_challenge')}", use_container_width=True, key=f"first_experiment_next_{index}"):
                         st.session_state.first_experiment_challenge_index = index + 1
                         _reset_first_experiment_challenge()
                         st.rerun()
                 else:
                     if not st.session_state.get("first_experiment_completion_recorded"):
-                        completion = complete_stage(
-                            profile,
-                            FIRST_EXPERIMENT_ID,
-                            1,
-                        )
+                        completion = complete_stage(profile, FIRST_EXPERIMENT_ID, 1)
                         _save_current_profile(profile)
                         st.session_state.first_experiment_completion_recorded = True
-                    else:
-                        completion = {"coins_awarded": 0}
-
-                    st.markdown(
-                        f'<div class="trios-action-card" style="margin-top:1rem;">'
-                        f'<h3>{t("stage_complete")}</h3>'
-                        f'<p>{t("stage_complete_copy")}</p>'
-                        f'<p>{t("coins_earned", amount=completion["coins_awarded"])}</p>'
-                        f'</div>',
-                        unsafe_allow_html=True,
-                    )
-                    if st.button(
-                        t("retry_stage"),
-                        use_container_width=True,
-                        key="first_experiment_retry_completed",
-                    ):
-                        st.session_state.first_experiment_active = True
-                        st.session_state.first_experiment_challenge_index = 0
-                        st.session_state.first_experiment_stage_completed = True
-                        st.session_state.first_experiment_completion_recorded = True
-                        _reset_first_experiment_challenge()
-                        st.rerun()
+                        st.session_state.first_experiment_last_reward = completion["coins_awarded"]
+                    st.session_state.first_experiment_active = False
+                    st.session_state.first_experiment_stage_completed = True
+                    st.rerun()
             else:
-                if st.button(
-                    t("retry_challenge"),
-                    use_container_width=True,
-                    key=f"first_experiment_retry_{index}",
-                ):
+                if st.button(f"🔄 {t('retry_challenge')}", use_container_width=True, key=f"first_experiment_retry_{index}"):
                     _reset_first_experiment_challenge()
                     st.rerun()
     else:
-        if st.button(
-            t("submit_prediction"),
-            use_container_width=True,
-            key=f"first_experiment_submit_{index}",
-        ):
+        if st.button(f"✨ {t('submit_prediction')}", use_container_width=True, key=f"first_experiment_submit_{index}"):
             if not prediction.strip():
                 st.warning(t("prediction_required"))
             else:
                 st.session_state.first_experiment_prediction = prediction
                 st.session_state.first_experiment_prediction_language = current_language()
-                st.session_state.first_experiment_evaluation = (
-                    evaluate_challenge_prediction(
-                        challenge,
-                        prediction,
-                        current_language(),
-                    )
+                st.session_state.first_experiment_evaluation = evaluate_challenge_prediction(
+                    challenge, prediction, current_language()
                 )
                 st.session_state.first_experiment_prediction_submitted = True
                 st.rerun()
 
-    st.markdown("</div>", unsafe_allow_html=True)
-
 
 def show_lab():
     show_public_nav()
-    _render_first_experiment()
+    _render_game_styles()
+    st.markdown('<div class="trios-game-shell">', unsafe_allow_html=True)
     _render_experiment_controls()
-
-    if st.button(t("back"), use_container_width=True, key="lab_back"):
-        navigate("dashboard")
+    _render_first_experiment()
+    if st.button(f"← {t('back_to_experiments')}", use_container_width=True, key="lab_back"):
+        navigate("experiments")
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 def show_report():
@@ -2750,6 +2766,12 @@ NAVIGATION_PAGES.update(
             url_path="dashboard",
             visibility="hidden",
         ),
+        "experiments": st.Page(
+            show_experiments,
+            title=t("experiments_title"),
+            url_path="experiments",
+            visibility="hidden",
+        ),
         "profile": st.Page(
             show_profile,
             title=t("profile"),
@@ -2794,6 +2816,7 @@ process_google_identity()
 
 if "user" not in st.session_state and navigation.url_path in {
     "dashboard",
+    "experiments",
     "profile",
     "lab",
     "report",
