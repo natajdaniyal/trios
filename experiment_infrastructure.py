@@ -5,6 +5,7 @@ Defines experiment structure and generic result containers. It does not
 know about physics, simulation execution, learner behavior, or GUI logic.
 """
 
+from bot_configuration import BotConfiguration
 from measurement import MeasurementSet
 from physical_configuration import StagePhysicalConfiguration
 
@@ -33,9 +34,18 @@ class ExperimentStage:
 class Experiment:
     """Represents an experiment as an ordered collection of stages."""
 
-    def __init__(self, name):
+    def __init__(self, name, bot_configuration=None):
         self.name = name
         self._stages = []
+
+        if bot_configuration is not None and not isinstance(
+            bot_configuration, BotConfiguration
+        ):
+            raise TypeError(
+                "bot_configuration must be a BotConfiguration instance or None."
+            )
+
+        self.bot_configuration = bot_configuration
 
     def add_stage(self, stage):
         if not isinstance(stage, ExperimentStage):
@@ -59,19 +69,27 @@ class Experiment:
     def __repr__(self):
         return (
             f"Experiment(name={self.name!r}, "
-            f"stage_count={len(self._stages)})"
+            f"stage_count={len(self._stages)}, "
+            f"has_bot={self.bot_configuration is not None})"
         )
 
 
 class ExperimentResult:
     """Container for generic experiment data, measurements, and validations."""
 
-    def __init__(self, data=None, measurements=None, validations=None):
+    def __init__(
+        self,
+        data=None,
+        measurements=None,
+        validations=None,
+        bot_evaluation=None,
+    ):
         self.data = data
         self.measurements = (
             MeasurementSet() if measurements is None else measurements
         )
         self.validations = {} if validations is None else validations
+        self.bot_evaluation = bot_evaluation
 
         if not isinstance(self.measurements, MeasurementSet):
             raise TypeError("measurements must be a MeasurementSet instance.")
@@ -102,9 +120,20 @@ class ExperimentResult:
     def has_validation(self, name):
         return name in self.validations
 
+    def set_bot_evaluation(self, evaluation):
+        self.bot_evaluation = evaluation
+        return evaluation
+
+    def has_bot_evaluation(self):
+        return self.bot_evaluation is not None
+
+    def get_bot_evaluation(self):
+        return self.bot_evaluation
+
     def __repr__(self):
         return (
             f"ExperimentResult(data={self.data!r}, "
             f"measurements={self.measurements!r}, "
-            f"validations={self.validations!r})"
+            f"validations={self.validations!r}, "
+            f"bot_evaluation={self.bot_evaluation!r})"
         )
