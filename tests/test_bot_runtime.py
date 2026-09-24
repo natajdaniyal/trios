@@ -37,8 +37,10 @@ def test_bot_runtime_evaluates_correct_prediction():
     assert isinstance(result, BotEvaluationResult)
     assert result.language == "en"
     assert result.matched_keywords == ("gravity", "closer")
+    assert result.missing_keywords == ()
     assert result.match_count == 2
     assert result.required_matches == 2
+    assert result.status == "correct"
     assert result.is_correct is True
 
 
@@ -50,8 +52,10 @@ def test_bot_runtime_evaluates_incomplete_prediction():
     result = runtime.evaluate("Gravity affects them.", "en")
 
     assert result.matched_keywords == ("gravity",)
+    assert result.missing_keywords == ("closer",)
     assert result.match_count == 1
     assert result.required_matches == 2
+    assert result.status == "partial"
     assert result.is_correct is False
 
 
@@ -64,6 +68,8 @@ def test_bot_runtime_supports_multilingual_evaluation():
     )
 
     assert result.matched_keywords == ("جاذبه", "نزدیک")
+    assert result.missing_keywords == ()
+    assert result.status == "correct"
     assert result.is_correct is True
 
 
@@ -89,3 +95,28 @@ def test_bot_runtime_delegates_validation():
 
     with pytest.raises(ValueError):
         runtime.evaluate("gravity", "it")
+
+
+def test_bot_runtime_returns_incorrect_status_when_no_keywords_match():
+    runtime = BotRuntime(
+        BotConfiguration(make_translations(), minimum_matches=2)
+    )
+
+    result = runtime.evaluate("They move away.", "en")
+
+    assert result.matched_keywords == ()
+    assert result.missing_keywords == ("gravity", "closer")
+    assert result.status == "incorrect"
+    assert result.is_correct is False
+
+
+def test_bot_runtime_keeps_matching_order_from_configuration():
+    runtime = BotRuntime(BotConfiguration(make_translations(), minimum_matches=2))
+
+    result = runtime.evaluate(
+        "closer because of gravity",
+        "en",
+    )
+
+    assert result.matched_keywords == ("gravity", "closer")
+    assert result.missing_keywords == ()
