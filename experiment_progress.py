@@ -90,13 +90,14 @@ def complete_stage(profile, experiment_id, stage_number, reward=DEFAULT_STAGE_RE
         raise ValueError("reward must be a non-negative integer.")
 
     progress = ensure_experiment_progress(profile)
+
+    if not is_stage_unlocked(profile, experiment_id, stage_number):
+        raise ValueError("Stage is locked.")
+
     stages = progress["completed_stages"].setdefault(experiment_id, [])
 
     if stage_number in stages:
         return {"completed_now": False, "coins_awarded": 0}
-
-    if not is_stage_unlocked(profile, experiment_id, stage_number):
-        raise ValueError("Stage is locked.")
 
     stages.append(stage_number)
     stages.sort()
