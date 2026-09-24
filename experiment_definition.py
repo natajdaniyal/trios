@@ -34,6 +34,6 @@ class ExperimentDefinition:
         return ExperimentStage(self.name, configuration)
 
     def build_experiment(self, selections=None):
-        experiment = Experiment(self.name)
+        experiment = Experiment(self.name, bot_configuration=self.bot_configuration)
         experiment.add_stage(self.stage(selections))
         return experiment
