@@ -25,35 +25,38 @@ def _simulation(magnets, time_step=DEFAULT_TIME_STEP):
     )
 
 
-def build_opposite_poles_scenario(time_step=DEFAULT_TIME_STEP):
+def build_opposite_poles_scenario(time_step=DEFAULT_TIME_STEP, positions=None):
     """Two magnets with opposite poles: attraction."""
+    positions = _resolve_positions({"A": -1.0, "B": 1.0}, positions)
     return _simulation(
         [
-            Magnet("A", 1.0, -1.0, 0.0, MAGNETIC_STRENGTH, "N"),
-            Magnet("B", 1.0, 1.0, 0.0, MAGNETIC_STRENGTH, "S"),
+            Magnet("A", 1.0, positions["A"], 0.0, MAGNETIC_STRENGTH, "N"),
+            Magnet("B", 1.0, positions["B"], 0.0, MAGNETIC_STRENGTH, "S"),
         ],
         time_step=time_step,
     )
 
 
-def build_same_poles_scenario(time_step=DEFAULT_TIME_STEP):
+def build_same_poles_scenario(time_step=DEFAULT_TIME_STEP, positions=None):
     """Two magnets with like poles: repulsion."""
+    positions = _resolve_positions({"A": -1.0, "B": 1.0}, positions)
     return _simulation(
         [
-            Magnet("A", 1.0, -1.0, 0.0, MAGNETIC_STRENGTH, "N"),
-            Magnet("B", 1.0, 1.0, 0.0, MAGNETIC_STRENGTH, "N"),
+            Magnet("A", 1.0, positions["A"], 0.0, MAGNETIC_STRENGTH, "N"),
+            Magnet("B", 1.0, positions["B"], 0.0, MAGNETIC_STRENGTH, "N"),
         ],
         time_step=time_step,
     )
 
 
-def build_three_magnets_scenario(time_step=DEFAULT_TIME_STEP):
+def build_three_magnets_scenario(time_step=DEFAULT_TIME_STEP, positions=None):
     """Three interacting magnets: N-S-N."""
+    positions = _resolve_positions({"A": -2.0, "B": 0.0, "C": 2.0}, positions)
     return _simulation(
         [
-            Magnet("A", 1.0, -2.0, 0.0, MAGNETIC_STRENGTH, "N"),
-            Magnet("B", 1.0, 0.0, 0.0, MAGNETIC_STRENGTH, "S"),
-            Magnet("C", 1.0, 2.0, 0.0, MAGNETIC_STRENGTH, "N"),
+            Magnet("A", 1.0, positions["A"], 0.0, MAGNETIC_STRENGTH, "N"),
+            Magnet("B", 1.0, positions["B"], 0.0, MAGNETIC_STRENGTH, "S"),
+            Magnet("C", 1.0, positions["C"], 0.0, MAGNETIC_STRENGTH, "N"),
         ],
         time_step=time_step,
     )
@@ -66,11 +69,11 @@ SCENARIO_BUILDERS = {
 }
 
 
-def build_experiment_one_scenario(scenario_id, time_step=DEFAULT_TIME_STEP):
+def build_experiment_one_scenario(scenario_id, time_step=DEFAULT_TIME_STEP, positions=None):
     """Build the concrete simulation for an Experiment 1 scenario."""
     try:
         builder = SCENARIO_BUILDERS[scenario_id]
     except KeyError as exc:
         raise ValueError(f"Unknown Experiment 1 scenario: {scenario_id!r}.") from exc
 
-    return builder(time_step=time_step)
+    return builder(time_step=time_step, positions=positions)
