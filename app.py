@@ -26,6 +26,8 @@ from first_experiment_runtime import (
     run_challenge,
 )
 
+MAX_VISIBLE_EXPERIMENT_STEPS = 10
+
 
 st.set_page_config(
     page_title="TRIOS",
@@ -2395,7 +2397,7 @@ def _render_experiment_controls():
     stop_col, hint_col, spacer = st.columns([1.2, 1.2, 5.6], gap="small")
 
     with stop_col:
-        with st.popover(f"⏸️ {t('experiment_stop')}", use_container_width=True):
+        with st.popover(t("experiment_stop"), use_container_width=True):
             st.caption(t("experiment_stop"))
             if st.button(t("experiment_exit"), use_container_width=True, key="experiment_exit_button"):
                 st.session_state.experiment_hint_visible = False
@@ -2411,7 +2413,7 @@ def _render_experiment_controls():
                 st.rerun()
 
     with hint_col:
-        with st.popover(f"💡 {t('experiment_hint')}", use_container_width=True):
+        with st.popover(t("experiment_hint"), use_container_width=True):
             if not has_active_stage or not context["hint_text"]:
                 st.info(t("hint_not_ready"))
             else:
@@ -2420,7 +2422,7 @@ def _render_experiment_controls():
                     st.success(f"{t('hint_unlocked_badge')}: {context['hint_text']}")
                     st.session_state.experiment_hint_visible = True
                 else:
-                    if st.button(f"{t('experiment_hint')} · 5 🪙", use_container_width=True, key="experiment_buy_hint"):
+                    if st.button(f"{t('experiment_hint')} · 5", use_container_width=True, key="experiment_buy_hint")
                         purchase = unlock_hint(profile, context["experiment_id"], context["stage_number"])
                         if purchase["unlocked_now"]:
                             _save_current_profile(profile)
@@ -2430,7 +2432,7 @@ def _render_experiment_controls():
                             st.warning(t("hint_no_coins"))
 
     if st.session_state.get("experiment_hint_visible") and context and context["hint_text"]:
-        st.markdown(f'<div class="trios-hint-pill">💡 {context["hint_text"]}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="trios-hint-pill">{trios_icon("hint",18)} {context["hint_text"]}</div>', unsafe_allow_html=True)
 
 
 def _reset_first_experiment_challenge():
@@ -2442,6 +2444,7 @@ def _reset_first_experiment_challenge():
     st.session_state.pop("first_experiment_prediction_language", None)
     st.session_state.pop("first_experiment_prediction_submitted", None)
     st.session_state.pop("first_experiment_simulation_started", None)
+    st.session_state.pop("first_experiment_simulation_steps", None)
     st.session_state.pop(f"first_experiment_prediction_input_{index}", None)
     st.session_state.experiment_hint_visible = False
 
@@ -2470,20 +2473,9 @@ def _render_game_styles():
         .trios-magnet .mag-half.s{background:linear-gradient(145deg,#4eafff,#24579c);}
         .trios-magnet .mag-half:first-child{border-radius:10px 0 0 10px;}.trios-magnet .mag-half:last-child{border-radius:0 10px 10px 0;}
         .trios-magnet small{position:absolute;left:50%;bottom:-1.7rem;transform:translateX(-50%);font-size:.72rem;font-weight:700;color:#aebddd;white-space:nowrap;}
-        .trios-scene.is-running .trios-force-line{opacity:1;}
-        .trios-scene.is-running .attract-a{animation:triosAttractA 2.8s ease-in-out infinite alternate;}
-        .trios-scene.is-running .attract-b{animation:triosAttractB 2.8s ease-in-out infinite alternate;}
-        .trios-scene.is-running .repel-a{animation:triosRepelA 2.8s ease-in-out infinite alternate;}
-        .trios-scene.is-running .repel-b{animation:triosRepelB 2.8s ease-in-out infinite alternate;}
-        .trios-scene.is-running .three-a{animation:triosThreeA 2.9s ease-in-out infinite alternate;}
-        .trios-scene.is-running .three-b{animation:triosThreeB 2.9s ease-in-out infinite alternate;}
-        .trios-scene.is-running .three-c{animation:triosThreeC 2.9s ease-in-out infinite alternate;}
-        .trios-magnet.attract-a{left:38%;}.trios-magnet.attract-b{left:62%;}
-        .trios-magnet.repel-a{left:36%;}.trios-magnet.repel-b{left:64%;}
-        .trios-magnet.three-a{left:24%;}.trios-magnet.three-b{left:50%;}.trios-magnet.three-c{left:76%;}
-        @keyframes triosAttractA{to{left:45%;}}@keyframes triosAttractB{to{left:55%;}}
-        @keyframes triosRepelA{to{left:29%;}}@keyframes triosRepelB{to{left:71%;}}
-        @keyframes triosThreeA{to{left:20%;}}@keyframes triosThreeB{to{top:52%;}}@keyframes triosThreeC{to{left:80%;}}
+        .trios-scene .trios-force-line{opacity:.5;transition:opacity .2s ease,left .2s ease,width .2s ease;}
+        .trios-scene.physics-live .trios-force-line{opacity:.95;}
+        .trios-magnet{transition:left .2s ease,top .2s ease,filter .2s ease;}
         .trios-hint-pill{margin:.65rem 0;padding:.7rem 1rem;border-radius:16px;background:rgba(255,193,92,.08);border:1px solid rgba(255,193,92,.18);color:#ffe7ae;}
         .trios-choice-card{padding:1.1rem;border-radius:22px;border:1px solid rgba(164,204,255,.14);background:rgba(255,255,255,.035);}
         .trios-stage-track{height:8px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.07);margin:.6rem 0 .2rem;}
@@ -2501,32 +2493,68 @@ def _render_game_styles():
     )
 
 
-def _magnetic_scene_html(challenge, running=False):
-    if challenge.scenario_id == "opposite-poles":
-        note=t("scene_attract")
-        magnets=(("A","s","n", "attract-a"),("B","s","n","attract-b"))
-        line='<div class="trios-force-line two"></div>'
-    elif challenge.scenario_id == "same-poles":
-        note=t("scene_repel")
-        magnets=(("A","s","n","repel-a"),("B","n","s","repel-b"))
-        line='<div class="trios-force-line two"></div>'
-    else:
-        note=t("scene_three")
-        magnets=(("A","s","n","three-a"),("B","s","n","three-b"),("C","n","s","three-c"))
-        line='<div class="trios-force-line three-a"></div><div class="trios-force-line three-b"></div>'
+def _magnetic_scene_html(challenge, result=None):
+    initial_simulation = build_experiment_one_scenario(challenge.scenario_id)
+    initial_positions = {
+        body.name: body.position.x for body in initial_simulation.bodies
+    }
+    current_positions = dict(initial_positions)
+    if result is not None:
+        current_positions.update(
+            {body["name"]: body["position_x"] for body in result.bodies}
+        )
 
-    magnet_html="".join(
-        f'<div class="trios-magnet {motion}"><div class="mag-half {left_pole}">{left_pole.upper()}</div><div class="mag-half {right_pole}">{right_pole.upper()}</div><small>{name}</small></div>'
-        for name,left_pole,right_pole,motion in magnets
+    if challenge.scenario_id == "opposite-poles":
+        note = t("scene_attract")
+        magnets = (("A", "s", "n"), ("B", "s", "n"))
+        segment_pairs = (("A", "B"),)
+    elif challenge.scenario_id == "same-poles":
+        note = t("scene_repel")
+        magnets = (("A", "s", "n"), ("B", "n", "s"))
+        segment_pairs = (("A", "B"),)
+    else:
+        note = t("scene_three")
+        magnets = (("A", "s", "n"), ("B", "s", "n"), ("C", "n", "s"))
+        segment_pairs = (("A", "B"), ("B", "C"))
+
+    base_extent = max(abs(x) for x in initial_positions.values()) + 1.0
+    extent = max(
+        base_extent,
+        max(abs(x) for x in current_positions.values()) + 0.75,
     )
-    state_class="is-running" if running else ""
+
+    def scene_x(position):
+        ratio = (position + extent) / (2 * extent)
+        return max(6.0, min(94.0, 8.0 + ratio * 84.0))
+
+    positions = {
+        name: scene_x(x)
+        for name, x in current_positions.items()
+    }
+
+    force_lines = []
+    for left_name, right_name in segment_pairs:
+        left = min(positions[left_name], positions[right_name])
+        width = max(2.0, abs(positions[right_name] - positions[left_name]))
+        force_lines.append(
+            f'<div class="trios-force-line" style="left:{left:.2f}%;width:{width:.2f}%;"></div>'
+        )
+
+    magnet_html = "".join(
+        f'<div class="trios-magnet" style="left:{positions[name]:.2f}%;">'
+        f'<div class="mag-half {left_pole}">{left_pole.upper()}</div>'
+        f'<div class="mag-half {right_pole}">{right_pole.upper()}</div>'
+        f'<small>{name}</small></div>'
+        for name, left_pole, right_pole in magnets
+    )
+
+    physics_live = " physics-live" if result is not None else ""
     return (
-        f'<div class="trios-scene {state_class}">'
+        f'<div class="trios-scene{physics_live}">'
         f'<div class="trios-scene-title">TRIOS · {t("scene_setup")}</div>'
         f'<div class="trios-scene-note">{note}</div>'
-        f'{line}{magnet_html}</div>'
+        f'{"".join(force_lines)}{magnet_html}</div>'
     )
-
 
 def _render_game_hud(profile,index,total):
     progress=ensure_experiment_progress(profile)
@@ -2601,9 +2629,9 @@ def show_experiments():
         st.markdown(f'<div class="trios-choice-card"><div style="font-size:.78rem;color:#8fa5cc;text-transform:uppercase;letter-spacing:.08em;">{t("stage_label")} 1 · {t("three_challenges")}</div><h2 style="margin:.4rem 0;">{t("experiment_one_name")}</h2><p style="color:#b8c5e2;">{t("experiment_one_copy")}</p></div>',unsafe_allow_html=True)
         current=min(current_index+1,3)
         st.progress(1.0 if completed else current/3)
-        st.caption(f'🪙 {progress["coins"]} {t("coins")}')
+        st.caption(f'{progress["coins"]} {t("coins")}')
         label=t("replay_experiment") if completed else (t("continue_experiment") if st.session_state.get("current_experiment_id")==FIRST_EXPERIMENT_ID else t("play_experiment"))
-        if st.button(f"🚀 {label}",use_container_width=True,key="experiment_one_open"):
+        if st.button(label,use_container_width=True,key="experiment_one_open"):
             st.session_state.current_experiment_id=FIRST_EXPERIMENT_ID
             st.session_state.current_stage_number=1
             st.session_state.first_experiment_active=True
@@ -2614,7 +2642,7 @@ def show_experiments():
             navigate("lab")
 
     with st.container(border=True):
-        st.markdown(f'<div class="trios-choice-card" style="opacity:.56;"><div style="font-size:.78rem;color:#8fa5cc;text-transform:uppercase;letter-spacing:.08em;">{t("stage_label")} 2 · 🔒 {t("locked_stage")}</div><h3 style="margin:.4rem 0;">{t("locked_stage")}</h3><p style="color:#aab7d1;">{t("locked_stage_copy")}</p></div>',unsafe_allow_html=True)
+        st.markdown(f'<div class="trios-choice-card" style="opacity:.56;"><div style="font-size:.78rem;color:#8fa5cc;text-transform:uppercase;letter-spacing:.08em;">{trios_icon("lock",18)} {t("stage_label")} 2 · {t("locked_stage")}</div><h3 style="margin:.4rem 0;">{t("locked_stage")}</h3><p style="color:#aab7d1;">{t("locked_stage_copy")}</p></div>',unsafe_allow_html=True)
 
     if st.button(t("back"),use_container_width=True,key="experiments_back"):
         navigate("dashboard")
@@ -2653,7 +2681,7 @@ def _show_first_experiment_result(challenge):
         return
 
     st.success(t("simulation_complete"))
-    st.markdown(_magnetic_scene_html(challenge, running=False), unsafe_allow_html=True)
+    st.markdown(_magnetic_scene_html(challenge, result=result), unsafe_allow_html=True)
 
     with st.expander(t("details"), expanded=False):
         for body in result.bodies:
@@ -2688,7 +2716,11 @@ def _render_first_experiment():
             f'<p>{t("stage_reward", amount=st.session_state.get("first_experiment_last_reward", 0))}</p></div>',
             unsafe_allow_html=True,
         )
-        st.markdown(f'<div style="display:flex;align-items:center;gap:.5rem;">{trios_icon("refresh",20)}<strong>{t("replay_experiment")}</strong></div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div style="display:flex;align-items:center;gap:.5rem;">'
+            f'{trios_icon("refresh",20)}<strong>{t("replay_experiment")}</strong></div>',
+            unsafe_allow_html=True,
+        )
         if st.button(t("replay_experiment"), use_container_width=True, key="first_experiment_retry_stage"):
             st.session_state.first_experiment_active = True
             st.session_state.first_experiment_challenge_index = 0
@@ -2707,10 +2739,20 @@ def _render_first_experiment():
         unsafe_allow_html=True,
     )
 
-    running = bool(st.session_state.get("first_experiment_simulation_started"))
+    steps = int(st.session_state.get("first_experiment_simulation_steps", 0))
     revealed = bool(st.session_state.get("first_experiment_result_revealed"))
+    prediction_submitted = bool(st.session_state.get("first_experiment_prediction_submitted"))
+    result = st.session_state.get("first_experiment_result")
 
-    st.markdown(_magnetic_scene_html(challenge, running=running and not revealed), unsafe_allow_html=True)
+    if prediction_submitted and steps > 0:
+        result = run_challenge(challenge, steps=steps)
+        st.session_state.first_experiment_result = result
+        st.session_state.first_experiment_simulation_started = True
+
+    st.markdown(
+        _magnetic_scene_html(challenge, result=result),
+        unsafe_allow_html=True,
+    )
     st.markdown("<div style='height:.8rem'></div>", unsafe_allow_html=True)
 
     prediction_key = f"first_experiment_prediction_input_{index}"
@@ -2719,14 +2761,15 @@ def _render_first_experiment():
         placeholder=t("prediction_placeholder"),
         key=prediction_key,
         height=120,
-        disabled=running or revealed,
+        disabled=prediction_submitted or revealed,
     )
 
-    submitted = bool(st.session_state.get("first_experiment_prediction_submitted"))
-    result = st.session_state.get("first_experiment_result")
-
-    if not submitted:
-        st.markdown(f'<div style="display:flex;align-items:center;gap:.5rem;margin:.25rem 0 .35rem;">{trios_icon("target",20)}<strong>{t("prediction_label")}</strong></div>', unsafe_allow_html=True)
+    if not prediction_submitted:
+        st.markdown(
+            f'<div style="display:flex;align-items:center;gap:.5rem;margin:.25rem 0 .35rem;">'
+            f'{trios_icon("target",20)}<strong>{t("prediction_label")}</strong></div>',
+            unsafe_allow_html=True,
+        )
         if st.button(t("submit_prediction"), use_container_width=True, key=f"first_experiment_submit_{index}"):
             if not prediction.strip():
                 st.warning(t("prediction_required"))
@@ -2737,26 +2780,44 @@ def _render_first_experiment():
                     challenge, prediction, current_language()
                 )
                 st.session_state.first_experiment_prediction_submitted = True
+                st.session_state.first_experiment_simulation_steps = 0
+                st.session_state.first_experiment_result = None
                 st.rerun()
         return
 
-    if not running and result is None:
-        st.info(t("prediction_saved_copy"))
-        st.markdown(f'<div style="display:flex;align-items:center;gap:.5rem;margin:.35rem 0;">{trios_icon("play",20)}<strong>{t("run_experiment")}</strong></div>', unsafe_allow_html=True)
-        if st.button(t("run_experiment"), use_container_width=True, key=f"first_experiment_run_{index}"):
-            st.session_state.first_experiment_result = run_challenge(challenge)
-            st.session_state.first_experiment_simulation_started = True
-            st.session_state.first_experiment_result_revealed = False
-            st.session_state.experiment_hint_visible = False
-            st.rerun()
-        return
-
-    if running and result is not None and not revealed:
+    if not revealed:
         st.info(t("simulation_running"))
-        st.markdown(f'<div style="display:flex;align-items:center;gap:.5rem;margin:.4rem 0;">{trios_icon("play",20)}<strong>{t("simulation_running")}</strong></div>', unsafe_allow_html=True)
-        if st.button(t("show_result"), use_container_width=True, key=f"first_experiment_show_result_{index}"):
-            st.session_state.first_experiment_result_revealed = True
-            st.rerun()
+        st.markdown(
+            f'<div style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;margin:.35rem 0;">'
+            f'<span style="display:flex;align-items:center;gap:.5rem;">{trios_icon("play",20)}'
+            f'<strong>{t("simulation_running")}</strong></span>'
+            f'<span style="color:#9fb0d3;font-size:.82rem;">'
+            f'{steps}/{MAX_VISIBLE_EXPERIMENT_STEPS} · t = {steps * 0.01:.2f}s</span></div>',
+            unsafe_allow_html=True,
+        )
+
+        if steps < MAX_VISIBLE_EXPERIMENT_STEPS:
+            if st.button(
+                t("run_experiment"),
+                use_container_width=True,
+                key=f"first_experiment_step_{index}_{steps}",
+            ):
+                st.session_state.first_experiment_simulation_steps = steps + 1
+                st.session_state.first_experiment_simulation_started = True
+                st.session_state.first_experiment_result_revealed = False
+                st.rerun()
+
+        if steps > 0:
+            if st.button(
+                t("show_result"),
+                use_container_width=True,
+                key=f"first_experiment_show_result_{index}",
+            ):
+                st.session_state.first_experiment_result = run_challenge(
+                    challenge, steps=steps
+                )
+                st.session_state.first_experiment_result_revealed = True
+                st.rerun()
         return
 
     if revealed and result is not None:
