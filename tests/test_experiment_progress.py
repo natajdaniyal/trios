@@ -7,9 +7,11 @@ from experiment_progress import (
     complete_stage,
     default_experiment_progress,
     ensure_experiment_progress,
+    has_hint,
     is_stage_completed,
     is_stage_unlocked,
     spend_hint,
+    unlock_hint,
 )
 
 
@@ -99,3 +101,26 @@ def test_invalid_stage_identifiers_are_rejected():
 
     with pytest.raises(ValueError):
         is_stage_unlocked({}, "experiment-1", 0)
+
+
+def test_hint_is_purchased_once_and_remains_unlocked_after_retry():
+    profile = {}
+    add_coins(profile, DEFAULT_HINT_COST)
+
+    first = unlock_hint(profile, "experiment-1", 1)
+    assert first == {"unlocked_now": True, "coins_spent": DEFAULT_HINT_COST}
+    assert has_hint(profile, "experiment-1", 1) is True
+    assert profile["experiment_progress"]["coins"] == 0
+
+    second = unlock_hint(profile, "experiment-1", 1)
+    assert second == {"unlocked_now": False, "coins_spent": 0}
+    assert has_hint(profile, "experiment-1", 1) is True
+    assert profile["experiment_progress"]["coins"] == 0
+
+
+def test_hint_cannot_be_unlocked_for_locked_stage():
+    profile = {}
+    add_coins(profile, DEFAULT_HINT_COST)
+
+    with pytest.raises(ValueError, match="Stage is locked"):
+        unlock_hint(profile, "experiment-1", 2)
