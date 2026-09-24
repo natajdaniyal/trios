@@ -78,6 +78,18 @@ def test_experiment_definition_builds_experiment():
     assert len(experiment) == 1
     assert experiment.stages()[0].name == "test"
 
+def test_experiment_definition_carries_bot_configuration_into_experiment():
+    bot = make_bot_configuration()
+    definition = ExperimentDefinition(
+        "gravity experiment",
+        make_configuration(),
+        bot_configuration=bot,
+    )
+
+    experiment = definition.build_experiment()
+
+    assert experiment.bot_configuration is bot
+
 
 def test_experiment_definition_validates_inputs():
     with pytest.raises(ValueError):
