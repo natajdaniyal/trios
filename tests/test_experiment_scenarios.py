@@ -35,6 +35,19 @@ def test_three_magnets_scenario_has_three_magnets():
     assert len(simulation.bodies) == 3
 
 
+def test_custom_positions_reach_the_real_physics_scenario():
+    simulation = build_opposite_poles_scenario(positions={"A": -2.0, "B": 2.0})
+
+    left, right = simulation.bodies
+    assert left.position.x == -2.0
+    assert right.position.x == 2.0
+
+    simulation.step()
+
+    assert left.position.x > -2.0
+    assert right.position.x < 2.0
+
+
 def test_unknown_scenario_is_rejected():
     with pytest.raises(ValueError, match="Unknown Experiment 1 scenario"):
         build_experiment_one_scenario("unknown")

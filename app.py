@@ -683,6 +683,61 @@ GAME_TRANSLATIONS = {
 for _code, _labels in GAME_TRANSLATIONS.items():
     TRANSLATIONS[_code].update(_labels)
 
+
+EXPERIMENT_INTERACTION_TRANSLATIONS = {
+    "fa": {
+        "experiment_setup_title": "چیدمان آزمایش",
+        "experiment_setup_copy": "قبل از اجرا، آهنرباها را خودت جابه‌جا کن.",
+        "experiment_position_label": "موقعیت آهنربای {name}",
+        "experiment_positions_too_close": "آهنرباها بیش از حد به هم نزدیک‌اند. کمی فاصله ایجاد کن.",
+    },
+    "en": {
+        "experiment_setup_title": "Set up the experiment",
+        "experiment_setup_copy": "Move the magnets yourself before you run the experiment.",
+        "experiment_position_label": "Position of magnet {name}",
+        "experiment_positions_too_close": "The magnets are too close together. Create a little more space.",
+    },
+    "ar": {
+        "experiment_setup_title": "إعداد التجربة",
+        "experiment_setup_copy": "حرّك المغناطيسات بنفسك قبل تشغيل التجربة.",
+        "experiment_position_label": "موضع المغناطيس {name}",
+        "experiment_positions_too_close": "المغناطيسات متقاربة جدًا. اترك مسافة أكبر قليلًا.",
+    },
+    "zh": {
+        "experiment_setup_title": "设置实验",
+        "experiment_setup_copy": "运行实验前，先自己移动磁铁。",
+        "experiment_position_label": "磁铁 {name} 的位置",
+        "experiment_positions_too_close": "磁铁太近了。请稍微拉开一些距离。",
+    },
+    "es": {
+        "experiment_setup_title": "Prepara el experimento",
+        "experiment_setup_copy": "Mueve tú mismo los imanes antes de ejecutar el experimento.",
+        "experiment_position_label": "Posición del imán {name}",
+        "experiment_positions_too_close": "Los imanes están demasiado cerca. Deja un poco más de espacio.",
+    },
+    "fr": {
+        "experiment_setup_title": "Prépare l'expérience",
+        "experiment_setup_copy": "Déplace toi-même les aimants avant de lancer l'expérience.",
+        "experiment_position_label": "Position de l'aimant {name}",
+        "experiment_positions_too_close": "Les aimants sont trop proches. Laisse un peu plus d'espace.",
+    },
+    "de": {
+        "experiment_setup_title": "Experiment aufbauen",
+        "experiment_setup_copy": "Bewege die Magnete selbst, bevor du das Experiment startest.",
+        "experiment_position_label": "Position des Magneten {name}",
+        "experiment_positions_too_close": "Die Magnete sind zu nah beieinander. Schaffe etwas mehr Abstand.",
+    },
+    "ja": {
+        "experiment_setup_title": "実験をセットアップ",
+        "experiment_setup_copy": "実験を開始する前に、自分で磁石を動かしてください。",
+        "experiment_position_label": "磁石 {name} の位置",
+        "experiment_positions_too_close": "磁石同士が近すぎます。少し間隔をあけてください。",
+    },
+}
+
+for _code, _labels in EXPERIMENT_INTERACTION_TRANSLATIONS.items():
+    TRANSLATIONS[_code].update(_labels)
+
 for _code, _labels in {
     "fa": {
         "simulation_running":"آزمایش در حال اجراست…",
@@ -2450,6 +2505,12 @@ def _reset_first_experiment_challenge():
     st.session_state.pop("first_experiment_simulation_started", None)
     st.session_state.pop("first_experiment_simulation_steps", None)
     st.session_state.pop(f"first_experiment_prediction_input_{index}", None)
+    st.session_state.pop("first_experiment_positions", None)
+    for _magnet_name in ("A", "B", "C"):
+        st.session_state.pop(
+            f"first_experiment_position_{index}_{_magnet_name}",
+            None,
+        )
     st.session_state.experiment_hint_visible = False
 
 
@@ -2497,8 +2558,11 @@ def _render_game_styles():
     )
 
 
-def _magnetic_scene_html(challenge, result=None):
-    initial_simulation = build_experiment_one_scenario(challenge.scenario_id)
+def _magnetic_scene_html(challenge, result=None, initial_positions=None):
+    initial_simulation = build_experiment_one_scenario(
+        challenge.scenario_id,
+        positions=initial_positions,
+    )
     initial_positions = {
         body.name: body.position.x for body in initial_simulation.bodies
     }
@@ -2679,6 +2743,54 @@ def _init_first_experiment():
     return profile
 
 
+def _get_first_experiment_positions(challenge):
+    positions = st.session_state.get("first_experiment_positions")
+    if not isinstance(positions, dict):
+        initial_simulation = build_experiment_one_scenario(challenge.scenario_id)
+        positions = {
+            body.name: body.position.x
+            for body in initial_simulation.bodies
+        }
+        st.session_state.first_experiment_positions = positions
+    return dict(positions)
+
+
+def _render_first_experiment_setup(challenge, index, positions, locked):
+    st.markdown(
+        f'<div style="margin:.65rem 0 .35rem;">'
+        f'<strong>{t("experiment_setup_title")}</strong>'
+        f'<div style="color:#9fb0d3;font-size:.88rem;margin-top:.2rem;">'
+        f'{t("experiment_setup_copy")}</div></div>',
+        unsafe_allow_html=True,
+    )
+
+    columns = st.columns(len(positions), gap="small")
+    for column, name in zip(columns, positions):
+        with column:
+            positions[name] = st.slider(
+                t("experiment_position_label", name=name),
+                min_value=-4.0,
+                max_value=4.0,
+                value=float(positions[name]),
+                step=0.25,
+                disabled=locked,
+                key=f"first_experiment_position_{index}_{name}",
+            )
+
+    values = list(positions.values())
+    too_close = any(
+        abs(left - right) < 0.5
+        for offset, left in enumerate(values)
+        for right in values[offset + 1:]
+    )
+    if too_close:
+        st.warning(t("experiment_positions_too_close"))
+        return positions, False
+
+    st.session_state.first_experiment_positions = dict(positions)
+    return positions, True
+
+
 def _show_first_experiment_result(challenge):
     result = st.session_state.get("first_experiment_result")
     if result is None:
@@ -2747,9 +2859,20 @@ def _render_first_experiment():
     revealed = bool(st.session_state.get("first_experiment_result_revealed"))
     prediction_submitted = bool(st.session_state.get("first_experiment_prediction_submitted"))
     result = st.session_state.get("first_experiment_result")
+    initial_positions = _get_first_experiment_positions(challenge)
+    initial_positions, positions_valid = _render_first_experiment_setup(
+        challenge,
+        index,
+        initial_positions,
+        locked=steps > 0 or revealed,
+    )
 
     if prediction_submitted and steps > 0:
-        result = run_challenge(challenge, steps=steps)
+        result = run_challenge(
+            challenge,
+            steps=steps,
+            initial_positions=initial_positions,
+        )
         st.session_state.first_experiment_result = result
         st.session_state.first_experiment_simulation_started = True
 
@@ -2805,6 +2928,7 @@ def _render_first_experiment():
                 t("run_experiment"),
                 use_container_width=True,
                 key=f"first_experiment_step_{index}_{steps}",
+                disabled=not positions_valid,
             ):
                 st.session_state.first_experiment_simulation_steps = steps + 1
                 st.session_state.first_experiment_simulation_started = True
@@ -2818,7 +2942,9 @@ def _render_first_experiment():
                 key=f"first_experiment_show_result_{index}",
             ):
                 st.session_state.first_experiment_result = run_challenge(
-                    challenge, steps=steps
+                    challenge,
+                    steps=steps,
+                    initial_positions=initial_positions,
                 )
                 st.session_state.first_experiment_result_revealed = True
                 st.rerun()
