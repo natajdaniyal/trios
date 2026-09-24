@@ -5,6 +5,7 @@ Connects experiment definitions to simulation construction, execution,
 measurements, and optional scientific validation.
 """
 
+from bot_runtime import BotRuntime
 from experiment_infrastructure import Experiment, ExperimentResult
 from simulation.physical_configuration_adapter import simulation_from_stage
 from validation.system_validation import PhysicalStateSnapshot
@@ -67,6 +68,8 @@ def run_experiment(
     force_engine=None,
     measurements=None,
     validators=None,
+    bot_answer=None,
+    bot_language=None,
 ):
     """Execute stages and optionally collect measurements and validations.
 
@@ -88,6 +91,22 @@ def run_experiment(
     measurements = _callable_list(measurements, "measurements")
     validators = _callable_list(validators, "validators")
 
+    if (bot_answer is None) != (bot_language is None):
+        raise ValueError("bot_answer and bot_language must be provided together.")
+
+    if experiment.bot_configuration is not None and bot_answer is None:
+        raise ValueError(
+            "This experiment has a TRIOS Bot configuration and requires "
+            "bot_answer and bot_language."
+        )
+
+    bot_evaluation = None
+    if experiment.bot_configuration is not None:
+        bot_evaluation = BotRuntime(experiment.bot_configuration).evaluate(
+            bot_answer,
+            bot_language,
+        )
+
     simulations = simulations_from_experiment(
         experiment,
         time_step=time_step,
@@ -100,6 +119,8 @@ def run_experiment(
             "stages": [],
         }
     )
+    if bot_evaluation is not None:
+        result.set_bot_evaluation(bot_evaluation)
 
     for stage, simulation in zip(experiment.stages(), simulations):
         initial_snapshot = (
