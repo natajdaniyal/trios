@@ -8,6 +8,14 @@ from user_interface import (
     recover_user,
     user_profile,
 )
+from experiment_progress import complete_stage, ensure_experiment_progress, is_stage_completed
+from first_experiment import FIRST_EXPERIMENT_ID
+from first_experiment_runtime import (
+    first_stage_challenge,
+    first_stage_challenge_count,
+    evaluate_challenge_prediction,
+    run_challenge,
+)
 
 
 st.set_page_config(
@@ -40,7 +48,7 @@ TRANSLATIONS = {
         "username":"نام کاربری","password":"رمز عبور","login_account":"ورود به حساب","register_title":"ساخت حساب TRIOS","register":"ساخت حساب","confirm_password":"تکرار رمز عبور","password_mismatch":"رمزهای عبور یکسان نیستند.",
         "welcome":"خوش آمدی، {name}!","welcome_back":"خوش برگشتی، {name}!","profile_title":"ساخت پروفایل TRIOS","profile_google_done":"ورود با Google انجام شد. حالا یک نام برای پروفایل TRIOS خودت انتخاب کن.","trios_username":"نام کاربری TRIOS","create_profile":"ساخت پروفایل","logout_google":"خروج از Google",
         "dashboard_kicker":"فضای شخصی TRIOS","dashboard_title":"خوش برگشتی،","dashboard_copy":"یک فضای آرام برای آزمایش، مشاهده و فکر کردن درباره‌ی حرکت.","path_title":"مسیر تو در TRIOS","path_copy":"از اینجا می‌توانی آزمایش‌ها، گزارش‌ها و پروفایلت را مدیریت کنی.","start_experiment":"شروع آزمایش","start_experiment_copy":"وارد آزمایشگاه شو و برای اجرای یک آزمایش آماده شو.","view_report":"مشاهده گزارش","report_copy":"نتایج و عملکرد ثبت‌شده‌ی این حساب را ببین.","profile":"پروفایل","profile_copy":"اطلاعات حساب و تنظیمات امنیتی خودت را مدیریت کن.",
-        "lab_title":"آزمایشگاه من","lab_notice":"زیرساخت اجرای آزمایش‌های TRIOS آماده است. محتوای آزمایش‌های آموزشی هنوز جداگانه تعریف نشده و فعلاً در این بخش ساخته نمی‌شود.","report_title":"گزارش من","profile_info":"اطلاعات شخصی","account_management":"مدیریت حساب","logout_device":"خروج از این دستگاه","delete_account":"حذف دائمی حساب","delete_warning":"حذف حساب دائمی است و اطلاعات ذخیره‌شده‌ی این حساب را پاک می‌کند.","delete_confirm":"می‌خواهم حسابم را برای همیشه حذف کنم.","confirm_delete_error":"برای حذف حساب، ابتدا تأیید حذف را فعال کن.","account_not_found":"حساب پیدا نشد.",
+        "lab_title":"آزمایشگاه من","lab_notice":"آزمایش آموزشی اول TRIOS آماده است: سه چالش دربارهٔ تعامل دو و سه آهنربا.","report_title":"گزارش من","profile_info":"اطلاعات شخصی","account_management":"مدیریت حساب","logout_device":"خروج از این دستگاه","delete_account":"حذف دائمی حساب","delete_warning":"حذف حساب دائمی است و اطلاعات ذخیره‌شده‌ی این حساب را پاک می‌کند.","delete_confirm":"می‌خواهم حسابم را برای همیشه حذف کنم.","confirm_delete_error":"برای حذف حساب، ابتدا تأیید حذف را فعال کن.","account_not_found":"حساب پیدا نشد.",
         "level":"سطح","attempts":"تلاش‌ها","correct":"پاسخ درست","accuracy":"دقت","report_summary":"خلاصه عملکرد","experiments":"آزمایش‌های ثبت‌شده","no_report":"هنوز گزارشی برای این حساب ثبت نشده است.",
         "about_title":"TRIOS چیست؟","about_text_1":"TRIOS یک سامانه برای شبیه‌سازی، مشاهده و مطالعه‌ی سیستم‌های فیزیکی چندجسمی با تمرکز بر مسئله‌ی سه‌جسمی است.","about_text_2":"هسته‌ی فیزیک مسئول قوانین و محاسبات است؛ لایه‌ی شبیه‌سازی اجرای گام‌های زمانی را مدیریت می‌کند؛ پیکربندی فیزیکی شرایط اولیه را نگه می‌دارد؛ و زیرساخت آزمایش مراحل و نتایج را مدیریت می‌کند.","about_text_3":"این جداسازی باعث می‌شود رابط کاربری مجبور نباشد منطق فیزیک را دوباره پیاده‌سازی کند و TRIOS بتواند به‌عنوان یک ابزار مطالعاتی و آموزشی رشد کند.","about_text_4":"TRIOS برای آزمایش‌های تکرارپذیر طراحی شده است تا شرایط فیزیکی، اجرای شبیه‌سازی، اندازه‌گیری و اعتبارسنجی از هم تفکیک باشند.","about_notice":"فعلاً تمرکز پروژه روی تکمیل زیرساخت و معماری است؛ آزمایش‌های آموزشی واقعی در این مرحله ساخته نشده‌اند.",
         "google_recovery_title":"بازیابی با Google","google_not_linked":"این حساب Google هنوز به یک حساب TRIOS متصل نشده است. برای جلوگیری از ساخت حساب تکراری، ابتدا با روش قبلی حسابت وارد شو.","back_to_recovery":"بازگشت به بازیابی","google_account":"حساب Google: {name}",
@@ -456,6 +464,196 @@ EXPERIMENT_CONTROL_TRANSLATIONS = {
 }
 
 for _code, _labels in EXPERIMENT_CONTROL_TRANSLATIONS.items():
+    TRANSLATIONS[_code].update(_labels)
+
+FIRST_EXPERIMENT_TRANSLATIONS = {
+    "fa": {
+        "first_experiment_title": "چرا مسئلهٔ سه‌جسمی سخت است؟",
+        "stage_one": "مرحلهٔ ۱",
+        "challenge_progress": "چالش {current} از {total}",
+        "prediction_label": "پیش‌بینی تو",
+        "prediction_placeholder": "فکر می‌کنی چه اتفاقی می‌افتد؟",
+        "submit_prediction": "ثبت پیش‌بینی",
+        "prediction_saved": "پیش‌بینی ثبت شد. حالا آزمایش را انجام بده.",
+        "run_experiment": "انجام آزمایش",
+        "experiment_done": "آزمایش انجام شد.",
+        "final_state": "نتیجهٔ شبیه‌سازی",
+        "bot_result_correct": "✅ پیش‌بینی درست بود.",
+        "bot_result_incorrect": "❌ این پیش‌بینی با معیار این چالش سازگار نبود.",
+        "bot_answer_label": "پاسخ TRIOS-Bot",
+        "bot_explanation_label": "چرا؟",
+        "next_challenge": "چالش بعدی",
+        "retry_challenge": "تکرار چالش",
+        "retry_stage": "تکرار مرحله",
+        "stage_complete": "🎉 مرحله کامل شد!",
+        "stage_complete_copy": "هر سه چالش مرحلهٔ اول را پشت سر گذاشتی.",
+        "coins_earned": "سکهٔ دریافت‌شده: +{amount}",
+        "prediction_required": "اول پیش‌بینی خودت را بنویس.",
+    },
+    "en": {
+        "first_experiment_title": "Why is the three-body problem hard?",
+        "stage_one": "Stage 1",
+        "challenge_progress": "Challenge {current} of {total}",
+        "prediction_label": "Your prediction",
+        "prediction_placeholder": "What do you think will happen?",
+        "submit_prediction": "Submit prediction",
+        "prediction_saved": "Prediction saved. Now run the experiment.",
+        "run_experiment": "Run experiment",
+        "experiment_done": "Experiment complete.",
+        "final_state": "Simulation result",
+        "bot_result_correct": "✅ Your prediction was correct.",
+        "bot_result_incorrect": "❌ Your prediction did not match this challenge's criteria.",
+        "bot_answer_label": "TRIOS-Bot answer",
+        "bot_explanation_label": "Why?",
+        "next_challenge": "Next challenge",
+        "retry_challenge": "Retry challenge",
+        "retry_stage": "Retry stage",
+        "stage_complete": "🎉 Stage complete!",
+        "stage_complete_copy": "You completed all three challenges in Stage 1.",
+        "coins_earned": "Coins earned: +{amount}",
+        "prediction_required": "Write your prediction first.",
+    },
+    "ar": {
+        "first_experiment_title": "لماذا تصبح مسألة الأجسام الثلاثة صعبة؟",
+        "stage_one": "المرحلة 1",
+        "challenge_progress": "التحدي {current} من {total}",
+        "prediction_label": "توقعك",
+        "prediction_placeholder": "ماذا تعتقد أنه سيحدث؟",
+        "submit_prediction": "إرسال التوقع",
+        "prediction_saved": "تم حفظ التوقع. الآن أجرِ التجربة.",
+        "run_experiment": "إجراء التجربة",
+        "experiment_done": "اكتملت التجربة.",
+        "final_state": "نتيجة المحاكاة",
+        "bot_result_correct": "✅ كان توقعك صحيحًا.",
+        "bot_result_incorrect": "❌ لم يتوافق توقعك مع معايير هذا التحدي.",
+        "bot_answer_label": "إجابة TRIOS-Bot",
+        "bot_explanation_label": "لماذا؟",
+        "next_challenge": "التحدي التالي",
+        "retry_challenge": "إعادة التحدي",
+        "retry_stage": "إعادة المرحلة",
+        "stage_complete": "🎉 اكتملت المرحلة!",
+        "stage_complete_copy": "أكملت التحديات الثلاثة في المرحلة الأولى.",
+        "coins_earned": "العملات المكتسبة: +{amount}",
+        "prediction_required": "اكتب توقعك أولًا.",
+    },
+    "zh": {
+        "first_experiment_title": "为什么三体问题很难？",
+        "stage_one": "第 1 阶段",
+        "challenge_progress": "第 {current} 个挑战，共 {total} 个",
+        "prediction_label": "你的预测",
+        "prediction_placeholder": "你觉得会发生什么？",
+        "submit_prediction": "提交预测",
+        "prediction_saved": "预测已保存。现在进行实验。",
+        "run_experiment": "进行实验",
+        "experiment_done": "实验完成。",
+        "final_state": "模拟结果",
+        "bot_result_correct": "✅ 你的预测正确。",
+        "bot_result_incorrect": "❌ 你的预测不符合本挑战的判断标准。",
+        "bot_answer_label": "TRIOS-Bot 答案",
+        "bot_explanation_label": "为什么？",
+        "next_challenge": "下一个挑战",
+        "retry_challenge": "重试挑战",
+        "retry_stage": "重试阶段",
+        "stage_complete": "🎉 阶段完成！",
+        "stage_complete_copy": "你完成了第 1 阶段的三个挑战。",
+        "coins_earned": "获得金币：+{amount}",
+        "prediction_required": "请先写下你的预测。",
+    },
+    "es": {
+        "first_experiment_title": "¿Por qué es difícil el problema de tres cuerpos?",
+        "stage_one": "Etapa 1",
+        "challenge_progress": "Desafío {current} de {total}",
+        "prediction_label": "Tu predicción",
+        "prediction_placeholder": "¿Qué crees que ocurrirá?",
+        "submit_prediction": "Enviar predicción",
+        "prediction_saved": "Predicción guardada. Ahora realiza el experimento.",
+        "run_experiment": "Realizar experimento",
+        "experiment_done": "Experimento completado.",
+        "final_state": "Resultado de la simulación",
+        "bot_result_correct": "✅ Tu predicción fue correcta.",
+        "bot_result_incorrect": "❌ Tu predicción no coincide con los criterios de este desafío.",
+        "bot_answer_label": "Respuesta de TRIOS-Bot",
+        "bot_explanation_label": "¿Por qué?",
+        "next_challenge": "Siguiente desafío",
+        "retry_challenge": "Repetir desafío",
+        "retry_stage": "Repetir etapa",
+        "stage_complete": "🎉 ¡Etapa completada!",
+        "stage_complete_copy": "Has completado los tres desafíos de la Etapa 1.",
+        "coins_earned": "Monedas obtenidas: +{amount}",
+        "prediction_required": "Escribe primero tu predicción.",
+    },
+    "fr": {
+        "first_experiment_title": "Pourquoi le problème à trois corps est-il difficile ?",
+        "stage_one": "Étape 1",
+        "challenge_progress": "Défi {current} sur {total}",
+        "prediction_label": "Ta prédiction",
+        "prediction_placeholder": "Que penses-tu qu'il va se passer ?",
+        "submit_prediction": "Envoyer la prédiction",
+        "prediction_saved": "Prédiction enregistrée. Fais maintenant l'expérience.",
+        "run_experiment": "Faire l'expérience",
+        "experiment_done": "Expérience terminée.",
+        "final_state": "Résultat de la simulation",
+        "bot_result_correct": "✅ Ta prédiction était correcte.",
+        "bot_result_incorrect": "❌ Ta prédiction ne correspondait pas aux critères de ce défi.",
+        "bot_answer_label": "Réponse de TRIOS-Bot",
+        "bot_explanation_label": "Pourquoi ?",
+        "next_challenge": "Défi suivant",
+        "retry_challenge": "Réessayer le défi",
+        "retry_stage": "Recommencer l'étape",
+        "stage_complete": "🎉 Étape terminée !",
+        "stage_complete_copy": "Tu as terminé les trois défis de l'étape 1.",
+        "coins_earned": "Pièces gagnées : +{amount}",
+        "prediction_required": "Écris d'abord ta prédiction.",
+    },
+    "de": {
+        "first_experiment_title": "Warum ist das Dreikörperproblem schwierig?",
+        "stage_one": "Stufe 1",
+        "challenge_progress": "Aufgabe {current} von {total}",
+        "prediction_label": "Deine Vorhersage",
+        "prediction_placeholder": "Was glaubst du, wird passieren?",
+        "submit_prediction": "Vorhersage senden",
+        "prediction_saved": "Vorhersage gespeichert. Führe jetzt das Experiment durch.",
+        "run_experiment": "Experiment durchführen",
+        "experiment_done": "Experiment abgeschlossen.",
+        "final_state": "Simulationsergebnis",
+        "bot_result_correct": "✅ Deine Vorhersage war richtig.",
+        "bot_result_incorrect": "❌ Deine Vorhersage entsprach nicht den Kriterien dieser Aufgabe.",
+        "bot_answer_label": "TRIOS-Bot-Antwort",
+        "bot_explanation_label": "Warum?",
+        "next_challenge": "Nächste Aufgabe",
+        "retry_challenge": "Aufgabe wiederholen",
+        "retry_stage": "Stufe wiederholen",
+        "stage_complete": "🎉 Stufe abgeschlossen!",
+        "stage_complete_copy": "Du hast alle drei Aufgaben der Stufe 1 abgeschlossen.",
+        "coins_earned": "Verdiente Münzen: +{amount}",
+        "prediction_required": "Gib zuerst deine Vorhersage ein.",
+    },
+    "ja": {
+        "first_experiment_title": "なぜ三体問題は難しいのでしょうか？",
+        "stage_one": "ステージ1",
+        "challenge_progress": "チャレンジ {current} / {total}",
+        "prediction_label": "あなたの予想",
+        "prediction_placeholder": "何が起こると思いますか？",
+        "submit_prediction": "予想を送信",
+        "prediction_saved": "予想を保存しました。次に実験を行います。",
+        "run_experiment": "実験を行う",
+        "experiment_done": "実験が完了しました。",
+        "final_state": "シミュレーション結果",
+        "bot_result_correct": "✅ 予想は正しかったです。",
+        "bot_result_incorrect": "❌ 予想はこのチャレンジの基準に一致しませんでした。",
+        "bot_answer_label": "TRIOS-Botの答え",
+        "bot_explanation_label": "なぜ？",
+        "next_challenge": "次のチャレンジ",
+        "retry_challenge": "チャレンジを再試行",
+        "retry_stage": "ステージを再試行",
+        "stage_complete": "🎉 ステージ完了！",
+        "stage_complete_copy": "ステージ1の3つのチャレンジをすべて完了しました。",
+        "coins_earned": "獲得コイン：+{amount}",
+        "prediction_required": "まず予想を書いてください。",
+    },
+}
+
+for _code, _labels in FIRST_EXPERIMENT_TRANSLATIONS.items():
     TRANSLATIONS[_code].update(_labels)
 
 ERROR_TRANSLATION_KEYS = {
@@ -2141,14 +2339,223 @@ def _render_experiment_controls():
         st.markdown("</div>", unsafe_allow_html=True)
 
 
-def show_lab():
-    show_public_nav()
+def _reset_first_experiment_challenge():
+    index = st.session_state.get("first_experiment_challenge_index", 0)
+    st.session_state.pop("first_experiment_evaluation", None)
+    st.session_state.pop("first_experiment_result", None)
+    st.session_state.pop("first_experiment_prediction", None)
+    st.session_state.pop("first_experiment_prediction_language", None)
+    st.session_state.pop("first_experiment_prediction_submitted", None)
+    st.session_state.pop(f"first_experiment_prediction_input_{index}", None)
+    st.session_state.experiment_hint_visible = False
+
+
+def _init_first_experiment():
+    if st.session_state.get("current_experiment_id") != FIRST_EXPERIMENT_ID:
+        st.session_state.current_experiment_id = FIRST_EXPERIMENT_ID
+        st.session_state.current_stage_number = 1
+        st.session_state.first_experiment_challenge_index = 0
+        st.session_state.first_experiment_active = False
+        st.session_state.first_experiment_stage_completed = False
+        _reset_first_experiment_challenge()
+
+    profile = user_profile(st.session_state.user)
+    ensure_experiment_progress(profile)
+    completed = is_stage_completed(profile, FIRST_EXPERIMENT_ID, 1)
+    st.session_state.first_experiment_stage_completed = completed
+
+    if completed and not st.session_state.get("first_experiment_active", False):
+        return profile
+
+    st.session_state.first_experiment_active = True
+    challenge = first_stage_challenge(
+        st.session_state.get("first_experiment_challenge_index", 0)
+    )
+
+    # The hint is a single stage-level purchase. Keep one fixed hint for the
+    # whole stage rather than silently granting a different hint per challenge.
+    st.session_state.current_stage_hint = first_stage_challenge(0).hint(
+        current_language()
+    )
+    return profile
+
+
+def _show_first_experiment_result(challenge):
+    result = st.session_state.get("first_experiment_result")
+    if result is None:
+        return
+
+    st.success(t("experiment_done"))
+    st.subheader(t("final_state"))
+
+    for body in result.bodies:
+        st.write(
+            f"**{body['name']}** — "
+            f"x = {body['position_x']:.3f}, y = {body['position_y']:.3f}, "
+            f"vx = {body['velocity_x']:.3f}, vy = {body['velocity_y']:.3f}"
+        )
+
+    evaluation = st.session_state.get("first_experiment_evaluation")
+    if evaluation is None:
+        return
+
+    if evaluation.is_correct:
+        st.success(t("bot_result_correct"))
+    else:
+        st.error(t("bot_result_incorrect"))
+
+    st.markdown(
+        f"**{t('bot_answer_label')}:** "
+        f"{challenge.answer(current_language())}"
+    )
+    st.markdown(
+        f"**{t('bot_explanation_label')}:** "
+        f"{challenge.explanation(current_language())}"
+    )
+
+
+def _render_first_experiment():
+    profile = _init_first_experiment()
+
+    if st.session_state.get("first_experiment_stage_completed") and not st.session_state.get(
+        "first_experiment_active", False
+    ):
+        st.markdown(
+            f'<div class="trios-page-card"><h2>{t("stage_complete")}</h2>'
+            f'<p>{t("stage_complete_copy")}</p></div>',
+            unsafe_allow_html=True,
+        )
+
+        progress = ensure_experiment_progress(profile)
+        stages = progress.get("completed_stages", {}).get(FIRST_EXPERIMENT_ID, [])
+        if 1 in stages:
+            st.caption(
+                t(
+                    "coins_earned",
+                    amount=10,
+                )
+            )
+
+        if st.button(
+            t("retry_stage"),
+            use_container_width=True,
+            key="first_experiment_retry_stage",
+        ):
+            st.session_state.first_experiment_active = True
+            st.session_state.first_experiment_challenge_index = 0
+            _reset_first_experiment_challenge()
+            st.rerun()
+        return
+
+    index = st.session_state.get("first_experiment_challenge_index", 0)
+    challenge = first_stage_challenge(index)
+    total = first_stage_challenge_count()
+
     st.markdown('<div class="trios-page-card">', unsafe_allow_html=True)
-    render_icon("lab", size=32)
-    st.header(t("lab_title"))
-    st.info(t("lab_notice"))
+    st.caption(f"{t('stage_one')} · {t('challenge_progress', current=index + 1, total=total)}")
+    st.header(t("first_experiment_title"))
+    st.subheader(challenge.question(current_language()))
+
+    prediction_key = f"first_experiment_prediction_input_{index}"
+    prediction = st.text_area(
+        t("prediction_label"),
+        placeholder=t("prediction_placeholder"),
+        key=prediction_key,
+        height=130,
+    )
+
+    if st.session_state.get("first_experiment_prediction_submitted"):
+        st.info(t("prediction_saved"))
+
+        if st.session_state.get("first_experiment_result") is None:
+            if st.button(
+                t("run_experiment"),
+                use_container_width=True,
+                key=f"first_experiment_run_{index}",
+            ):
+                st.session_state.first_experiment_result = run_challenge(challenge)
+                st.session_state.experiment_hint_visible = False
+                st.rerun()
+        else:
+            _show_first_experiment_result(challenge)
+
+            evaluation = st.session_state.get("first_experiment_evaluation")
+            if evaluation is not None and evaluation.is_correct:
+                if index + 1 < total:
+                    if st.button(
+                        t("next_challenge"),
+                        use_container_width=True,
+                        key=f"first_experiment_next_{index}",
+                    ):
+                        st.session_state.first_experiment_challenge_index = index + 1
+                        _reset_first_experiment_challenge()
+                        st.rerun()
+                else:
+                    if not st.session_state.get("first_experiment_completion_recorded"):
+                        completion = complete_stage(
+                            profile,
+                            FIRST_EXPERIMENT_ID,
+                            1,
+                        )
+                        _save_current_profile(profile)
+                        st.session_state.first_experiment_completion_recorded = True
+                    else:
+                        completion = {"coins_awarded": 0}
+
+                    st.markdown(
+                        f'<div class="trios-action-card" style="margin-top:1rem;">'
+                        f'<h3>{t("stage_complete")}</h3>'
+                        f'<p>{t("stage_complete_copy")}</p>'
+                        f'<p>{t("coins_earned", amount=completion["coins_awarded"])}</p>'
+                        f'</div>',
+                        unsafe_allow_html=True,
+                    )
+                    if st.button(
+                        t("retry_stage"),
+                        use_container_width=True,
+                        key="first_experiment_retry_completed",
+                    ):
+                        st.session_state.first_experiment_active = True
+                        st.session_state.first_experiment_challenge_index = 0
+                        st.session_state.first_experiment_stage_completed = True
+                        st.session_state.first_experiment_completion_recorded = True
+                        _reset_first_experiment_challenge()
+                        st.rerun()
+            else:
+                if st.button(
+                    t("retry_challenge"),
+                    use_container_width=True,
+                    key=f"first_experiment_retry_{index}",
+                ):
+                    _reset_first_experiment_challenge()
+                    st.rerun()
+    else:
+        if st.button(
+            t("submit_prediction"),
+            use_container_width=True,
+            key=f"first_experiment_submit_{index}",
+        ):
+            if not prediction.strip():
+                st.warning(t("prediction_required"))
+            else:
+                st.session_state.first_experiment_prediction = prediction
+                st.session_state.first_experiment_prediction_language = current_language()
+                st.session_state.first_experiment_evaluation = (
+                    evaluate_challenge_prediction(
+                        challenge,
+                        prediction,
+                        current_language(),
+                    )
+                )
+                st.session_state.first_experiment_prediction_submitted = True
+                st.rerun()
+
     st.markdown("</div>", unsafe_allow_html=True)
 
+
+def show_lab():
+    show_public_nav()
+    _render_first_experiment()
     _render_experiment_controls()
 
     if st.button(t("back"), use_container_width=True, key="lab_back"):
