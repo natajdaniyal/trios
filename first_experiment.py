@@ -55,7 +55,7 @@ _STAGE_ONE_CHALLENGE_THREE_QUESTION = {
     "fa": "اگر این سه آهنربا را کنار هم بگذاری، فکر می‌کنی چه اتفاقی می‌افتد؟ چرا این مسئله سخت‌تر می‌شود؟",
     "en": "What do you think will happen if you place these three magnets together? Why does this become harder?",
     "ar": "ماذا تعتقد أنه سيحدث إذا وضعت هذه المغناطيسات الثلاثة معًا؟ ولماذا تصبح المسألة أصعب؟",
-    "zh": "如果把这三个磁铁放在一起，你觉得会发生什么？为什么 تصبح هذه المسألة أصعب؟",
+    "zh": "如果把这三个磁铁放在一起，你觉得会发生什么？为什么这会变得更难？",
     "es": "¿Qué crees que ocurrirá si colocas estos tres imanes juntos? ¿Por qué se vuelve más difícil?",
     "fr": "Que penses-tu qu'il se passera avec ces trois aimants ? Pourquoi cela devient-il plus difficile ?",
     "de": "Was glaubst du, passiert mit diesen drei Magneten zusammen? Warum wird es schwieriger?",
