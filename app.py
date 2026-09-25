@@ -2693,7 +2693,17 @@ def _show_first_experiment_result(challenge):
         return
 
     st.success(t("simulation_complete"))
-    st.markdown(_magnetic_scene_html(challenge, result=result), unsafe_allow_html=True)
+    final_positions = {
+        body["name"]: body["position_x"]
+        for body in result.bodies
+    }
+    _render_magnet_lab(
+        magnets=_magnet_visual_definition(challenge),
+        positions=final_positions,
+        disabled=True,
+        hint=t("simulation_complete"),
+        key=f"magnet_lab_result_{challenge.challenge_id}",
+    )
 
     with st.expander(t("details"), expanded=False):
         for body in result.bodies:
