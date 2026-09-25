@@ -2441,7 +2441,7 @@ def _experiment_stage_context():
 def _render_experiment_controls():
     """Render the stop control at the top of the experiment."""
     with st.popover(
-        f"🛑 {t('experiment_stop')}",
+        t("experiment_stop"),
         icon=":material/stop_circle:",
         width="content",
     ):
@@ -2483,7 +2483,7 @@ def _render_experiment_hint_control():
     has_active_stage = context is not None
 
     with st.popover(
-        f"✨ {t('experiment_hint')}",
+        t("experiment_hint"),
         icon=":material/auto_awesome:",
         width="content",
     ):
@@ -2612,6 +2612,7 @@ def _render_game_styles():
             border-color:rgba(110,222,255,.46)!important;
             box-shadow:0 0 0 1px rgba(110,222,255,.14),0 14px 32px rgba(34,130,190,.10)!important;
         }
+        .trios-full-experiment div[data-testid="stTextArea"] textarea,.trios-full-experiment [data-baseweb="textarea"] textarea{opacity:1!important;filter:none!important;mix-blend-mode:normal!important;color:#111827!important;-webkit-text-fill-color:#111827!important;color-scheme:light!important;}
         .trios-full-experiment div[data-testid="stButton"] button,
         .trios-full-experiment div[data-testid="stPopover"] button,
         .trios-full-experiment button[data-testid*="stBaseButton"],
@@ -2631,6 +2632,8 @@ def _render_game_styles():
             transform:translateY(-1px);
         }
         .trios-full-experiment button svg{color:#bcefff!important;fill:currentColor!important;}
+        .trios-full-experiment [data-baseweb="popover"],.trios-full-experiment [data-baseweb="popover"] [role="dialog"]{background:#091229!important;color:#eef7ff!important;border:1px solid rgba(129,222,255,.16)!important;}
+        .trios-full-experiment [data-baseweb="popover"] button,.trios-full-experiment [data-baseweb="popover"] button *{color:#eef7ff!important;-webkit-text-fill-color:#eef7ff!important;}
         .trios-full-experiment [data-testid="stPopover"]{margin:0!important;}
         .trios-control-rail button,
         .trios-full-experiment div[data-testid="stPopover"] > button{
