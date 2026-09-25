@@ -2424,7 +2424,7 @@ def _render_experiment_controls():
     """Render the stop control at the top of the experiment."""
     with st.popover(
         t("experiment_stop"),
-        icon=":material/pause_circle:",
+        icon=":material/stop_circle:",
         width="content",
     ):
         st.caption(t("experiment_stop"))
@@ -2466,7 +2466,7 @@ def _render_experiment_hint_control():
 
     with st.popover(
         t("experiment_hint"),
-        icon=":material/lightbulb:",
+        icon=":material/auto_awesome:",
         width="content",
     ):
         if not has_active_stage or not context["hint_text"]:
@@ -2528,6 +2528,61 @@ def _render_game_styles():
          .trios-full-experiment .trios-game-hud{margin:.35rem 0 .75rem;}
          .trios-experiment-bottom-controls{display:flex;justify-content:center;margin:1rem 0 0;}
          .trios-experiment-bottom-controls > div{min-width:170px;}
+        .trios-challenge-flow{display:flex;align-items:center;gap:.45rem;margin:.35rem 0 .95rem;padding:.4rem .55rem;border-radius:18px;background:rgba(255,255,255,.025);border:1px solid rgba(183,210,255,.10);}
+        .trios-flow-step{display:flex;align-items:center;gap:.42rem;min-width:0;color:#8091b8;font-size:.78rem;white-space:nowrap;transition:color .2s ease,transform .2s ease;}
+        .trios-flow-step.active{color:#ecf5ff;transform:translateY(-1px);}
+        .trios-flow-step.done{color:#9fe9ff;}
+        .trios-flow-dot{position:relative;width:30px;height:30px;display:grid;place-items:center;border-radius:10px;border:1px solid rgba(183,210,255,.13);background:rgba(255,255,255,.045);color:#93a4c8;}
+        .trios-flow-step.active .trios-flow-dot{background:linear-gradient(145deg,rgba(95,201,255,.22),rgba(170,116,255,.20));border-color:rgba(130,215,255,.35);color:#fff;box-shadow:0 0 24px rgba(92,193,255,.14);}
+        .trios-flow-step.done .trios-flow-dot{background:rgba(108,226,205,.10);border-color:rgba(108,226,205,.25);color:#b3ffe8;}
+        .trios-flow-dot b{position:absolute;right:-4px;top:-5px;width:14px;height:14px;display:grid;place-items:center;border-radius:50%;font-size:.58rem;background:#101a36;color:#dce9ff;border:1px solid rgba(255,255,255,.10);}
+        .trios-flow-connector{height:1px;flex:1;min-width:24px;background:rgba(183,210,255,.10);}
+        .trios-flow-connector.done{background:linear-gradient(90deg,rgba(104,221,255,.32),rgba(174,129,255,.42));}
+        .trios-section-card{margin:.2rem 0 .7rem;padding:.85rem 1rem;border-radius:18px;background:linear-gradient(145deg,rgba(78,189,255,.07),rgba(174,119,255,.06)),rgba(255,255,255,.025);border:1px solid rgba(159,209,255,.11);}
+        .trios-section-kicker{display:flex;align-items:center;gap:.42rem;color:#ecf4ff;font-weight:800;}
+        .trios-section-card p{margin:.28rem 0 0;color:#9cafce;font-size:.86rem;}
+        .trios-prediction-lock{display:flex;align-items:flex-start;gap:.75rem;margin:.3rem 0 .8rem;padding:.82rem 1rem;border-radius:18px;background:linear-gradient(145deg,rgba(102,231,255,.08),rgba(174,119,255,.07)),rgba(255,255,255,.025);border:1px solid rgba(159,209,255,.12);}
+        .trios-prediction-lock-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:11px;background:rgba(102,219,255,.10);color:#bfefff;flex:0 0 auto;}
+        .trios-prediction-lock div{display:flex;flex-direction:column;gap:.18rem;min-width:0;}
+        .trios-prediction-lock span{color:#8ea2c8;font-size:.74rem;}
+        .trios-prediction-lock strong{color:#edf4ff;font-size:.92rem;line-height:1.45;word-break:break-word;}
+        .trios-run-panel{margin:.8rem 0 0;}
+        .trios-run-panel > div:first-child{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.55rem;padding:0 .1rem;}
+        .trios-run-panel > div:first-child > span{color:#eef5ff;font-weight:800;}
+        .trios-run-panel > div:first-child > small{color:#8da2c9;font-size:.76rem;text-align:right;}
+        .trios-result-banner{display:flex;align-items:center;gap:.8rem;margin:.9rem 0 .75rem;padding:.85rem 1rem;border-radius:18px;background:linear-gradient(145deg,rgba(102,231,255,.08),rgba(183,119,255,.08)),rgba(255,255,255,.025);border:1px solid rgba(159,209,255,.13);}
+        .trios-result-banner > div:last-child{display:flex;flex-direction:column;gap:.1rem;}
+        .trios-result-banner strong{color:#f7fbff;font-size:.98rem;}
+        .trios-result-banner small{color:#8fa5c9;font-size:.75rem;}
+        .trios-result-kicker{color:#8fdfff;text-transform:uppercase;letter-spacing:.09em;font-size:.68rem;font-weight:800;}
+        .trios-result-icon{width:38px;height:38px;display:grid;place-items:center;flex:0 0 auto;border-radius:13px;background:linear-gradient(145deg,rgba(92,213,255,.15),rgba(183,126,255,.14));border:1px solid rgba(176,221,255,.14);color:#dff7ff;}
+        .trios-bot-result{display:flex;align-items:flex-start;gap:.8rem;margin:.8rem 0;padding:1rem 1.05rem;border-radius:20px;background:rgba(255,255,255,.028);border:1px solid rgba(183,210,255,.11);}
+        .trios-bot-result.correct{box-shadow:0 16px 40px rgba(55,202,184,.07);}
+        .trios-bot-result.incorrect{box-shadow:0 16px 40px rgba(255,104,140,.06);}
+        .trios-bot-result p{margin:.32rem 0 0;color:#cbd8ee;line-height:1.55;}
+        .trios-full-experiment div[data-testid="stButton"] button,
+        .trios-full-experiment div[data-testid="stPopover"] > button,
+        .trios-full-experiment button[data-testid="baseButton-secondary"],
+        .trios-full-experiment button[data-testid="stBaseButton-secondary"]{
+            color:#eef6ff!important;
+            -webkit-text-fill-color:#eef6ff!important;
+            background:linear-gradient(145deg,rgba(84,190,255,.12),rgba(176,118,255,.10)),rgba(11,18,40,.86)!important;
+            border:1px solid rgba(159,211,255,.18)!important;
+            border-radius:15px!important;
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 10px 24px rgba(0,0,0,.14)!important;
+            transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease,background .16s ease!important;
+        }
+        .trios-full-experiment div[data-testid="stButton"] button:hover,
+        .trios-full-experiment div[data-testid="stPopover"] > button:hover,
+        .trios-full-experiment button[data-testid="baseButton-secondary"]:hover,
+        .trios-full-experiment button[data-testid="stBaseButton-secondary"]:hover{
+            transform:translateY(-1px);
+            border-color:rgba(145,224,255,.38)!important;
+            box-shadow:0 12px 30px rgba(83,191,255,.10),inset 0 1px 0 rgba(255,255,255,.07)!important;
+        }
+        .trios-full-experiment div[data-testid="stPopover"] > button svg,
+        .trios-full-experiment div[data-testid="stButton"] button svg{color:#bfeeff!important;fill:currentColor!important;}
+        .trios-full-experiment div[data-testid="stPopover"]{margin-bottom:.15rem;}
         .trios-game-hud{display:flex;gap:.65rem;align-items:center;flex-wrap:wrap;margin:.75rem 0 1rem;}
         .trios-hud-chip{display:flex;align-items:center;gap:.45rem;padding:.55rem .85rem;border-radius:999px;border:1px solid rgba(183,210,255,.15);background:rgba(255,255,255,.055);color:#edf4ff;box-shadow:inset 0 1px 0 rgba(255,255,255,.05);font-size:.88rem;}
         .trios-hud-chip svg{flex:0 0 auto;}
@@ -2749,7 +2804,17 @@ def _show_first_experiment_result(challenge):
     if result is None:
         return
 
-    st.success(t("simulation_complete"))
+    evaluation = st.session_state.get("first_experiment_evaluation")
+
+    st.markdown(
+        f'<div class="trios-result-banner">'
+        f'<div class="trios-result-icon">{trios_icon("robot",24)}</div>'
+        f'<div><span class="trios-result-kicker">{t("bot_label")}</span>'
+        f'<strong>{t("experiment_done")}</strong>'
+        f'<small>{t("final_state")}</small></div></div>',
+        unsafe_allow_html=True,
+    )
+
     final_positions = {
         body["name"]: body["position_x"]
         for body in result.bodies
@@ -2758,10 +2823,22 @@ def _show_first_experiment_result(challenge):
         magnets=_magnet_visual_definition(challenge),
         positions=final_positions,
         disabled=True,
-        hint=t("simulation_complete"),
-        trajectory=None,
+        hint=t("experiment_done"),
+        trajectory=result.trajectory,
         key=f"magnet_lab_result_{challenge.challenge_id}",
     )
+
+    if evaluation is not None:
+        result_class = "correct" if evaluation.is_correct else "incorrect"
+        result_title = t("bot_result_correct") if evaluation.is_correct else t("bot_result_incorrect")
+        st.markdown(
+            f'<div class="trios-bot-result {result_class}">'
+            f'<div class="trios-result-icon">{trios_icon("robot",22)}</div>'
+            f'<div><strong>{result_title}</strong>'
+            f'<p><b>{t("bot_answer_label")}:</b> {challenge.answer(current_language())}</p>'
+            f'<p><b>{t("bot_explanation_label")}:</b> {challenge.explanation(current_language())}</p></div></div>',
+            unsafe_allow_html=True,
+        )
 
     with st.expander(t("details"), expanded=False):
         for body in result.bodies:
@@ -2771,17 +2848,6 @@ def _show_first_experiment_result(challenge):
                 f"vy = {body['velocity_y']:.3f}"
             )
 
-    evaluation = st.session_state.get("first_experiment_evaluation")
-    if evaluation is None:
-        return
-
-    if evaluation.is_correct:
-        st.success(t("bot_result_correct"))
-    else:
-        st.error(t("bot_result_incorrect"))
-
-    st.markdown(f"**{t('bot_answer_label')}:** {challenge.answer(current_language())}")
-    st.markdown(f"**{t('bot_explanation_label')}:** {challenge.explanation(current_language())}")
 
 
 def _render_first_experiment():
@@ -2812,63 +2878,62 @@ def _render_first_experiment():
     challenge = first_stage_challenge(index)
     _render_game_hud(profile, index, total)
 
+    prediction_submitted = bool(st.session_state.get("first_experiment_prediction_submitted"))
+    result = st.session_state.get("first_experiment_result")
+
+    flow_state = 0 if not prediction_submitted else (2 if result is not None else 1)
+    flow_steps = [
+        ("target", t("prediction_label")),
+        ("lab", t("run_experiment")),
+        ("robot", t("bot_label")),
+    ]
+    flow_html = '<div class="trios-challenge-flow">'
+    for step_index, (icon_name, label) in enumerate(flow_steps):
+        state = "done" if step_index < flow_state else ("active" if step_index == flow_state else "")
+        number = step_index + 1
+        flow_html += (
+            f'<div class="trios-flow-step {state}">'
+            f'<span class="trios-flow-dot">{trios_icon(icon_name,17)}<b>{number}</b></span>'
+            f'<span>{label}</span></div>'
+        )
+        if step_index < len(flow_steps) - 1:
+            connector = "done" if step_index < flow_state else ""
+            flow_html += f'<span class="trios-flow-connector {connector}"></span>'
+    flow_html += "</div>"
+    st.markdown(flow_html, unsafe_allow_html=True)
+
     st.markdown(
-        f'<div class="trios-bot-card"><div class="trios-bot-avatar">{trios_icon("robot",28)}</div>'
+        f'<div class="trios-bot-card">'
+        f'<div class="trios-bot-avatar">{trios_icon("robot",28)}</div>'
         f'<div class="trios-bot-copy"><strong>{t("bot_label")}</strong>'
         f'<span>{challenge.question(current_language())}</span></div></div>',
         unsafe_allow_html=True,
     )
 
-    steps = int(st.session_state.get("first_experiment_simulation_steps", 0))
-    revealed = bool(st.session_state.get("first_experiment_result_revealed"))
-    prediction_submitted = bool(st.session_state.get("first_experiment_prediction_submitted"))
-    result = st.session_state.get("first_experiment_result")
     initial_positions = _get_first_experiment_positions(challenge)
-
-    trajectory = None
-    if prediction_submitted and steps > 0:
-        result = run_challenge(
-            challenge,
-            steps=steps,
-            initial_positions=initial_positions,
-        )
-        st.session_state.first_experiment_result = result
-        st.session_state.first_experiment_simulation_started = True
-        trajectory = result.trajectory
-        display_positions = {
-            body["name"]: body["position_x"]
-            for body in result.bodies
-        }
-    else:
-        display_positions = initial_positions
-
-    if prediction_submitted:
-        _render_first_experiment_lab(
-            challenge,
-            index,
-            display_positions,
-            disabled=steps > 0 or revealed,
-            trajectory=trajectory,
-        )
-
-    st.markdown("<div style='height:.8rem'></div>", unsafe_allow_html=True)
-
-    prediction_key = f"first_experiment_prediction_input_{index}"
-    prediction = st.text_area(
-        t("prediction_label"),
-        placeholder=t("prediction_placeholder"),
-        key=prediction_key,
-        height=120,
-        disabled=prediction_submitted or revealed,
-    )
 
     if not prediction_submitted:
         st.markdown(
-            f'<div style="display:flex;align-items:center;gap:.5rem;margin:.25rem 0 .35rem;">'
-            f'{trios_icon("target",20)}<strong>{t("prediction_label")}</strong></div>',
+            f'<div class="trios-section-card">'
+            f'<div class="trios-section-kicker">{trios_icon("target",18)}'
+            f'<span>{t("prediction_label")}</span></div>'
+            f'<p>{t("prediction_placeholder")}</p></div>',
             unsafe_allow_html=True,
         )
-        if st.button(t("submit_prediction"), use_container_width=True, key=f"first_experiment_submit_{index}"):
+        prediction_key = f"first_experiment_prediction_input_{index}"
+        prediction = st.text_area(
+            t("prediction_label"),
+            placeholder=t("prediction_placeholder"),
+            key=prediction_key,
+            height=120,
+            label_visibility="collapsed",
+        )
+        if st.button(
+            t("submit_prediction"),
+            icon=":material/near_me:",
+            use_container_width=True,
+            key=f"first_experiment_submit_{index}",
+        ):
             if not prediction.strip():
                 st.warning(t("prediction_required"))
             else:
@@ -2878,73 +2943,90 @@ def _render_first_experiment():
                     challenge, prediction, current_language()
                 )
                 st.session_state.first_experiment_prediction_submitted = True
-                st.session_state.first_experiment_simulation_steps = 0
                 st.session_state.first_experiment_result = None
+                st.session_state.first_experiment_simulation_steps = 0
                 st.rerun()
         return
 
-    if not revealed:
-        st.info(t("simulation_running"))
+    # Once the prediction is submitted, the learner immediately gets the real lab.
+    # There is no intermediate confirmation button: the learner moves the magnets
+    # and then presses one single "Run experiment" action.
+    if result is None:
+        prediction_text = st.session_state.get("first_experiment_prediction", "")
         st.markdown(
-            f'<div style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;margin:.35rem 0;">'
-            f'<span style="display:flex;align-items:center;gap:.5rem;">{trios_icon("play",20)}'
-            f'<strong>{t("simulation_running")}</strong></span>'
-            f'<span style="color:#9fb0d3;font-size:.82rem;">'
-            f'{steps}/{MAX_VISIBLE_EXPERIMENT_STEPS} · t = {steps * 0.01:.2f}s</span></div>',
+            f'<div class="trios-prediction-lock">'
+            f'<span class="trios-prediction-lock-icon">{trios_icon("target",17)}</span>'
+            f'<div><span>{t("prediction_saved")}</span><strong>{prediction_text}</strong></div></div>',
             unsafe_allow_html=True,
         )
 
-        if steps < MAX_VISIBLE_EXPERIMENT_STEPS:
-            if st.button(
-                t("run_experiment"),
-                use_container_width=True,
-                key=f"first_experiment_step_{index}_{steps}",
-            ):
-                st.session_state.first_experiment_simulation_steps = min(
-                    steps + EXPERIMENT_STEPS_PER_RUN,
-                    MAX_VISIBLE_EXPERIMENT_STEPS,
-                )
-                st.session_state.first_experiment_simulation_started = True
-                st.session_state.first_experiment_result_revealed = False
-                st.rerun()
+        positions = _render_first_experiment_lab(
+            challenge,
+            index,
+            initial_positions,
+            disabled=False,
+            trajectory=None,
+        )
 
-        if steps > 0:
-            if st.button(
-                t("show_result"),
-                use_container_width=True,
-                key=f"first_experiment_show_result_{index}",
-            ):
-                st.session_state.first_experiment_result = run_challenge(
-                    challenge,
-                    steps=steps,
-                    initial_positions=initial_positions,
-                )
-                st.session_state.first_experiment_result_revealed = True
-                st.rerun()
+        st.markdown(
+            f'<div class="trios-run-panel">'
+            f'<div><span>{t("run_experiment")}</span>'
+            f'<small>{t("experiment_drag_hint")}</small></div>',
+            unsafe_allow_html=True,
+        )
+        if st.button(
+            t("run_experiment"),
+            icon=":material/science:",
+            use_container_width=True,
+            key=f"first_experiment_run_{index}",
+        ):
+            st.session_state.first_experiment_result = run_challenge(
+                challenge,
+                steps=MAX_VISIBLE_EXPERIMENT_STEPS,
+                initial_positions=positions,
+            )
+            st.session_state.first_experiment_simulation_steps = MAX_VISIBLE_EXPERIMENT_STEPS
+            st.session_state.first_experiment_simulation_started = True
+            st.session_state.first_experiment_result_revealed = True
+            st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
         return
 
-    if revealed and result is not None:
-        _show_first_experiment_result(challenge)
-        evaluation = st.session_state.get("first_experiment_evaluation")
-        if evaluation is not None and evaluation.is_correct:
-            if index + 1 < total:
-                if st.button(t("next_challenge"), use_container_width=True, key=f"first_experiment_next_{index}"):
-                    st.session_state.first_experiment_challenge_index = index + 1
-                    _reset_first_experiment_challenge()
-                    st.rerun()
-            else:
-                if not st.session_state.get("first_experiment_completion_recorded"):
-                    completion = complete_stage(profile, FIRST_EXPERIMENT_ID, 1)
-                    _save_current_profile(profile)
-                    st.session_state.first_experiment_completion_recorded = True
-                    st.session_state.first_experiment_last_reward = completion["coins_awarded"]
-                st.session_state.first_experiment_active = False
-                st.session_state.first_experiment_stage_completed = True
-                st.rerun()
-        else:
-            if st.button(t("retry_challenge"), use_container_width=True, key=f"first_experiment_retry_{index}"):
+    # The experiment is complete: the physics result and TRIOS-Bot explanation
+    # appear automatically. There is deliberately no "Show result" button.
+    _show_first_experiment_result(challenge)
+
+    evaluation = st.session_state.get("first_experiment_evaluation")
+    if evaluation is not None and evaluation.is_correct:
+        if index + 1 < total:
+            if st.button(
+                t("next_challenge"),
+                icon=":material/arrow_forward:",
+                use_container_width=True,
+                key=f"first_experiment_next_{index}",
+            ):
+                st.session_state.first_experiment_challenge_index = index + 1
                 _reset_first_experiment_challenge()
                 st.rerun()
+        else:
+            if not st.session_state.get("first_experiment_completion_recorded"):
+                completion = complete_stage(profile, FIRST_EXPERIMENT_ID, 1)
+                _save_current_profile(profile)
+                st.session_state.first_experiment_completion_recorded = True
+                st.session_state.first_experiment_last_reward = completion["coins_awarded"]
+            st.session_state.first_experiment_active = False
+            st.session_state.first_experiment_stage_completed = True
+            st.rerun()
+    else:
+        if st.button(
+            t("retry_challenge"),
+            icon=":material/replay:",
+            use_container_width=True,
+            key=f"first_experiment_retry_{index}",
+        ):
+            _reset_first_experiment_challenge()
+            st.rerun()
+
 
 
 def show_lab():
