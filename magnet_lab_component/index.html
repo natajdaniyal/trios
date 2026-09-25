@@ -30,8 +30,9 @@ const lab=document.createElement("div");lab.className="lab";
 const grid=document.createElement("div");grid.className="grid";lab.appendChild(grid);
 const hint=document.createElement("div");hint.className="hint";hint.textContent=args.disabled?"Experiment is running":(args.hint||"Drag a magnet to choose its position");lab.appendChild(hint);
 for(const [text,cls] of [["-4","left"],["+4","right"]]){const a=document.createElement("div");a.className="axis "+cls;a.textContent=text;lab.appendChild(a)}
+root.appendChild(lab);
 for(const m of (args.magnets||[])){
-const el=document.createElement("div");el.className="magnet"+(args.disabled?" disabled":"");el.style.left=px(Number(positions[m.name]||0),lab)+"px";
+const el=document.createElement("div");el.className="magnet"+(args.disabled?" disabled":"");el.dataset.name=m.name;el.style.left=px(Number(positions[m.name]||0),lab)+"px";
 const a=document.createElement("div");a.className="pole "+m.left_pole.toLowerCase();a.textContent=m.left_pole;
 const b=document.createElement("div");b.className="pole "+m.right_pole.toLowerCase();b.textContent=m.right_pole;
 const n=document.createElement("div");n.className="name";n.textContent=m.name;el.append(a,b,n);lab.appendChild(el);
@@ -41,7 +42,7 @@ el.addEventListener("pointermove",e=>{if(!drag||drag.id!==e.pointerId||drag.name
 el.addEventListener("pointerup",e=>{if(!drag||drag.id!==e.pointerId)return;drag=null;publish();e.preventDefault()});
 el.addEventListener("pointercancel",()=>drag=null);
 }}
-root.appendChild(lab);send("streamlit:setFrameHeight",{height:360})
+send("streamlit:setFrameHeight",{height:360})
 }
 window.addEventListener("message",e=>{if(e.data&&e.data.type==="streamlit:render"){args=e.data.args||args;render()}});
 ready();
