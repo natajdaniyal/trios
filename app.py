@@ -2815,16 +2815,27 @@ def _show_first_experiment_result(challenge):
         unsafe_allow_html=True,
     )
 
+    result_bodies = (
+        result.get("bodies", ())
+        if isinstance(result, dict)
+        else getattr(result, "bodies", ())
+    )
+    result_trajectory = (
+        result.get("trajectory")
+        if isinstance(result, dict)
+        else getattr(result, "trajectory", None)
+    )
+
     final_positions = {
         body["name"]: body["position_x"]
-        for body in result.bodies
+        for body in result_bodies
     }
     _render_magnet_lab(
         magnets=_magnet_visual_definition(challenge),
         positions=final_positions,
         disabled=True,
         hint=t("experiment_done"),
-        trajectory=result.trajectory,
+        trajectory=result_trajectory,
         key=f"magnet_lab_result_{challenge.challenge_id}",
     )
 
@@ -2841,7 +2852,7 @@ def _show_first_experiment_result(challenge):
         )
 
     with st.expander(t("details"), expanded=False):
-        for body in result.bodies:
+        for body in result_bodies:
             st.write(
                 f"**{body['name']}** — x = {body['position_x']:.3f}, "
                 f"y = {body['position_y']:.3f}, vx = {body['velocity_x']:.3f}, "
