@@ -2420,50 +2420,86 @@ def _experiment_stage_context():
 
 
 def _render_experiment_controls():
-    """Render compact experiment controls in the game HUD."""
+    """Render the stop control at the top of the experiment."""
+    with st.popover(
+        t("experiment_stop"),
+        icon=":material/pause_circle:",
+        width="content",
+    ):
+        st.caption(t("experiment_stop"))
+        if st.button(
+            t("experiment_exit"),
+            icon=":material/exit_to_app:",
+            width="stretch",
+            key="experiment_exit_button",
+        ):
+            st.session_state.experiment_hint_visible = False
+            st.session_state.first_experiment_active = False
+            navigate("experiments")
+        if st.button(
+            t("experiment_retry"),
+            icon=":material/replay:",
+            width="stretch",
+            key="experiment_retry_button",
+        ):
+            st.session_state.experiment_hint_visible = False
+            st.session_state.first_experiment_active = True
+            st.session_state.first_experiment_challenge_index = 0
+            _reset_first_experiment_challenge()
+            st.rerun()
+        if st.button(
+            t("experiment_continue"),
+            icon=":material/play_arrow:",
+            width="stretch",
+            key="experiment_continue_button",
+        ):
+            st.rerun()
+
+
+def _render_experiment_hint_control():
+    """Render the hint control below the experiment."""
     from experiment_progress import has_hint, unlock_hint
 
     context = _experiment_stage_context()
     has_active_stage = context is not None
-    stop_col, hint_col, spacer = st.columns([1.2, 1.2, 5.6], gap="small")
 
-    with stop_col:
-        with st.popover(t("experiment_stop"), icon=":material/pause_circle:", width="stretch"):
-            st.caption(t("experiment_stop"))
-            if st.button(t("experiment_exit"), use_container_width=True, key="experiment_exit_button"):
-                st.session_state.experiment_hint_visible = False
-                st.session_state.first_experiment_active = False
-                navigate("experiments")
-            if st.button(t("experiment_retry"), use_container_width=True, key="experiment_retry_button"):
-                st.session_state.experiment_hint_visible = False
-                st.session_state.first_experiment_active = True
-                st.session_state.first_experiment_challenge_index = 0
-                _reset_first_experiment_challenge()
-                st.rerun()
-            if st.button(t("experiment_continue"), use_container_width=True, key="experiment_continue_button"):
-                st.rerun()
-
-    with hint_col:
-        with st.popover(t("experiment_hint"), icon=":material/lightbulb:", width="stretch"):
-            if not has_active_stage or not context["hint_text"]:
-                st.info(t("hint_not_ready"))
-            else:
-                profile = user_profile(st.session_state.user)
-                if has_hint(profile, context["experiment_id"], context["stage_number"]):
-                    st.success(f"{t('hint_unlocked_badge')}: {context['hint_text']}")
+    with st.popover(
+        t("experiment_hint"),
+        icon=":material/lightbulb:",
+        width="content",
+    ):
+        if not has_active_stage or not context["hint_text"]:
+            st.info(t("hint_not_ready"))
+        else:
+            profile = user_profile(st.session_state.user)
+            if has_hint(profile, context["experiment_id"], context["stage_number"]):
+                st.success(f"{t('hint_unlocked_badge')}: {context['hint_text']}")
+                st.session_state.experiment_hint_visible = True
+            elif st.button(
+                f"{t('experiment_hint')} · 5",
+                icon=":material/lightbulb:",
+                width="stretch",
+                key="experiment_buy_hint",
+            ):
+                purchase = unlock_hint(
+                    profile,
+                    context["experiment_id"],
+                    context["stage_number"],
+                )
+                if purchase["unlocked_now"]:
+                    _save_current_profile(profile)
                     st.session_state.experiment_hint_visible = True
+                    st.rerun()
                 else:
-                    if st.button(f"{t('experiment_hint')} · 5", use_container_width=True, key="experiment_buy_hint"):
-                        purchase = unlock_hint(profile, context["experiment_id"], context["stage_number"])
-                        if purchase["unlocked_now"]:
-                            _save_current_profile(profile)
-                            st.session_state.experiment_hint_visible = True
-                            st.rerun()
-                        else:
-                            st.warning(t("hint_no_coins"))
+                    st.warning(t("hint_no_coins"))
 
     if st.session_state.get("experiment_hint_visible") and context and context["hint_text"]:
-        st.markdown(f'<div class="trios-hint-pill">{trios_icon("hint",18)} {context["hint_text"]}</div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="trios-hint-pill">{trios_icon("hint",18)} '
+            f'{context["hint_text"]}</div>',
+            unsafe_allow_html=True,
+        )
+
 
 
 def _reset_first_experiment_challenge():
@@ -2486,6 +2522,11 @@ def _render_game_styles():
         """
         <style>
         .trios-game-shell{max-width:1120px;margin:1rem auto 0;}
+         .trios-full-experiment{max-width:none!important;width:100%;margin:0 auto;padding:0 1.25rem 2rem;}
+         .trios-full-experiment .trios-bot-card{margin:0 0 .9rem;border-radius:20px;}
+         .trios-full-experiment .trios-game-hud{margin:.35rem 0 .75rem;}
+         .trios-experiment-bottom-controls{display:flex;justify-content:center;margin:1rem 0 0;}
+         .trios-experiment-bottom-controls > div{min-width:170px;}
         .trios-game-hud{display:flex;gap:.65rem;align-items:center;flex-wrap:wrap;margin:.75rem 0 1rem;}
         .trios-hud-chip{display:flex;align-items:center;gap:.45rem;padding:.55rem .85rem;border-radius:999px;border:1px solid rgba(183,210,255,.15);background:rgba(255,255,255,.055);color:#edf4ff;box-shadow:inset 0 1px 0 rgba(255,255,255,.05);font-size:.88rem;}
         .trios-hud-chip svg{flex:0 0 auto;}
@@ -2903,14 +2944,16 @@ def _render_first_experiment():
 
 
 def show_lab():
-    show_public_nav()
     _render_game_styles()
-    st.markdown('<div class="trios-game-shell">', unsafe_allow_html=True)
+    st.markdown('<div class="trios-game-shell trios-full-experiment">', unsafe_allow_html=True)
     _render_experiment_controls()
     _render_first_experiment()
-    if st.button(f"← {t('back_to_experiments')}", use_container_width=True, key="lab_back"):
-        navigate("experiments")
-    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown(
+        '<div class="trios-experiment-bottom-controls">',
+        unsafe_allow_html=True,
+    )
+    _render_experiment_hint_control()
+    st.markdown("</div></div>", unsafe_allow_html=True)
 
 
 def show_report():
