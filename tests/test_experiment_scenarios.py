@@ -38,3 +38,16 @@ def test_three_magnets_scenario_has_three_magnets():
 def test_unknown_scenario_is_rejected():
     with pytest.raises(ValueError, match="Unknown Experiment 1 scenario"):
         build_experiment_one_scenario("unknown")
+
+
+def test_magnets_cannot_penetrate_each_other_during_simulation():
+    simulation = build_opposite_poles_scenario(positions={"A": -0.25, "B": 0.25})
+    simulation.step()
+    left, right = simulation.bodies
+    distance = right.position.subtract(left.position).length()
+    assert distance >= (left.collision_radius + right.collision_radius) - 1e-9
+
+
+def test_three_magnet_setup_is_not_symmetric():
+    simulation = build_three_magnets_scenario()
+    assert len({round(body.position.y, 6) for body in simulation.bodies}) == 3
