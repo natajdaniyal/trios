@@ -82,10 +82,16 @@ def test_run_challenge_uses_user_selected_positions():
         time_step=0.01,
         initial_positions={"A": -2.0, "B": 2.0},
     )
-    assert result.bodies[0]["position_x"] == pytest.approx(-2.0, abs=0.001)
-    assert result.bodies[1]["position_x"] == pytest.approx(2.0, abs=0.001)
-    assert result.bodies[0]["velocity_x"] > 0
-    assert result.bodies[1]["velocity_x"] < 0
+
+    initial = result.trajectory[0]
+    final = result.trajectory[-1]
+
+    assert initial[0]["position_x"] == pytest.approx(-2.0)
+    assert initial[1]["position_x"] == pytest.approx(2.0)
+    assert final[0]["position_x"] > initial[0]["position_x"]
+    assert final[1]["position_x"] < initial[1]["position_x"]
+    assert final[0]["velocity_x"] > 0
+    assert final[1]["velocity_x"] < 0
 
 
 def test_run_challenge_executes_the_real_three_magnet_scenario():
