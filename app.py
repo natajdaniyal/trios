@@ -11,6 +11,8 @@ for _module_dir in ("core", "simulation", "validation", "tools"):
         sys.path.insert(0, _module_path)
 
 from user_interface import (
+    _cloud,
+    _local_profile,
     create_google_user,
     create_user,
     delete_user,
@@ -2439,7 +2441,7 @@ def _experiment_stage_context():
 def _render_experiment_controls():
     """Render the stop control at the top of the experiment."""
     with st.popover(
-        t("experiment_stop"),
+        f"🛑 {t('experiment_stop')}",
         icon=":material/stop_circle:",
         width="content",
     ):
@@ -2481,7 +2483,7 @@ def _render_experiment_hint_control():
     has_active_stage = context is not None
 
     with st.popover(
-        t("experiment_hint"),
+        f"✨ {t('experiment_hint')}",
         icon=":material/auto_awesome:",
         width="content",
     ):
@@ -2588,22 +2590,22 @@ def _render_game_styles():
         .trios-full-experiment [data-baseweb="textarea"] textarea,
         .trios-full-experiment textarea,
         .trios-full-experiment textarea:focus{
-            color:#f4f8ff!important;
-            -webkit-text-fill-color:#f4f8ff!important;
+            color:#111827!important;
+            -webkit-text-fill-color:#111827!important;
             caret-color:#8fe9ff!important;
-            background:linear-gradient(145deg,rgba(17,28,57,.96),rgba(8,15,33,.96))!important;
+            background:#ffffff!important;
             border:1px solid rgba(134,203,255,.20)!important;
             border-radius:16px!important;
             box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 10px 26px rgba(0,0,0,.11)!important;
             font-size:.95rem!important;
             line-height:1.6!important;
             padding:.85rem 1rem!important;
-            color-scheme:dark!important;
+            color-scheme:light!important;
         }
         .trios-full-experiment div[data-testid="stTextArea"] textarea::placeholder,
         .trios-full-experiment textarea::placeholder{
-            color:#667da7!important;
-            -webkit-text-fill-color:#667da7!important;
+            color:#718096!important;
+            -webkit-text-fill-color:#718096!important;
             opacity:1!important;
         }
         .trios-full-experiment div[data-testid="stTextArea"] textarea:focus{
@@ -2630,6 +2632,21 @@ def _render_game_styles():
         }
         .trios-full-experiment button svg{color:#bcefff!important;fill:currentColor!important;}
         .trios-full-experiment [data-testid="stPopover"]{margin:0!important;}
+        .trios-control-rail button,
+        .trios-full-experiment div[data-testid="stPopover"] > button{
+            color:#eef7ff!important;
+            -webkit-text-fill-color:#eef7ff!important;
+            background:linear-gradient(145deg,#172b57,#151331)!important;
+            border:1px solid rgba(129,222,255,.32)!important;
+            border-radius:14px!important;
+            min-height:42px!important;
+            box-shadow:0 8px 22px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.06)!important;
+        }
+        .trios-control-rail button:hover,
+        .trios-full-experiment div[data-testid="stPopover"] > button:hover{
+            border-color:rgba(132,231,255,.65)!important;
+            box-shadow:0 12px 28px rgba(64,184,255,.12)!important;
+        }
         </style>
         """,
         unsafe_allow_html=True,
@@ -2661,7 +2678,13 @@ def _get_first_experiment_positions(challenge):
     positions = st.session_state.get("first_experiment_positions")
     if not isinstance(positions, dict):
         simulation = build_experiment_one_scenario(challenge.scenario_id)
-        positions = {body.name: body.position.x for body in simulation.bodies}
+        positions = {
+            body.name: {
+                "x": body.position.x,
+                "y": body.position.y,
+            }
+            for body in simulation.bodies
+        }
         st.session_state.first_experiment_positions = dict(positions)
     return dict(positions)
 
@@ -2686,12 +2709,24 @@ def _render_first_experiment_lab(
         cleaned = {}
         for magnet in _magnet_visual_definition(challenge):
             name = magnet["name"]
-            raw = value.get(name, positions.get(name))
-            cleaned[name] = (
-                float(raw)
-                if isinstance(raw, (int, float)) and not isinstance(raw, bool)
-                else float(positions[name])
-            )
+            fallback = positions.get(name, {"x": 0.0, "y": 0.0})
+            raw = value.get(name, fallback)
+            if isinstance(raw, dict):
+                x = raw.get("x", fallback.get("x", 0.0))
+                y = raw.get("y", fallback.get("y", 0.0))
+                if (
+                    isinstance(x, (int, float)) and not isinstance(x, bool)
+                    and isinstance(y, (int, float)) and not isinstance(y, bool)
+                ):
+                    cleaned[name] = {"x": float(x), "y": float(y)}
+                    continue
+            if isinstance(raw, (int, float)) and not isinstance(raw, bool):
+                cleaned[name] = {"x": float(raw), "y": float(fallback.get("y", 0.0))}
+            else:
+                cleaned[name] = {
+                    "x": float(fallback.get("x", 0.0)),
+                    "y": float(fallback.get("y", 0.0)),
+                }
         st.session_state.first_experiment_positions = cleaned
         return cleaned
     return positions
@@ -2854,7 +2889,10 @@ def _show_first_experiment_result(challenge):
     )
 
     final_positions = {
-        body["name"]: body["position_x"]
+        body["name"]: {
+            "x": body["position_x"],
+            "y": body["position_y"],
+        }
         for body in result_bodies
     }
     _render_magnet_lab(
@@ -3000,11 +3038,11 @@ def _render_first_experiment():
         st.markdown(
             f'<div class="trios-run-panel">'
             f'<div><span>{t("run_experiment")}</span>'
-            f'<small>{t("experiment_drag_hint")}</small></div>',
+            f'<small>🧲 {t("experiment_drag_hint")}</small></div>',
             unsafe_allow_html=True,
         )
         if st.button(
-            t("run_experiment"),
+            f"🧪 {t('run_experiment')}",
             icon=":material/science:",
             use_container_width=True,
             key=f"first_experiment_run_{index}",
