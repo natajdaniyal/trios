@@ -27,6 +27,10 @@ def normalize_text(value):
     return " ".join(value.casefold().split())
 
 
+def _compact_normalize_text(value):
+    return "".join(normalize_text(value).split())
+
+
 class BotConfiguration:
     """Localized configuration for the TRIOS Bot attached to one experiment."""
 
@@ -215,11 +219,12 @@ class KeywordMatcher:
         normalized_answer = normalize_text(answer)
         if not normalized_answer:
             return []
-
+        compact_answer = _compact_normalize_text(answer)
         return [
             keyword
             for keyword in self.configuration.keywords(language)
             if normalize_text(keyword) in normalized_answer
+            or _compact_normalize_text(keyword) in compact_answer
         ]
 
     def match_count(self, answer, language):
