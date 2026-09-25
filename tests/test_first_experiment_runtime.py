@@ -57,6 +57,23 @@ def test_run_challenge_executes_the_real_two_magnet_scenario():
     assert result.bodies[1]["velocity_x"] < 0
 
 
+def test_run_challenge_records_real_physics_trajectory():
+    challenge = first_stage_challenge(0)
+    result = run_challenge(
+        challenge,
+        steps=3,
+        time_step=0.01,
+        initial_positions={"A": -2.0, "B": 2.0},
+    )
+
+    assert len(result.trajectory) == 4
+    assert result.trajectory[0][0]["position_x"] == pytest.approx(-2.0)
+    assert result.trajectory[0][1]["position_x"] == pytest.approx(2.0)
+    assert result.trajectory[-1] == result.bodies
+    assert result.trajectory[1][0]["position_x"] > result.trajectory[0][0]["position_x"]
+    assert result.trajectory[1][1]["position_x"] < result.trajectory[0][1]["position_x"]
+
+
 def test_run_challenge_uses_user_selected_positions():
     challenge = first_stage_challenge(0)
     result = run_challenge(
