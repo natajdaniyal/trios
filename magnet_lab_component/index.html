@@ -4,83 +4,81 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-*{box-sizing:border-box}html,body{margin:0;background:transparent}body{font-family:Inter,system-ui,sans-serif;color:#eef4ff}
-.lab{position:relative;min-height:560px;height:min(68vh,680px);width:100%;overflow:hidden;border:1px solid rgba(183,210,255,.16);border-radius:22px;background:radial-gradient(circle at 50% 45%,rgba(122,128,255,.13),transparent 42%),linear-gradient(180deg,rgba(18,25,49,.96),rgba(8,13,29,.98));user-select:none;touch-action:none}
-.grid{position:absolute;left:7%;right:7%;top:50%;height:1px;background:rgba(194,214,255,.25)}
-.hint{position:absolute;left:50%;top:20px;transform:translateX(-50%);padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.055);border:1px solid rgba(183,210,255,.12);color:#b8c6e5;font-size:13px;white-space:nowrap;pointer-events:none}
-.magnet{position:absolute;top:50%;width:120px;height:56px;transform:translate(-50%,-50%);display:flex;border-radius:13px;overflow:visible;cursor:grab;border:2px solid rgba(255,255,255,.18);box-shadow:0 12px 30px rgba(0,0,0,.28)}
-.magnet:active{cursor:grabbing}.magnet.disabled{cursor:default;opacity:.82}.pole{flex:1;display:grid;place-items:center;font-size:20px;font-weight:800}
-.pole.n{background:linear-gradient(135deg,#ff6c7d,#cf314e);color:white}.pole.s{background:linear-gradient(135deg,#5bbdff,#3566d6);color:white}
-.name{position:absolute;left:50%;top:64px;transform:translateX(-50%);font-size:13px;font-weight:700;color:#b9c8e7}
-.axis{position:absolute;bottom:14px;color:#7f91b8;font-size:11px}.left{left:7%}.right{right:7%}
+*{box-sizing:border-box}html,body{margin:0;background:transparent}body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#eef5ff}
+.lab{position:relative;min-height:560px;height:min(70vh,700px);width:100%;overflow:hidden;border:1px solid rgba(155,209,255,.16);border-radius:28px;background:radial-gradient(circle at 50% 46%,rgba(92,199,255,.13),transparent 27%),radial-gradient(circle at 80% 20%,rgba(172,116,255,.09),transparent 23%),radial-gradient(circle at 18% 78%,rgba(65,175,255,.07),transparent 25%),linear-gradient(180deg,#0b1430 0%,#070d20 55%,#050918 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.045),0 28px 80px rgba(0,0,0,.24);user-select:none;touch-action:none}
+.lab:before{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle at 8% 18%,rgba(255,255,255,.46) 0 1px,transparent 1.4px),radial-gradient(circle at 16% 62%,rgba(255,255,255,.20) 0 1px,transparent 1.4px),radial-gradient(circle at 29% 28%,rgba(255,255,255,.24) 0 1px,transparent 1.4px),radial-gradient(circle at 42% 74%,rgba(255,255,255,.20) 0 1px,transparent 1.4px),radial-gradient(circle at 57% 19%,rgba(255,255,255,.35) 0 1px,transparent 1.4px),radial-gradient(circle at 72% 68%,rgba(255,255,255,.22) 0 1px,transparent 1.4px),radial-gradient(circle at 86% 27%,rgba(255,255,255,.30) 0 1px,transparent 1.4px),radial-gradient(circle at 93% 76%,rgba(255,255,255,.18) 0 1px,transparent 1.4px);opacity:.9}
+.lab:after{content:"";position:absolute;inset:16% 9% 17%;border-radius:50%;border:1px solid rgba(123,193,255,.035);box-shadow:0 0 0 42px rgba(113,178,255,.018),0 0 0 84px rgba(113,178,255,.012);pointer-events:none}
+.lab-top{position:absolute;left:18px;right:18px;top:16px;display:flex;justify-content:space-between;align-items:center;gap:12px;z-index:4;pointer-events:none}
+.lab-badge,.lab-status{padding:7px 10px;border-radius:999px;background:rgba(7,15,34,.58);border:1px solid rgba(166,215,255,.10);backdrop-filter:blur(10px);font-size:11px}
+.lab-badge{color:#a8bfdf;letter-spacing:.09em;text-transform:uppercase}.lab-status{display:flex;align-items:center;gap:7px;color:#91a8cc}.lab-status i{display:block;width:7px;height:7px;border-radius:50%;background:#5ee4ff;box-shadow:0 0 12px rgba(94,228,255,.65)}.lab.disabled .lab-status i{background:#8290ad;box-shadow:none}
+.hint{position:absolute;left:50%;top:58px;transform:translateX(-50%);max-width:78%;padding:8px 13px;border-radius:999px;background:rgba(8,16,37,.68);border:1px solid rgba(166,215,255,.09);color:#91a8cc;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;backdrop-filter:blur(10px);z-index:5}
+.track{position:absolute;left:7%;right:7%;top:50%;height:1px;background:linear-gradient(90deg,transparent,rgba(149,194,255,.20) 12%,rgba(149,194,255,.28) 50%,rgba(149,194,255,.20) 88%,transparent)}
+.track:before,.track:after{content:"";position:absolute;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background:#8ab8e9;opacity:.32}.track:before{left:0}.track:after{right:0}
+.scale{position:absolute;left:7%;right:7%;bottom:18px;height:18px;display:flex;justify-content:space-between;align-items:flex-end;color:#597092;font-size:10px;pointer-events:none}.scale em{display:block;width:1px;height:7px;background:rgba(130,170,218,.22);font-style:normal}
+.force-line{position:absolute;height:2px;top:50%;transform:translateY(-50%);border-radius:999px;opacity:0;filter:drop-shadow(0 0 7px currentColor);pointer-events:none;transition:opacity .25s ease,left .18s ease,width .18s ease}.force-line.attract{background:linear-gradient(90deg,transparent,#7ce7ff 28%,#d7f8ff 50%,#7ce7ff 72%,transparent);color:#75e5ff}.force-line.repel{background:linear-gradient(90deg,transparent,#b38aff 28%,#ffd0f2 50%,#b38aff 72%,transparent);color:#b38aff}.lab.live .force-line{opacity:.52}.lab.live .force-line.strong{opacity:.86}
+.magnet{position:absolute;top:50%;width:154px;height:68px;transform:translate(-50%,-50%);border-radius:16px;cursor:grab;z-index:3;filter:drop-shadow(0 16px 28px rgba(0,0,0,.28))}.magnet:before{content:"";position:absolute;inset:-10px;border-radius:22px;background:radial-gradient(circle,rgba(103,219,255,.15),transparent 65%);opacity:.8;pointer-events:none}.magnet:active{cursor:grabbing}.magnet.disabled{cursor:default;opacity:.94}.magnet.dragging{filter:drop-shadow(0 18px 34px rgba(38,177,255,.26))}
+.magnet-body{position:absolute;inset:0;display:flex;overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,.20);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 -10px 20px rgba(0,0,0,.12),0 0 0 1px rgba(0,0,0,.10)}
+.pole{flex:1;display:flex;align-items:center;justify-content:center;font-size:21px;font-weight:900;letter-spacing:.08em;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.20)}.pole.n{background:linear-gradient(145deg,#ff7288,#ad3152)}.pole.s{background:linear-gradient(145deg,#62c8ff,#2e61b3)}.pole:first-child{border-radius:15px 0 0 15px}.pole:last-child{border-radius:0 15px 15px 0}
+.magnet-name{position:absolute;left:50%;top:76px;transform:translateX(-50%);color:#a8bddf;font-weight:800;font-size:11px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}.magnet-glint{position:absolute;left:10px;right:10px;top:7px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);opacity:.7;pointer-events:none}
+.snap{position:absolute;left:50%;bottom:38px;transform:translateX(-50%);display:flex;align-items:center;gap:6px;color:#6c85ac;font-size:10px;white-space:nowrap;pointer-events:none}.snap b{width:5px;height:5px;border-radius:50%;background:#5ee4ff;box-shadow:0 0 8px rgba(94,228,255,.5)}
+@media(max-width:720px){.lab{min-height:480px;height:540px;border-radius:22px}.magnet{width:128px;height:58px}.magnet-name{top:66px}.hint{top:56px;max-width:86%}}
 </style>
 </head>
 <body><div id="root"></div>
 <script>
 (function(){
-const root=document.getElementById("root");let args={magnets:[],positions:{},disabled:false};let positions={};let drag=null;
+const root=document.getElementById("root");let args={magnets:[],positions:{},disabled:false,hint:null,trajectory:null};let positions={};let drag=null;
 function send(type,payload){window.parent.postMessage(Object.assign({isStreamlitMessage:true,type:type},payload),"*")}
-function ready(){send("streamlit:componentReady",{apiVersion:1});send("streamlit:setFrameHeight",{height:360})}
-function px(x,lab){const w=lab.clientWidth,l=w*.08,u=w*.84;return l+((x+4)/8)*u}
+function ready(){send("streamlit:componentReady",{apiVersion:1});send("streamlit:setFrameHeight",{height:560})}
+function px(x,lab){const w=lab.clientWidth,l=w*.08,u=w*.84;return l+((Number(x)+4)/8)*u}
 function val(p,lab){const w=lab.clientWidth,l=w*.08,u=w*.84;return Math.max(-4,Math.min(4,((p-l)/u)*8-4))}
 function publish(){send("streamlit:setComponentValue",{valueType:"json",value:Object.assign({},positions)})}
+function interactionType(a,b){return a===b?"repel":"attract"}
+function renderForces(lab,magnets){
+  lab.querySelectorAll(".force-line").forEach(x=>x.remove());
+  const ordered=magnets.map(m=>({m,x:Number(positions[m.name]||0)})).sort((a,b)=>a.x-b.x);
+  for(let i=0;i<ordered.length-1;i++){
+    const left=ordered[i],right=ordered[i+1];
+    const mid=(px(left.x,lab)+px(right.x,lab))/2;
+    const width=Math.max(18,Math.abs(px(right.x,lab)-px(left.x,lab))-82);
+    const line=document.createElement("div");
+    line.className="force-line "+interactionType(left.m.right_pole,right.m.left_pole);
+    if(width<100)line.classList.add("strong");
+    line.style.left=(mid-width/2)+"px";line.style.width=width+"px";lab.appendChild(line);
+  }
+}
 function playTrajectory(frames,lab){
- if(!Array.isArray(frames)||frames.length<2||args.disabled!==true)return;
- const magnets=args.magnets||[];
- let frame=0;
- const apply=()=>{
-   if(frame>=frames.length)return;
-   const snapshot=frames[frame]||[];
-   for(const body of snapshot){
-     positions[body.name]=Number(body.position_x)||0;
-     const el=document.querySelector('.magnet[data-name="'+body.name+'"]');
-     if(el)el.style.left=px(positions[body.name],lab)+"px";
-   }
-   frame+=1;
-   if(frame<frames.length) window.setTimeout(apply,70);
- };
- apply();
+  if(!Array.isArray(frames)||frames.length<2||args.disabled!==true)return;
+  let frame=0;
+  const apply=()=>{
+    if(frame>=frames.length)return;
+    const snapshot=frames[frame]||[];
+    for(const body of snapshot){positions[body.name]=Number(body.position_x)||0;const el=lab.querySelector('.magnet[data-name="'+body.name+'"]');if(el)el.style.left=px(positions[body.name],lab)+"px"}
+    renderForces(lab,args.magnets||[]);frame+=1;if(frame<frames.length)window.setTimeout(apply,45);
+  };apply();
 }
 function render(){
-positions=Object.assign({},args.positions||{});root.innerHTML="";
-const lab=document.createElement("div");lab.className="lab physics-lab";
-const grid=document.createElement("div");grid.className="grid";lab.appendChild(grid);
-const hint=document.createElement("div");hint.className="hint";hint.textContent=args.hint||(args.disabled?"":"Drag a magnet to choose its position");lab.appendChild(hint);
-for(const [text,cls] of [["-4","left"],["+4","right"]]){const a=document.createElement("div");a.className="axis "+cls;a.textContent=text;lab.appendChild(a)}
-root.appendChild(lab);
-for(const m of (args.magnets||[])){
-const el=document.createElement("div");el.className="magnet"+(args.disabled?" disabled":"");el.dataset.name=m.name;el.style.left=px(Number(positions[m.name]||0),lab)+"px";
-const a=document.createElement("div");a.className="pole "+m.left_pole.toLowerCase();a.textContent=m.left_pole;
-const b=document.createElement("div");b.className="pole "+m.right_pole.toLowerCase();b.textContent=m.right_pole;
-const n=document.createElement("div");n.className="name";n.textContent=m.name;el.append(a,b,n);lab.appendChild(el);
-if(!args.disabled){
-el.addEventListener("mousedown",e=>{
-if(e.button!==0)return;
-drag={name:m.name};
-e.preventDefault();
-});
-}}
-send("streamlit:setFrameHeight",{height:360});
-if(Array.isArray(args.trajectory)&&args.trajectory.length>1)playTrajectory(args.trajectory,lab);
+  positions=Object.assign({},args.positions||{});root.innerHTML="";
+  const lab=document.createElement("div");lab.className="lab "+(args.disabled?"disabled":"live");
+  const top=document.createElement("div");top.className="lab-top";
+  const badge=document.createElement("div");badge.className="lab-badge";badge.textContent="TRIOS · LAB";
+  const status=document.createElement("div");status.className="lab-status";const dot=document.createElement("i");status.appendChild(dot);const st=document.createElement("span");st.textContent=args.disabled?"":"LIVE";status.appendChild(st);top.append(badge,status);lab.appendChild(top);
+  const hint=document.createElement("div");hint.className="hint";hint.textContent=args.hint||"";lab.appendChild(hint);
+  const track=document.createElement("div");track.className="track";lab.appendChild(track);
+  const scale=document.createElement("div");scale.className="scale";for(let i=-4;i<=4;i++){const span=document.createElement("span");span.textContent=i===0?"0":(i>0?"+"+i:""+i);const em=document.createElement("em");span.appendChild(em);scale.appendChild(span)}lab.appendChild(scale);root.appendChild(lab);
+  for(const m of (args.magnets||[])){
+    const el=document.createElement("div");el.className="magnet"+(args.disabled?" disabled":"");el.dataset.name=m.name;el.style.left=px(Number(positions[m.name]||0),lab)+"px";
+    const body=document.createElement("div");body.className="magnet-body";const a=document.createElement("div");a.className="pole "+m.left_pole.toLowerCase();a.textContent=m.left_pole;const b=document.createElement("div");b.className="pole "+m.right_pole.toLowerCase();b.textContent=m.right_pole;const glint=document.createElement("div");glint.className="magnet-glint";body.append(a,b,glint);
+    const name=document.createElement("div");name.className="magnet-name";name.textContent=m.name;
+    const snap=document.createElement("div");snap.className="snap";const bullet=document.createElement("b");snap.append(bullet);const snapText=document.createElement("span");snapText.textContent=args.disabled?"":"drag";snap.append(snapText);
+    el.append(body,name,snap);lab.appendChild(el);
+    if(!args.disabled)el.addEventListener("pointerdown",e=>{if(e.button!==0)return;drag={name:m.name,pointerId:e.pointerId};el.classList.add("dragging");try{el.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()});
+  }
+  renderForces(lab,args.magnets||[]);send("streamlit:setFrameHeight",{height:560});if(Array.isArray(args.trajectory)&&args.trajectory.length>1)playTrajectory(args.trajectory,lab);
 }
-document.addEventListener("mousemove",e=>{
-if(!drag||args.disabled)return;
-const lab=document.querySelector(".lab");
-if(!lab)return;
-const r=lab.getBoundingClientRect();
-positions[drag.name]=Math.round(val(e.clientX-r.left,lab)*4)/4;
-const el=document.querySelector('.magnet[data-name="'+drag.name+'"]');
-if(el)el.style.left=px(positions[drag.name],lab)+"px";
-e.preventDefault();
-});
-document.addEventListener("mouseup",e=>{
-if(!drag||e.button!==0)return;
-publish();
-drag=null;
-});
-window.addEventListener("blur",()=>{drag=null});
-window.addEventListener("message",e=>{if(e.data&&e.data.type==="streamlit:render"){args=e.data.args||args;render()}});
-ready();
+document.addEventListener("pointermove",e=>{if(!drag||args.disabled)return;const lab=document.querySelector(".lab");if(!lab)return;const r=lab.getBoundingClientRect();positions[drag.name]=Math.round(val(e.clientX-r.left,lab)*4)/4;const el=lab.querySelector('.magnet[data-name="'+drag.name+'"]');if(el)el.style.left=px(positions[drag.name],lab)+"px";renderForces(lab,args.magnets||[])});
+document.addEventListener("pointerup",()=>{if(!drag)return;const lab=document.querySelector(".lab");const el=lab&&lab.querySelector('.magnet[data-name="'+drag.name+'"]');if(el)el.classList.remove("dragging");publish();drag=null});
+window.addEventListener("blur",()=>{drag=null});window.addEventListener("message",e=>{if(e.data&&e.data.type==="streamlit:render"){args=e.data.args||args;render()}});ready();
 })();
 </script>
 </body>
