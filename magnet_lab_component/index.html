@@ -37,13 +37,30 @@ const a=document.createElement("div");a.className="pole "+m.left_pole.toLowerCas
 const b=document.createElement("div");b.className="pole "+m.right_pole.toLowerCase();b.textContent=m.right_pole;
 const n=document.createElement("div");n.className="name";n.textContent=m.name;el.append(a,b,n);lab.appendChild(el);
 if(!args.disabled){
-el.addEventListener("pointerdown",e=>{drag={name:m.name,id:e.pointerId};el.setPointerCapture(e.pointerId);e.preventDefault()});
-el.addEventListener("pointermove",e=>{if(!drag||drag.id!==e.pointerId||drag.name!==m.name)return;const r=lab.getBoundingClientRect();positions[m.name]=Math.round(val(e.clientX-r.left,lab)*4)/4;el.style.left=px(positions[m.name],lab)+"px";e.preventDefault()});
-el.addEventListener("pointerup",e=>{if(!drag||drag.id!==e.pointerId)return;drag=null;publish();e.preventDefault()});
-el.addEventListener("pointercancel",()=>drag=null);
+el.addEventListener("mousedown",e=>{
+if(e.button!==0)return;
+drag={name:m.name};
+e.preventDefault();
+});
 }}
 send("streamlit:setFrameHeight",{height:360})
 }
+document.addEventListener("mousemove",e=>{
+if(!drag||args.disabled)return;
+const lab=document.querySelector(".lab");
+if(!lab)return;
+const r=lab.getBoundingClientRect();
+positions[drag.name]=Math.round(val(e.clientX-r.left,lab)*4)/4;
+const el=document.querySelector('.magnet[data-name="'+drag.name+'"]');
+if(el)el.style.left=px(positions[drag.name],lab)+"px";
+e.preventDefault();
+});
+document.addEventListener("mouseup",e=>{
+if(!drag||e.button!==0)return;
+publish();
+drag=null;
+});
+window.addEventListener("blur",()=>{drag=null});
 window.addEventListener("message",e=>{if(e.data&&e.data.type==="streamlit:render"){args=e.data.args||args;render()}});
 ready();
 })();
