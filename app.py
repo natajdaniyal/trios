@@ -529,6 +529,8 @@ FIRST_EXPERIMENT_TRANSLATIONS = {
         "stage_complete_copy": "هر سه چالش مرحلهٔ اول را پشت سر گذاشتی.",
         "coins_earned": "سکهٔ دریافت‌شده: +{amount}",
         "prediction_required": "اول پیش‌بینی خودت را بنویس.",
+        "experiment_drag_hint": "بعد از پیش‌بینی، آهنرباها را جابه‌جا کن.",
+        "prediction_lab_hint": "فعلاً فقط صحنه را بررسی کن؛ بعد از ثبت پیش‌بینی، کنترل آزمایش را در دست می‌گیری.",
     },
     "en": {
         "first_experiment_title": "Why is the three-body problem hard?",
@@ -552,6 +554,8 @@ FIRST_EXPERIMENT_TRANSLATIONS = {
         "stage_complete_copy": "You completed all three challenges in Stage 1.",
         "coins_earned": "Coins earned: +{amount}",
         "prediction_required": "Write your prediction first.",
+        "experiment_drag_hint": "After your prediction, drag the magnets into position.",
+        "prediction_lab_hint": "Study the scene first. After you submit your prediction, you take control of the experiment.",
     },
     "ar": {
         "first_experiment_title": "لماذا تصبح مسألة الأجسام الثلاثة صعبة؟",
@@ -575,6 +579,8 @@ FIRST_EXPERIMENT_TRANSLATIONS = {
         "stage_complete_copy": "أكملت التحديات الثلاثة في المرحلة الأولى.",
         "coins_earned": "العملات المكتسبة: +{amount}",
         "prediction_required": "اكتب توقعك أولًا.",
+        "experiment_drag_hint": "بعد التوقع، حرّك المغناطيسين إلى المواضع التي تريدها.",
+        "prediction_lab_hint": "راقب المشهد أولًا. بعد إرسال توقعك، ستتحكم في التجربة.",
     },
     "zh": {
         "first_experiment_title": "为什么三体问题很难？",
@@ -598,6 +604,8 @@ FIRST_EXPERIMENT_TRANSLATIONS = {
         "stage_complete_copy": "你完成了第 1 阶段的三个挑战。",
         "coins_earned": "获得金币：+{amount}",
         "prediction_required": "请先写下你的预测。",
+        "experiment_drag_hint": "提交预测后，拖动磁铁到你想要的位置。",
+        "prediction_lab_hint": "先观察场景。提交预测后，你就可以控制实验。",
     },
     "es": {
         "first_experiment_title": "¿Por qué es difícil el problema de tres cuerpos?",
@@ -621,6 +629,8 @@ FIRST_EXPERIMENT_TRANSLATIONS = {
         "stage_complete_copy": "Has completado los tres desafíos de la Etapa 1.",
         "coins_earned": "Monedas obtenidas: +{amount}",
         "prediction_required": "Escribe primero tu predicción.",
+        "experiment_drag_hint": "Después de tu predicción, arrastra los imanes a la posición que quieras.",
+        "prediction_lab_hint": "Observa la escena primero. Después de enviar tu predicción, controlarás el experimento.",
     },
     "fr": {
         "first_experiment_title": "Pourquoi le problème à trois corps est-il difficile ?",
@@ -644,6 +654,8 @@ FIRST_EXPERIMENT_TRANSLATIONS = {
         "stage_complete_copy": "Tu as terminé les trois défis de l'étape 1.",
         "coins_earned": "Pièces gagnées : +{amount}",
         "prediction_required": "Écris d'abord ta prédiction.",
+        "experiment_drag_hint": "Après ta prédiction, déplace les aimants jusqu’aux positions souhaitées.",
+        "prediction_lab_hint": "Observe d’abord la scène. Après avoir envoyé ta prédiction, tu prendras le contrôle de l’expérience.",
     },
     "de": {
         "first_experiment_title": "Warum ist das Dreikörperproblem schwierig?",
@@ -667,6 +679,8 @@ FIRST_EXPERIMENT_TRANSLATIONS = {
         "stage_complete_copy": "Du hast alle drei Aufgaben der Stufe 1 abgeschlossen.",
         "coins_earned": "Verdiente Münzen: +{amount}",
         "prediction_required": "Gib zuerst deine Vorhersage ein.",
+        "experiment_drag_hint": "Ziehe nach deiner Vorhersage die Magnete an die gewünschten Positionen.",
+        "prediction_lab_hint": "Schau dir zuerst die Szene an. Nach deiner Vorhersage übernimmst du die Kontrolle über das Experiment.",
     },
     "ja": {
         "first_experiment_title": "なぜ三体問題は難しいのでしょうか？",
@@ -690,6 +704,8 @@ FIRST_EXPERIMENT_TRANSLATIONS = {
         "stage_complete_copy": "ステージ1の3つのチャレンジをすべて完了しました。",
         "coins_earned": "獲得コイン：+{amount}",
         "prediction_required": "まず予想を書いてください。",
+        "experiment_drag_hint": "予測したら、磁石を好きな位置へドラッグしてください。",
+        "prediction_lab_hint": "まずはシーンを観察してください。予測を送信すると、実験を操作できます。",
     },
 }
 
@@ -2522,117 +2538,121 @@ def _render_game_styles():
     st.markdown(
         """
         <style>
-        .trios-game-shell{max-width:1120px;margin:1rem auto 0;}
-         .trios-full-experiment{max-width:none!important;width:100%;margin:0 auto;padding:0 1.25rem 2rem;}
-         .trios-full-experiment .trios-bot-card{margin:0 0 .9rem;border-radius:20px;}
-         .trios-full-experiment .trios-game-hud{margin:.35rem 0 .75rem;}
-         .trios-experiment-bottom-controls{display:flex;justify-content:center;margin:1rem 0 0;}
-         .trios-experiment-bottom-controls > div{min-width:170px;}
-        .trios-challenge-flow{display:flex;align-items:center;gap:.45rem;margin:.35rem 0 .95rem;padding:.4rem .55rem;border-radius:18px;background:rgba(255,255,255,.025);border:1px solid rgba(183,210,255,.10);}
-        .trios-flow-step{display:flex;align-items:center;gap:.42rem;min-width:0;color:#8091b8;font-size:.78rem;white-space:nowrap;transition:color .2s ease,transform .2s ease;}
-        .trios-flow-step.active{color:#ecf5ff;transform:translateY(-1px);}
-        .trios-flow-step.done{color:#9fe9ff;}
-        .trios-flow-dot{position:relative;width:30px;height:30px;display:grid;place-items:center;border-radius:10px;border:1px solid rgba(183,210,255,.13);background:rgba(255,255,255,.045);color:#93a4c8;}
-        .trios-flow-step.active .trios-flow-dot{background:linear-gradient(145deg,rgba(95,201,255,.22),rgba(170,116,255,.20));border-color:rgba(130,215,255,.35);color:#fff;box-shadow:0 0 24px rgba(92,193,255,.14);}
-        .trios-flow-step.done .trios-flow-dot{background:rgba(108,226,205,.10);border-color:rgba(108,226,205,.25);color:#b3ffe8;}
-        .trios-flow-dot b{position:absolute;right:-4px;top:-5px;width:14px;height:14px;display:grid;place-items:center;border-radius:50%;font-size:.58rem;background:#101a36;color:#dce9ff;border:1px solid rgba(255,255,255,.10);}
-        .trios-flow-connector{height:1px;flex:1;min-width:24px;background:rgba(183,210,255,.10);}
-        .trios-flow-connector.done{background:linear-gradient(90deg,rgba(104,221,255,.32),rgba(174,129,255,.42));}
-        .trios-section-card{margin:.2rem 0 .7rem;padding:.85rem 1rem;border-radius:18px;background:linear-gradient(145deg,rgba(78,189,255,.07),rgba(174,119,255,.06)),rgba(255,255,255,.025);border:1px solid rgba(159,209,255,.11);}
-        .trios-section-kicker{display:flex;align-items:center;gap:.42rem;color:#ecf4ff;font-weight:800;}
-        .trios-section-card p{margin:.28rem 0 0;color:#9cafce;font-size:.86rem;}
-        .trios-prediction-lock{display:flex;align-items:flex-start;gap:.75rem;margin:.3rem 0 .8rem;padding:.82rem 1rem;border-radius:18px;background:linear-gradient(145deg,rgba(102,231,255,.08),rgba(174,119,255,.07)),rgba(255,255,255,.025);border:1px solid rgba(159,209,255,.12);}
-        .trios-prediction-lock-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:11px;background:rgba(102,219,255,.10);color:#bfefff;flex:0 0 auto;}
-        .trios-prediction-lock div{display:flex;flex-direction:column;gap:.18rem;min-width:0;}
-        .trios-prediction-lock span{color:#8ea2c8;font-size:.74rem;}
-        .trios-prediction-lock strong{color:#edf4ff;font-size:.92rem;line-height:1.45;word-break:break-word;}
-        .trios-run-panel{margin:.8rem 0 0;}
-        .trios-run-panel > div:first-child{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.55rem;padding:0 .1rem;}
-        .trios-run-panel > div:first-child > span{color:#eef5ff;font-weight:800;}
-        .trios-run-panel > div:first-child > small{color:#8da2c9;font-size:.76rem;text-align:right;}
-        .trios-result-banner{display:flex;align-items:center;gap:.8rem;margin:.9rem 0 .75rem;padding:.85rem 1rem;border-radius:18px;background:linear-gradient(145deg,rgba(102,231,255,.08),rgba(183,119,255,.08)),rgba(255,255,255,.025);border:1px solid rgba(159,209,255,.13);}
-        .trios-result-banner > div:last-child{display:flex;flex-direction:column;gap:.1rem;}
-        .trios-result-banner strong{color:#f7fbff;font-size:.98rem;}
-        .trios-result-banner small{color:#8fa5c9;font-size:.75rem;}
-        .trios-result-kicker{color:#8fdfff;text-transform:uppercase;letter-spacing:.09em;font-size:.68rem;font-weight:800;}
-        .trios-result-icon{width:38px;height:38px;display:grid;place-items:center;flex:0 0 auto;border-radius:13px;background:linear-gradient(145deg,rgba(92,213,255,.15),rgba(183,126,255,.14));border:1px solid rgba(176,221,255,.14);color:#dff7ff;}
-        .trios-bot-result{display:flex;align-items:flex-start;gap:.8rem;margin:.8rem 0;padding:1rem 1.05rem;border-radius:20px;background:rgba(255,255,255,.028);border:1px solid rgba(183,210,255,.11);}
-        .trios-bot-result.correct{box-shadow:0 16px 40px rgba(55,202,184,.07);}
-        .trios-bot-result.incorrect{box-shadow:0 16px 40px rgba(255,104,140,.06);}
-        .trios-bot-result p{margin:.32rem 0 0;color:#cbd8ee;line-height:1.55;}
+        .trios-game-shell{max-width:1180px;margin:.4rem auto 0;}
+        .trios-full-experiment{max-width:1180px!important;width:100%;margin:0 auto;padding:0 1rem 2.5rem;}
+        .trios-full-experiment *{box-sizing:border-box;}
+        .trios-control-rail{display:flex;justify-content:flex-end;align-items:center;gap:.55rem;min-height:42px;margin:.1rem 0 .25rem;}
+        .trios-lab-header{display:flex;align-items:flex-end;justify-content:space-between;gap:1.2rem;margin:.15rem 0 .5rem;}
+        .trios-lab-heading{min-width:0;}
+        .trios-lab-kicker{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#7890bd;font-weight:800;margin-bottom:.22rem;}
+        .trios-lab-title{font-size:clamp(1.2rem,2vw,1.65rem);line-height:1.15;font-weight:850;color:#f4f8ff;letter-spacing:-.02em;}
+        .trios-lab-meta{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:flex-end;}
+        .trios-meta-chip{display:flex;align-items:center;gap:.35rem;padding:.38rem .62rem;border-radius:999px;border:1px solid rgba(183,210,255,.11);background:rgba(255,255,255,.035);color:#b7c7e7;font-size:.72rem;white-space:nowrap;}
+        .trios-progress-line{display:flex;justify-content:space-between;color:#7186ad;font-size:.69rem;font-weight:700;margin-top:.7rem;}
+        .trios-stage-track{height:5px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.055);margin:.35rem 0 .8rem;}
+        .trios-stage-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#5fe0ff,#9c83ff,#ef8fcf);box-shadow:0 0 16px rgba(112,205,255,.28);}
+        .trios-mission-card{display:flex;gap:.85rem;align-items:center;margin:.45rem 0 .7rem;padding:.75rem .85rem;border:1px solid rgba(157,213,255,.11);border-radius:18px;background:linear-gradient(135deg,rgba(75,177,255,.075),rgba(176,116,255,.055)),rgba(6,11,26,.72);box-shadow:0 12px 30px rgba(0,0,0,.12);}
+        .trios-bot-avatar{flex:0 0 42px;width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(118,229,255,.14),rgba(191,132,255,.13));border:1px solid rgba(177,221,255,.14);color:#eafaff;}
+        .trios-mission-copy{min-width:0;display:flex;flex-direction:column;gap:.15rem;}
+        .trios-mission-copy span{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:#7da0ce;font-weight:800;}
+        .trios-mission-copy strong{font-size:.94rem;line-height:1.5;color:#edf4ff;font-weight:750;}
+        .trios-prediction-card{margin:.8rem 0 .48rem;padding:.72rem .85rem;border-radius:16px;border:1px solid rgba(164,207,255,.10);background:rgba(255,255,255,.025);}
+        .trios-card-kicker{display:flex;align-items:center;gap:.35rem;color:#dceaff;font-weight:800;font-size:.82rem;}
+        .trios-card-copy{margin-top:.18rem;color:#7187af;font-size:.74rem;}
+        .trios-prediction-lock{display:flex;align-items:flex-start;gap:.7rem;margin:.55rem 0 .65rem;padding:.7rem .82rem;border-radius:15px;background:rgba(255,255,255,.028);border:1px solid rgba(159,209,255,.10);}
+        .trios-prediction-lock-icon{width:29px;height:29px;display:grid;place-items:center;border-radius:10px;background:rgba(94,214,255,.08);color:#bcefff;flex:0 0 auto;}
+        .trios-prediction-lock div{display:flex;flex-direction:column;gap:.1rem;min-width:0;}
+        .trios-prediction-lock span{color:#7086ad;font-size:.69rem;}
+        .trios-prediction-lock strong{color:#e8f1ff;font-size:.83rem;line-height:1.45;word-break:break-word;}
+        .trios-run-panel{margin:.65rem 0 0;}
+        .trios-run-panel > div:first-child{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.42rem;padding:0 .05rem;}
+        .trios-run-panel > div:first-child > span{color:#edf4ff;font-weight:800;font-size:.83rem;}
+        .trios-run-panel > div:first-child > small{color:#7187ad;font-size:.68rem;text-align:right;}
+        .trios-result-banner{display:flex;align-items:center;gap:.75rem;margin:.7rem 0 .55rem;padding:.72rem .82rem;border-radius:16px;background:linear-gradient(145deg,rgba(100,226,255,.07),rgba(183,119,255,.07)),rgba(255,255,255,.022);border:1px solid rgba(159,209,255,.11);}
+        .trios-result-banner > div:last-child{display:flex;flex-direction:column;gap:.08rem;}
+        .trios-result-banner strong{color:#f3f8ff;font-size:.9rem;}
+        .trios-result-banner small{color:#8195b9;font-size:.68rem;}
+        .trios-result-kicker{color:#8ddfff;text-transform:uppercase;letter-spacing:.09em;font-size:.62rem;font-weight:850;}
+        .trios-result-icon{width:34px;height:34px;display:grid;place-items:center;flex:0 0 auto;border-radius:11px;background:linear-gradient(145deg,rgba(92,213,255,.13),rgba(183,126,255,.12));border:1px solid rgba(176,221,255,.12);color:#dff7ff;}
+        .trios-bot-result{display:flex;align-items:flex-start;gap:.72rem;margin:.65rem 0;padding:.84rem .9rem;border-radius:17px;background:rgba(255,255,255,.024);border:1px solid rgba(183,210,255,.095);}
+        .trios-bot-result.correct{box-shadow:0 16px 36px rgba(55,202,184,.055);}
+        .trios-bot-result.incorrect{box-shadow:0 16px 36px rgba(255,104,140,.05);}
+        .trios-bot-result p{margin:.28rem 0 0;color:#c3d2ea;line-height:1.52;font-size:.82rem;}
+        .trios-completion-card{display:flex;align-items:center;gap:1rem;margin:.9rem 0;padding:1rem 1.1rem;border-radius:20px;border:1px solid rgba(159,209,255,.12);background:linear-gradient(145deg,rgba(101,226,255,.08),rgba(184,127,255,.08)),rgba(255,255,255,.025);}
+        .trios-completion-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(145deg,rgba(103,226,255,.14),rgba(181,128,255,.13));color:#e8fbff;}
+        .trios-completion-card span{font-size:.66rem;text-transform:uppercase;letter-spacing:.1em;color:#7892bc;font-weight:800;}
+        .trios-completion-card h2{margin:.12rem 0 .18rem;color:#f5f9ff;font-size:1.25rem;}
+        .trios-completion-card p{margin:0 0 .18rem;color:#9cafce;}
+        .trios-completion-card strong{color:#aef0ff;font-size:.82rem;}
+        .trios-full-experiment div[data-testid="stTextArea"] textarea,
+        .trios-full-experiment [data-baseweb="textarea"] textarea,
+        .trios-full-experiment textarea,
+        .trios-full-experiment textarea:focus{
+            color:#f4f8ff!important;
+            -webkit-text-fill-color:#f4f8ff!important;
+            caret-color:#8fe9ff!important;
+            background:linear-gradient(145deg,rgba(17,28,57,.96),rgba(8,15,33,.96))!important;
+            border:1px solid rgba(134,203,255,.20)!important;
+            border-radius:16px!important;
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 10px 26px rgba(0,0,0,.11)!important;
+            font-size:.95rem!important;
+            line-height:1.6!important;
+            padding:.85rem 1rem!important;
+            color-scheme:dark!important;
+        }
+        .trios-full-experiment div[data-testid="stTextArea"] textarea::placeholder,
+        .trios-full-experiment textarea::placeholder{
+            color:#667da7!important;
+            -webkit-text-fill-color:#667da7!important;
+            opacity:1!important;
+        }
+        .trios-full-experiment div[data-testid="stTextArea"] textarea:focus{
+            border-color:rgba(110,222,255,.46)!important;
+            box-shadow:0 0 0 1px rgba(110,222,255,.14),0 14px 32px rgba(34,130,190,.10)!important;
+        }
         .trios-full-experiment div[data-testid="stButton"] button,
-        .trios-full-experiment div[data-testid="stPopover"] > button,
-        .trios-full-experiment button[data-testid="baseButton-secondary"],
-        .trios-full-experiment button[data-testid="stBaseButton-secondary"]{
-            color:#eef6ff!important;
-            -webkit-text-fill-color:#eef6ff!important;
-            background:linear-gradient(145deg,rgba(84,190,255,.12),rgba(176,118,255,.10)),rgba(11,18,40,.86)!important;
-            border:1px solid rgba(159,211,255,.18)!important;
-            border-radius:15px!important;
-            box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 10px 24px rgba(0,0,0,.14)!important;
-            transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease,background .16s ease!important;
+        .trios-full-experiment div[data-testid="stPopover"] button,
+        .trios-full-experiment button[data-testid*="stBaseButton"],
+        .trios-full-experiment button[kind="secondary"]{
+            color:#eef7ff!important;
+            -webkit-text-fill-color:#eef7ff!important;
+            background:linear-gradient(145deg,rgba(58,158,220,.16),rgba(143,100,224,.13)),rgba(8,16,35,.94)!important;
+            border:1px solid rgba(142,215,255,.20)!important;
+            border-radius:14px!important;
+            min-height:40px!important;
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 9px 22px rgba(0,0,0,.14)!important;
         }
         .trios-full-experiment div[data-testid="stButton"] button:hover,
-        .trios-full-experiment div[data-testid="stPopover"] > button:hover,
-        .trios-full-experiment button[data-testid="baseButton-secondary"]:hover,
-        .trios-full-experiment button[data-testid="stBaseButton-secondary"]:hover{
+        .trios-full-experiment div[data-testid="stPopover"] button:hover{
+            border-color:rgba(137,227,255,.42)!important;
+            box-shadow:0 12px 26px rgba(61,179,239,.10),inset 0 1px 0 rgba(255,255,255,.07)!important;
             transform:translateY(-1px);
-            border-color:rgba(145,224,255,.38)!important;
-            box-shadow:0 12px 30px rgba(83,191,255,.10),inset 0 1px 0 rgba(255,255,255,.07)!important;
         }
-        .trios-full-experiment div[data-testid="stPopover"] > button svg,
-        .trios-full-experiment div[data-testid="stButton"] button svg{color:#bfeeff!important;fill:currentColor!important;}
-        .trios-full-experiment div[data-testid="stPopover"]{margin-bottom:.15rem;}
-        .trios-game-hud{display:flex;gap:.65rem;align-items:center;flex-wrap:wrap;margin:.75rem 0 1rem;}
-        .trios-hud-chip{display:flex;align-items:center;gap:.45rem;padding:.55rem .85rem;border-radius:999px;border:1px solid rgba(183,210,255,.15);background:rgba(255,255,255,.055);color:#edf4ff;box-shadow:inset 0 1px 0 rgba(255,255,255,.05);font-size:.88rem;}
-        .trios-hud-chip svg{flex:0 0 auto;}
-        .trios-bot-card{display:flex;gap:1rem;align-items:flex-start;padding:1rem 1.1rem;border-radius:22px;border:1px solid rgba(132,195,255,.2);background:linear-gradient(145deg,rgba(81,180,255,.1),rgba(180,113,255,.08)),rgba(9,14,33,.72);box-shadow:0 16px 40px rgba(0,0,0,.18);margin-bottom:1rem;}
-        .trios-bot-avatar{flex:0 0 46px;width:46px;height:46px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(131,231,255,.18),rgba(189,146,255,.18));border:1px solid rgba(174,219,255,.18);}
-        .trios-bot-copy strong{display:block;color:#fff;margin-bottom:.2rem;}
-        .trios-bot-copy span{color:#d9e4ff;line-height:1.55;}
-        .trios-scene{position:relative;min-height:340px;overflow:hidden;border-radius:28px;border:1px solid rgba(159,209,255,.18);background:radial-gradient(circle at 50% 42%,rgba(95,193,255,.1),transparent 35%),radial-gradient(circle at 18% 20%,rgba(190,126,255,.08),transparent 20%),linear-gradient(180deg,rgba(9,15,36,.92),rgba(7,11,27,.96));box-shadow:0 26px 70px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.05);}
-        .trios-scene::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 12% 22%,rgba(255,255,255,.36) 0 1px,transparent 1.5px),radial-gradient(circle at 31% 68%,rgba(255,255,255,.22) 0 1px,transparent 1.5px),radial-gradient(circle at 73% 18%,rgba(255,255,255,.28) 0 1px,transparent 1.5px),radial-gradient(circle at 87% 61%,rgba(255,255,255,.24) 0 1px,transparent 1.5px),radial-gradient(circle at 57% 81%,rgba(255,255,255,.2) 0 1px,transparent 1.5px);pointer-events:none;}
-        .trios-scene-title{position:absolute;left:1rem;top:.9rem;color:#b6c9ef;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;}
-        .trios-scene-note{position:absolute;right:1rem;top:.85rem;padding:.45rem .7rem;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#e9f0ff;font-size:.78rem;}
-        .trios-force-line{position:absolute;top:53%;height:2px;background:linear-gradient(90deg,transparent,rgba(134,223,255,.72),transparent);filter:drop-shadow(0 0 8px rgba(115,205,255,.55));opacity:.25;}
-        .trios-force-line.two{left:30%;width:40%;}.trios-force-line.three-a{left:17%;width:27%;}.trios-force-line.three-b{left:56%;width:27%;}
-        .trios-magnet{position:absolute;top:47%;width:150px;height:52px;transform:translate(-50%,-50%);display:flex;overflow:visible;border-radius:12px;border:2px solid rgba(255,255,255,.24);box-shadow:0 10px 28px rgba(0,0,0,.34),0 0 30px rgba(101,204,255,.1);transition:filter .3s;}
-        .trios-magnet .mag-half{width:50%;height:100%;display:grid;place-items:center;font-size:1rem;font-weight:900;color:#fff;letter-spacing:.04em;}
-        .trios-magnet .mag-half.n{background:linear-gradient(145deg,#ff667a,#ba304f);}
-        .trios-magnet .mag-half.s{background:linear-gradient(145deg,#4eafff,#24579c);}
-        .trios-magnet .mag-half:first-child{border-radius:10px 0 0 10px;}.trios-magnet .mag-half:last-child{border-radius:0 10px 10px 0;}
-        .trios-magnet small{position:absolute;left:50%;bottom:-1.7rem;transform:translateX(-50%);font-size:.72rem;font-weight:700;color:#aebddd;white-space:nowrap;}
-        .trios-scene .trios-force-line{opacity:.5;transition:opacity .2s ease,left .2s ease,width .2s ease;}
-        .trios-scene.physics-live .trios-force-line{opacity:.95;}
-        .trios-magnet{transition:left .2s ease,top .2s ease,filter .2s ease;}
-        .trios-hint-pill{margin:.65rem 0;padding:.7rem 1rem;border-radius:16px;background:rgba(255,193,92,.08);border:1px solid rgba(255,193,92,.18);color:#ffe7ae;}
-        .trios-choice-card{padding:1.1rem;border-radius:22px;border:1px solid rgba(164,204,255,.14);background:rgba(255,255,255,.035);}
-        .trios-stage-track{height:8px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.07);margin:.6rem 0 .2rem;}
-        .trios-stage-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#67e8ff,#a87cff,#ef8cff);box-shadow:0 0 18px rgba(127,185,255,.28);}
-        div[data-testid="stTextArea"] textarea,
-        div[data-testid="stTextArea"] textarea:focus,
-        [data-baseweb="textarea"] textarea,
-        [data-baseweb="textarea"] textarea:focus,
-        textarea{color:#f7f9ff!important;-webkit-text-fill-color:#f7f9ff!important;caret-color:#9fe9ff!important;background:rgba(255,255,255,.07)!important;border-color:rgba(183,210,255,.22)!important;font-size:1rem!important;line-height:1.6!important;}
-        div[data-testid="stTextArea"] textarea::placeholder{color:rgba(224,234,255,.55)!important;-webkit-text-fill-color:rgba(224,234,255,.55)!important;}
-        div[data-testid="stTextArea"] label{color:#eef4ff!important;}
+        .trios-full-experiment button svg{color:#bcefff!important;fill:currentColor!important;}
+        .trios-full-experiment [data-testid="stPopover"]{margin:0!important;}
         </style>
         """,
+        unsafe_allow_html=True,
+    )
+,
         unsafe_allow_html=True,
     )
 
 
 def _magnet_visual_definition(challenge):
     if challenge.scenario_id == "opposite-poles":
+        # Facing poles are N-S -> attraction.
         return (
             {"name": "A", "left_pole": "S", "right_pole": "N"},
-            {"name": "B", "left_pole": "N", "right_pole": "S"},
+            {"name": "B", "left_pole": "S", "right_pole": "N"},
         )
     if challenge.scenario_id == "same-poles":
+        # Facing poles are N-N -> repulsion.
         return (
             {"name": "A", "left_pole": "S", "right_pole": "N"},
             {"name": "B", "left_pole": "N", "right_pole": "S"},
         )
+    # N-S-N: the center magnet interacts with both outer magnets.
     return (
         {"name": "A", "left_pole": "S", "right_pole": "N"},
         {"name": "B", "left_pole": "N", "right_pole": "S"},
@@ -2655,12 +2675,13 @@ def _render_first_experiment_lab(
     positions,
     disabled=False,
     trajectory=None,
+    hint=None,
 ):
     value = _render_magnet_lab(
         magnets=_magnet_visual_definition(challenge),
         positions=positions,
         disabled=disabled,
-        hint=t("experiment_drag_hint"),
+        hint=hint or t("experiment_drag_hint"),
         trajectory=trajectory,
         key=f"magnet_lab_{index}",
     )
@@ -2680,17 +2701,26 @@ def _render_first_experiment_lab(
 
 
 
-def _render_game_hud(profile,index,total):
-    progress=ensure_experiment_progress(profile)
-    coins=progress["coins"]
-    percent=int(((index+1)/total)*100)
+def _render_game_hud(profile, index, total):
+    progress = ensure_experiment_progress(profile)
+    coins = progress["coins"]
+    percent = int(((index + 1) / total) * 100)
     st.markdown(
-        f'<div class="trios-game-hud">'
-        f'<div class="trios-hud-chip">{trios_icon("lab",18)}<strong>{t("stage_label")} 1</strong></div>'
-        f'<div class="trios-hud-chip">{trios_icon("target",18)}<strong>{t("challenge_label")} {index+1}/{total}</strong></div>'
-        f'<div class="trios-hud-chip">{trios_icon("coin",18)}<strong>{coins}</strong> {t("coins")}</div>'
-        f'<div style="flex:1;min-width:180px;"><div style="display:flex;justify-content:space-between;color:#9fb0d3;font-size:.78rem;"><span>{t("progress")}</span><span>{percent}%</span></div>'
-        f'<div class="trios-stage-track"><div class="trios-stage-fill" style="width:{percent}%"></div></div></div></div>',
+        f'<div class="trios-lab-header">'
+        f'<div class="trios-lab-heading">'
+        f'<div class="trios-lab-kicker">{t("stage_one")} · {t("challenge_label")} {index + 1}/{total}</div>'
+        f'<div class="trios-lab-title">{t("first_experiment_title")}</div>'
+        f'</div>'
+        f'<div class="trios-lab-meta">'
+        f'<span class="trios-meta-chip">{trios_icon("lab",15)} {t("stage_one")}</span>'
+        f'<span class="trios-meta-chip">{trios_icon("coin",15)} {coins}</span>'
+        f'</div>'
+        f'</div>'
+        f'<div class="trios-progress-line">'
+        f'<span>{t("progress")}</span>'
+        f'<span>{percent}%</span>'
+        f'</div>'
+        f'<div class="trios-stage-track"><div class="trios-stage-fill" style="width:{percent}%"></div></div>',
         unsafe_allow_html=True,
     )
 
@@ -2868,17 +2898,19 @@ def _render_first_experiment():
 
     if st.session_state.get("first_experiment_stage_completed") and not st.session_state.get("first_experiment_active", False):
         st.markdown(
-            f'<div class="trios-page-card"><h2>{t("stage_complete")}</h2>'
+            f'<div class="trios-completion-card">'
+            f'<div class="trios-completion-icon">{trios_icon("trophy",28)}</div>'
+            f'<div><span>{t("stage_one")}</span><h2>{t("stage_complete")}</h2>'
             f'<p>{t("stage_complete_copy")}</p>'
-            f'<p>{t("stage_reward", amount=st.session_state.get("first_experiment_last_reward", 0))}</p></div>',
+            f'<strong>{t("stage_reward", amount=st.session_state.get("first_experiment_last_reward", 0))}</strong></div></div>',
             unsafe_allow_html=True,
         )
-        st.markdown(
-            f'<div style="display:flex;align-items:center;gap:.5rem;">'
-            f'{trios_icon("refresh",20)}<strong>{t("replay_experiment")}</strong></div>',
-            unsafe_allow_html=True,
-        )
-        if st.button(t("replay_experiment"), use_container_width=True, key="first_experiment_retry_stage"):
+        if st.button(
+            t("replay_experiment"),
+            icon=":material/replay:",
+            use_container_width=True,
+            key="first_experiment_retry_stage",
+        ):
             st.session_state.first_experiment_active = True
             st.session_state.first_experiment_challenge_index = 0
             st.session_state.first_experiment_completion_recorded = True
@@ -2891,44 +2923,35 @@ def _render_first_experiment():
 
     prediction_submitted = bool(st.session_state.get("first_experiment_prediction_submitted"))
     result = st.session_state.get("first_experiment_result")
-
-    flow_state = 0 if not prediction_submitted else (2 if result is not None else 1)
-    flow_steps = [
-        ("target", t("prediction_label")),
-        ("lab", t("run_experiment")),
-        ("robot", t("bot_label")),
-    ]
-    flow_html = '<div class="trios-challenge-flow">'
-    for step_index, (icon_name, label) in enumerate(flow_steps):
-        state = "done" if step_index < flow_state else ("active" if step_index == flow_state else "")
-        number = step_index + 1
-        flow_html += (
-            f'<div class="trios-flow-step {state}">'
-            f'<span class="trios-flow-dot">{trios_icon(icon_name,17)}<b>{number}</b></span>'
-            f'<span>{label}</span></div>'
-        )
-        if step_index < len(flow_steps) - 1:
-            connector = "done" if step_index < flow_state else ""
-            flow_html += f'<span class="trios-flow-connector {connector}"></span>'
-    flow_html += "</div>"
-    st.markdown(flow_html, unsafe_allow_html=True)
+    initial_positions = _get_first_experiment_positions(challenge)
 
     st.markdown(
-        f'<div class="trios-bot-card">'
-        f'<div class="trios-bot-avatar">{trios_icon("robot",28)}</div>'
-        f'<div class="trios-bot-copy"><strong>{t("bot_label")}</strong>'
-        f'<span>{challenge.question(current_language())}</span></div></div>',
+        f'<div class="trios-mission-card">'
+        f'<div class="trios-bot-avatar">{trios_icon("robot",24)}</div>'
+        f'<div class="trios-mission-copy">'
+        f'<span>{t("bot_label")}</span>'
+        f'<strong>{challenge.question(current_language())}</strong>'
+        f'</div></div>',
         unsafe_allow_html=True,
     )
 
-    initial_positions = _get_first_experiment_positions(challenge)
+    # The physical scene is visible even while the Bot asks the question.
+    # It is locked until the learner submits a prediction.
+    if not prediction_submitted and result is None:
+        _render_first_experiment_lab(
+            challenge,
+            index,
+            initial_positions,
+            disabled=True,
+            trajectory=None,
+            hint=t("prediction_lab_hint"),
+        )
 
-    if not prediction_submitted:
         st.markdown(
-            f'<div class="trios-section-card">'
-            f'<div class="trios-section-kicker">{trios_icon("target",18)}'
-            f'<span>{t("prediction_label")}</span></div>'
-            f'<p>{t("prediction_placeholder")}</p></div>',
+            f'<div class="trios-prediction-card">'
+            f'<div class="trios-card-kicker">{trios_icon("target",17)} {t("prediction_label")}</div>'
+            f'<div class="trios-card-copy">{t("prediction_placeholder")}</div>'
+            f'</div>',
             unsafe_allow_html=True,
         )
         prediction_key = f"first_experiment_prediction_input_{index}"
@@ -2936,7 +2959,7 @@ def _render_first_experiment():
             t("prediction_label"),
             placeholder=t("prediction_placeholder"),
             key=prediction_key,
-            height=120,
+            height=110,
             label_visibility="collapsed",
         )
         if st.button(
@@ -2959,9 +2982,6 @@ def _render_first_experiment():
                 st.rerun()
         return
 
-    # Once the prediction is submitted, the learner immediately gets the real lab.
-    # There is no intermediate confirmation button: the learner moves the magnets
-    # and then presses one single "Run experiment" action.
     if result is None:
         prediction_text = st.session_state.get("first_experiment_prediction", "")
         st.markdown(
@@ -2977,6 +2997,7 @@ def _render_first_experiment():
             initial_positions,
             disabled=False,
             trajectory=None,
+            hint=t("experiment_drag_hint"),
         )
 
         st.markdown(
@@ -3003,8 +3024,6 @@ def _render_first_experiment():
         st.markdown("</div>", unsafe_allow_html=True)
         return
 
-    # The experiment is complete: the physics result and TRIOS-Bot explanation
-    # appear automatically. There is deliberately no "Show result" button.
     _show_first_experiment_result(challenge)
 
     evaluation = st.session_state.get("first_experiment_evaluation")
@@ -3038,19 +3057,15 @@ def _render_first_experiment():
             _reset_first_experiment_challenge()
             st.rerun()
 
-
-
 def show_lab():
     _render_game_styles()
     st.markdown('<div class="trios-game-shell trios-full-experiment">', unsafe_allow_html=True)
+    st.markdown('<div class="trios-control-rail">', unsafe_allow_html=True)
     _render_experiment_controls()
-    _render_first_experiment()
-    st.markdown(
-        '<div class="trios-experiment-bottom-controls">',
-        unsafe_allow_html=True,
-    )
     _render_experiment_hint_control()
-    st.markdown("</div></div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+    _render_first_experiment()
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 def show_report():
