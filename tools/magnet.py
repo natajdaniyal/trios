@@ -22,6 +22,7 @@ class Magnet(Body):
 
         self.strength = strength
         self.pole = pole
+        self.collision_radius = 0.62
 
 
     def is_north(self):
