@@ -24,9 +24,26 @@ function ready(){send("streamlit:componentReady",{apiVersion:1});send("streamlit
 function px(x,lab){const w=lab.clientWidth,l=w*.08,u=w*.84;return l+((x+4)/8)*u}
 function val(p,lab){const w=lab.clientWidth,l=w*.08,u=w*.84;return Math.max(-4,Math.min(4,((p-l)/u)*8-4))}
 function publish(){send("streamlit:setComponentValue",{valueType:"json",value:Object.assign({},positions)})}
+function playTrajectory(frames,lab){
+ if(!Array.isArray(frames)||frames.length<2||args.disabled!==true)return;
+ const magnets=args.magnets||[];
+ let frame=0;
+ const apply=()=>{
+   if(frame>=frames.length)return;
+   const snapshot=frames[frame]||[];
+   for(const body of snapshot){
+     positions[body.name]=Number(body.position_x)||0;
+     const el=document.querySelector('.magnet[data-name="'+body.name+'"]');
+     if(el)el.style.left=px(positions[body.name],lab)+"px";
+   }
+   frame+=1;
+   if(frame<frames.length) window.setTimeout(apply,70);
+ };
+ apply();
+}
 function render(){
 positions=Object.assign({},args.positions||{});root.innerHTML="";
-const lab=document.createElement("div");lab.className="lab";
+const lab=document.createElement("div");lab.className="lab physics-lab";
 const grid=document.createElement("div");grid.className="grid";lab.appendChild(grid);
 const hint=document.createElement("div");hint.className="hint";hint.textContent=args.disabled?"Experiment is running":(args.hint||"Drag a magnet to choose its position");lab.appendChild(hint);
 for(const [text,cls] of [["-4","left"],["+4","right"]]){const a=document.createElement("div");a.className="axis "+cls;a.textContent=text;lab.appendChild(a)}
@@ -43,7 +60,8 @@ drag={name:m.name};
 e.preventDefault();
 });
 }}
-send("streamlit:setFrameHeight",{height:360})
+send("streamlit:setFrameHeight",{height:360});
+if(Array.isArray(args.trajectory)&&args.trajectory.length>1)playTrajectory(args.trajectory,lab);
 }
 document.addEventListener("mousemove",e=>{
 if(!drag||args.disabled)return;
