@@ -7,7 +7,7 @@ reports, or UI widgets.
 
 from dataclasses import dataclass
 
-from bot_configuration import BotConfiguration, KeywordMatcher
+from bot_configuration import BotConfiguration, KeywordMatcher, normalize_text
 
 
 @dataclass(frozen=True)
@@ -41,9 +41,12 @@ class BotRuntime:
     def evaluate(self, answer, language):
         """Evaluate one learner answer against the configured Bot rules."""
         # KeywordMatcher performs the answer type and language validation.
-        matched_keywords = tuple(
-            self._matcher.matched_keywords(answer, language)
-        )
+        canonical = "".join(char for char in normalize_text(self.configuration.answer(language)) if char.isalnum())
+        submitted = "".join(char for char in normalize_text(answer) if char.isalnum())
+        if canonical and canonical in submitted:
+            matched_keywords = tuple(self.configuration.keywords(language))
+        else:
+            matched_keywords = tuple(self._matcher.matched_keywords(answer, language))
         match_count = len(matched_keywords)
         required_matches = self.configuration.minimum_matches
 
