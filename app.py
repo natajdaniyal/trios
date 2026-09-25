@@ -2634,9 +2634,6 @@ def _render_game_styles():
         """,
         unsafe_allow_html=True,
     )
-,
-        unsafe_allow_html=True,
-    )
 
 
 def _magnet_visual_definition(challenge):
