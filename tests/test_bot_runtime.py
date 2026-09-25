@@ -91,3 +91,11 @@ def test_bot_runtime_delegates_validation():
         runtime.evaluate("gravity", "it")
 
 
+
+
+def test_bot_accepts_persian_spacing_variants():
+    from first_experiment import first_stage_challenges
+    from first_experiment_runtime import evaluate_challenge_prediction
+    challenge = first_stage_challenges()[2]
+    answer = "هر آهن‌ربا هم زمان از دو آهنربای دیگر تأثیر می‌گیرد؛ بنابراین حرکت هرکدام به حرکت بقیه وابسته است."
+    assert evaluate_challenge_prediction(challenge, answer, "fa").is_correct is True
