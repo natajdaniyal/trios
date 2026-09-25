@@ -15,6 +15,21 @@ MAGNETIC_FORCE_STRENGTH = 10.0
 DEFAULT_TIME_STEP = 0.01
 
 
+def _resolve_positions(default_positions, positions):
+    if positions is None:
+        return dict(default_positions)
+    if not isinstance(positions, dict):
+        raise TypeError("positions must be a dictionary.")
+    if set(positions) != set(default_positions):
+        raise ValueError("positions must contain exactly the expected magnet names.")
+    resolved = {}
+    for name, value in positions.items():
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise TypeError(f"Position for magnet {name!r} must be a number.")
+        resolved[name] = float(value)
+    return resolved
+
+
 def _simulation(magnets, time_step=DEFAULT_TIME_STEP):
     force_engine = ForceEngine()
     force_engine.add_force(MagneticForce(MAGNETIC_FORCE_STRENGTH))
