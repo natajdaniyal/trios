@@ -85,9 +85,9 @@ def build_three_magnets_scenario(time_step=DEFAULT_TIME_STEP, positions=None):
     """Three interacting magnets: N-S-N."""
     positions = _resolve_positions(
         {
-            "A": {"x": -2.2, "y": -1.0},
-            "B": {"x": 0.0, "y": 1.0},
-            "C": {"x": 2.2, "y": -1.0},
+            "A": {"x": -2.2, "y": -0.8},
+            "B": {"x": 0.2, "y": 1.1},
+            "C": {"x": 1.9, "y": -1.0},
         },
         positions,
     )
