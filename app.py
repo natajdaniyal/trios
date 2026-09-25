@@ -28,7 +28,8 @@ from first_experiment_runtime import (
     run_challenge,
 )
 
-MAX_VISIBLE_EXPERIMENT_STEPS = 10
+MAX_VISIBLE_EXPERIMENT_STEPS = 100
+EXPERIMENT_STEPS_PER_RUN = 10
 
 _MAGNET_LAB_COMPONENT = components.declare_component(
     "trios_magnet_lab",
@@ -2899,7 +2900,10 @@ def _render_first_experiment():
                 use_container_width=True,
                 key=f"first_experiment_step_{index}_{steps}",
             ):
-                st.session_state.first_experiment_simulation_steps = steps + 1
+                st.session_state.first_experiment_simulation_steps = min(
+                    steps + EXPERIMENT_STEPS_PER_RUN,
+                    MAX_VISIBLE_EXPERIMENT_STEPS,
+                )
                 st.session_state.first_experiment_simulation_started = True
                 st.session_state.first_experiment_result_revealed = False
                 st.rerun()
