@@ -36,12 +36,20 @@ _MAGNET_LAB_COMPONENT = components.declare_component(
 )
 
 
-def _render_magnet_lab(magnets, positions, disabled=False, hint=None, key=None):
+def _render_magnet_lab(
+    magnets,
+    positions,
+    disabled=False,
+    hint=None,
+    trajectory=None,
+    key=None,
+):
     return _MAGNET_LAB_COMPONENT(
         magnets=magnets,
         positions=positions,
         disabled=disabled,
         hint=hint,
+        trajectory=trajectory,
         default=positions,
         key=key,
     )
@@ -405,77 +413,77 @@ for code, overrides in {
 
 EXPERIMENT_CONTROL_TRANSLATIONS = {
     "fa": {
-        "experiment_stop": "⏸️ استپ",
-        "experiment_exit": "🚪 خروج",
-        "experiment_retry": "🔄 تکرار",
-        "experiment_continue": "▶️ ادامه",
-        "experiment_hint": "💡 راهنمایی",
+        "experiment_stop": "استپ",
+        "experiment_exit": "خروج",
+        "experiment_retry": "تکرار",
+        "experiment_continue": "ادامه",
+        "experiment_hint": "راهنمایی",
         "hint_not_ready": "راهنمایی این مرحله هنوز تعریف نشده است.",
         "hint_already_unlocked": "راهنمایی این مرحله قبلاً باز شده است.",
         "hint_no_coins": "سکه کافی برای دریافت راهنمایی نداری.",
         "experiment_retry_requested": "مرحله برای شروع دوباره آماده شد.",
     },
     "en": {
-        "experiment_stop": "⏸️ Stop",
-        "experiment_exit": "🚪 Exit",
-        "experiment_retry": "🔄 Retry",
-        "experiment_continue": "▶️ Continue",
-        "experiment_hint": "💡 Hint",
+        "experiment_stop": "Stop",
+        "experiment_exit": "Exit",
+        "experiment_retry": "Retry",
+        "experiment_continue": "Continue",
+        "experiment_hint": "Hint",
         "hint_not_ready": "The hint for this stage has not been defined yet.",
         "hint_already_unlocked": "The hint for this stage is already unlocked.",
         "hint_no_coins": "You do not have enough coins for this hint.",
         "experiment_retry_requested": "The stage is ready to restart.",
     },
     "ar": {
-        "experiment_stop": "⏸️ إيقاف",
-        "experiment_exit": "🚪 خروج",
-        "experiment_retry": "🔄 إعادة",
-        "experiment_continue": "▶️ متابعة",
-        "experiment_hint": "💡 تلميح",
+        "experiment_stop": "إيقاف",
+        "experiment_exit": "خروج",
+        "experiment_retry": "إعادة",
+        "experiment_continue": "متابعة",
+        "experiment_hint": "تلميح",
         "hint_not_ready": "لم يتم تعريف تلميح هذه المرحلة بعد.",
         "hint_already_unlocked": "تلميح هذه المرحلة مفتوح بالفعل.",
         "hint_no_coins": "ليس لديك ما يكفي من العملات لهذا التلميح.",
         "experiment_retry_requested": "المرحلة جاهزة للبدء من جديد.",
     },
     "zh": {
-        "experiment_stop": "⏸️ 暂停",
-        "experiment_exit": "🚪 退出",
-        "experiment_retry": "🔄 重试",
-        "experiment_continue": "▶️ 继续",
-        "experiment_hint": "💡 提示",
+        "experiment_stop": "暂停",
+        "experiment_exit": "退出",
+        "experiment_retry": "重试",
+        "experiment_continue": "继续",
+        "experiment_hint": "提示",
         "hint_not_ready": "此阶段的提示尚未定义。",
         "hint_already_unlocked": "此阶段的提示已经解锁。",
         "hint_no_coins": "你的金币不足，无法获得提示。",
         "experiment_retry_requested": "此阶段已准备好重新开始。",
     },
     "es": {
-        "experiment_stop": "⏸️ Pausa",
-        "experiment_exit": "🚪 Salir",
-        "experiment_retry": "🔄 Repetir",
-        "experiment_continue": "▶️ Continuar",
-        "experiment_hint": "💡 Pista",
+        "experiment_stop": "Pausa",
+        "experiment_exit": "Salir",
+        "experiment_retry": "Repetir",
+        "experiment_continue": "Continuar",
+        "experiment_hint": "Pista",
         "hint_not_ready": "La pista de esta etapa aún no está definida.",
         "hint_already_unlocked": "La pista de esta etapa ya está desbloqueada.",
         "hint_no_coins": "No tienes suficientes monedas para esta pista.",
         "experiment_retry_requested": "La etapa está lista para comenzar de nuevo.",
     },
     "fr": {
-        "experiment_stop": "⏸️ Stop",
-        "experiment_exit": "🚪 Quitter",
-        "experiment_retry": "🔄 Recommencer",
-        "experiment_continue": "▶️ Continuer",
-        "experiment_hint": "💡 Indice",
+        "experiment_stop": "Stop",
+        "experiment_exit": "Quitter",
+        "experiment_retry": "Recommencer",
+        "experiment_continue": "Continuer",
+        "experiment_hint": "Indice",
         "hint_not_ready": "L’indice de cette étape n’est pas encore défini.",
         "hint_already_unlocked": "L’indice de cette étape est déjà débloqué.",
         "hint_no_coins": "Vous n’avez pas assez de pièces pour cet indice.",
         "experiment_retry_requested": "L’étape est prête à recommencer.",
     },
     "de": {
-        "experiment_stop": "⏸️ Stopp",
-        "experiment_exit": "🚪 Verlassen",
-        "experiment_retry": "🔄 Wiederholen",
-        "experiment_continue": "▶️ Weiter",
-        "experiment_hint": "💡 Hinweis",
+        "experiment_stop": "Stopp",
+        "experiment_exit": "Verlassen",
+        "experiment_retry": "Wiederholen",
+        "experiment_continue": "Weiter",
+        "experiment_hint": "Hinweis",
         "hint_not_ready": "Der Hinweis für diese Stufe ist noch nicht definiert.",
         "hint_already_unlocked": "Der Hinweis für diese Stufe ist bereits freigeschaltet.",
         "hint_no_coins": "Du hast nicht genug Münzen für diesen Hinweis.",
@@ -2420,7 +2428,7 @@ def _render_experiment_controls():
     stop_col, hint_col, spacer = st.columns([1.2, 1.2, 5.6], gap="small")
 
     with stop_col:
-        with st.popover(t("experiment_stop"), use_container_width=True):
+        with st.popover(t("experiment_stop"), icon=":material/pause_circle:", width="stretch"):
             st.caption(t("experiment_stop"))
             if st.button(t("experiment_exit"), use_container_width=True, key="experiment_exit_button"):
                 st.session_state.experiment_hint_visible = False
@@ -2436,7 +2444,7 @@ def _render_experiment_controls():
                 st.rerun()
 
     with hint_col:
-        with st.popover(t("experiment_hint"), use_container_width=True):
+        with st.popover(t("experiment_hint"), icon=":material/lightbulb:", width="stretch"):
             if not has_active_stage or not context["hint_text"]:
                 st.info(t("hint_not_ready"))
             else:
@@ -2544,12 +2552,19 @@ def _get_first_experiment_positions(challenge):
     return dict(positions)
 
 
-def _render_first_experiment_lab(challenge, index, positions, disabled=False):
+def _render_first_experiment_lab(
+    challenge,
+    index,
+    positions,
+    disabled=False,
+    trajectory=None,
+):
     value = _render_magnet_lab(
         magnets=_magnet_visual_definition(challenge),
         positions=positions,
         disabled=disabled,
         hint=t("experiment_drag_hint"),
+        trajectory=trajectory,
         key=f"magnet_lab_{index}",
     )
     if isinstance(value, dict):
@@ -2702,6 +2717,7 @@ def _show_first_experiment_result(challenge):
         positions=final_positions,
         disabled=True,
         hint=t("simulation_complete"),
+        trajectory=None,
         key=f"magnet_lab_result_{challenge.challenge_id}",
     )
 
@@ -2766,15 +2782,8 @@ def _render_first_experiment():
     prediction_submitted = bool(st.session_state.get("first_experiment_prediction_submitted"))
     result = st.session_state.get("first_experiment_result")
     initial_positions = _get_first_experiment_positions(challenge)
-    if prediction_submitted:
-        initial_positions = _render_first_experiment_lab(
-            challenge,
-            index,
-            initial_positions,
-            disabled=steps > 0 or revealed,
-        )
 
-
+    trajectory = None
     if prediction_submitted and steps > 0:
         result = run_challenge(
             challenge,
@@ -2783,6 +2792,22 @@ def _render_first_experiment():
         )
         st.session_state.first_experiment_result = result
         st.session_state.first_experiment_simulation_started = True
+        trajectory = result.trajectory
+        display_positions = {
+            body["name"]: body["position_x"]
+            for body in result.bodies
+        }
+    else:
+        display_positions = initial_positions
+
+    if prediction_submitted:
+        _render_first_experiment_lab(
+            challenge,
+            index,
+            display_positions,
+            disabled=steps > 0 or revealed,
+            trajectory=trajectory,
+        )
 
     st.markdown("<div style='height:.8rem'></div>", unsafe_allow_html=True)
 
