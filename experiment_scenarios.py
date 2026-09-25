@@ -10,23 +10,40 @@ from magnet import Magnet
 from simulation_engine import SimulationEngine
 
 
-MAGNETIC_STRENGTH = 5.0
-MAGNETIC_FORCE_STRENGTH = 10.0
+MAGNETIC_STRENGTH = 1.0
+MAGNETIC_FORCE_STRENGTH = 1.0
 DEFAULT_TIME_STEP = 0.01
 
 
 def _resolve_positions(default_positions, positions):
-    if positions is None:
-        return dict(default_positions)
-    if not isinstance(positions, dict):
+    source = default_positions if positions is None else positions
+    if not isinstance(source, dict):
         raise TypeError("positions must be a dictionary.")
-    if set(positions) != set(default_positions):
+    if set(source) != set(default_positions):
         raise ValueError("positions must contain exactly the expected magnet names.")
+
     resolved = {}
-    for name, value in positions.items():
-        if isinstance(value, bool) or not isinstance(value, (int, float)):
-            raise TypeError(f"Position for magnet {name!r} must be a number.")
-        resolved[name] = float(value)
+    for name, value in source.items():
+        if isinstance(value, bool):
+            raise TypeError(f"Position for magnet {name!r} must be a number or x/y mapping.")
+
+        if isinstance(value, (int, float)):
+            resolved[name] = {"x": float(value), "y": 0.0}
+            continue
+
+        if isinstance(value, dict):
+            x = value.get("x")
+            y = value.get("y", 0.0)
+            if (
+                isinstance(x, (int, float)) and not isinstance(x, bool)
+                and isinstance(y, (int, float)) and not isinstance(y, bool)
+            ):
+                resolved[name] = {"x": float(x), "y": float(y)}
+                continue
+
+        raise TypeError(
+            f"Position for magnet {name!r} must be a number or {{'x', 'y'}} mapping."
+        )
     return resolved
 
 
@@ -45,8 +62,8 @@ def build_opposite_poles_scenario(time_step=DEFAULT_TIME_STEP, positions=None):
     positions = _resolve_positions({"A": -1.0, "B": 1.0}, positions)
     return _simulation(
         [
-            Magnet("A", 1.0, positions["A"], 0.0, MAGNETIC_STRENGTH, "N"),
-            Magnet("B", 1.0, positions["B"], 0.0, MAGNETIC_STRENGTH, "S"),
+            Magnet("A", 1.0, positions["A"]["x"], positions["A"]["y"], MAGNETIC_STRENGTH, "N"),
+            Magnet("B", 1.0, positions["B"]["x"], positions["B"]["y"], MAGNETIC_STRENGTH, "S"),
         ],
         time_step=time_step,
     )
@@ -57,8 +74,8 @@ def build_same_poles_scenario(time_step=DEFAULT_TIME_STEP, positions=None):
     positions = _resolve_positions({"A": -1.0, "B": 1.0}, positions)
     return _simulation(
         [
-            Magnet("A", 1.0, positions["A"], 0.0, MAGNETIC_STRENGTH, "N"),
-            Magnet("B", 1.0, positions["B"], 0.0, MAGNETIC_STRENGTH, "N"),
+            Magnet("A", 1.0, positions["A"]["x"], positions["A"]["y"], MAGNETIC_STRENGTH, "N"),
+            Magnet("B", 1.0, positions["B"]["x"], positions["B"]["y"], MAGNETIC_STRENGTH, "N"),
         ],
         time_step=time_step,
     )
@@ -66,12 +83,19 @@ def build_same_poles_scenario(time_step=DEFAULT_TIME_STEP, positions=None):
 
 def build_three_magnets_scenario(time_step=DEFAULT_TIME_STEP, positions=None):
     """Three interacting magnets: N-S-N."""
-    positions = _resolve_positions({"A": -2.0, "B": 0.0, "C": 2.0}, positions)
+    positions = _resolve_positions(
+        {
+            "A": {"x": -2.2, "y": -1.0},
+            "B": {"x": 0.0, "y": 1.0},
+            "C": {"x": 2.2, "y": -1.0},
+        },
+        positions,
+    )
     return _simulation(
         [
-            Magnet("A", 1.0, positions["A"], 0.0, MAGNETIC_STRENGTH, "N"),
-            Magnet("B", 1.0, positions["B"], 0.0, MAGNETIC_STRENGTH, "S"),
-            Magnet("C", 1.0, positions["C"], 0.0, MAGNETIC_STRENGTH, "N"),
+            Magnet("A", 1.0, positions["A"]["x"], positions["A"]["y"], MAGNETIC_STRENGTH, "N"),
+            Magnet("B", 1.0, positions["B"]["x"], positions["B"]["y"], MAGNETIC_STRENGTH, "S"),
+            Magnet("C", 1.0, positions["C"]["x"], positions["C"]["y"], MAGNETIC_STRENGTH, "N"),
         ],
         time_step=time_step,
     )
