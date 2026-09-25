@@ -20,12 +20,13 @@ DEFAULT_CHALLENGE_TIME_STEP = 0.01
 
 @dataclass(frozen=True)
 class ChallengeExecutionResult:
-    """Final state produced by running one educational challenge scenario."""
+    """Physics result plus the actual body states produced by each step."""
 
     challenge_id: str
     scenario_id: str
     time: float
     bodies: tuple[dict, ...]
+    trajectory: tuple[tuple[dict, ...], ...]
 
 
 def evaluate_challenge_prediction(challenge, answer, language):
@@ -66,24 +67,31 @@ def run_challenge(
     if force_engine is not None:
         simulation.force_engine = force_engine
 
-    simulation.run(steps)
+    def snapshot():
+        return tuple(
+            {
+                "name": body.name,
+                "mass": body.mass,
+                "position_x": body.position.x,
+                "position_y": body.position.y,
+                "velocity_x": body.velocity.x,
+                "velocity_y": body.velocity.y,
+            }
+            for body in simulation.bodies
+        )
 
-    bodies = tuple(
-        {
-            "name": body.name,
-            "mass": body.mass,
-            "position_x": body.position.x,
-            "position_y": body.position.y,
-            "velocity_x": body.velocity.x,
-            "velocity_y": body.velocity.y,
-        }
-        for body in simulation.bodies
-    )
+    trajectory = [snapshot()]
+    for _ in range(steps):
+        simulation.step()
+        trajectory.append(snapshot())
+
+    bodies = trajectory[-1]
     return ChallengeExecutionResult(
         challenge_id=challenge.challenge_id,
         scenario_id=challenge.scenario_id,
         time=simulation.time,
         bodies=bodies,
+        trajectory=tuple(trajectory),
     )
 
 
