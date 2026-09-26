@@ -111,19 +111,10 @@ def test_three_magnet_pairwise_poles_are_physically_consistent():
     force_bc = force_model.calculate(b, c)
     force_ac = force_model.calculate(a, c)
 
-    # For diagonal pairs, use the force projection along the line joining
-    # the magnet centers rather than a single x component.
-    ab_dx = b.position.x - a.position.x
-    ab_dy = b.position.y - a.position.y
-    bc_dx = c.position.x - b.position.x
-    bc_dy = c.position.y - b.position.y
-    ac_dx = c.position.x - a.position.x
-    ac_dy = c.position.y - a.position.y
+    # The facing poles are N-N for A/B and S-S for B/C: both pairs repel.
+    assert force_ab.x * (b.position.x - a.position.x) + force_ab.y * (b.position.y - a.position.y) < 0
+    assert force_bc.x * (c.position.x - b.position.x) + force_bc.y * (c.position.y - b.position.y) < 0
 
-    # N-N faces across A/B and S-S faces across B/C: both pairs repel.
-    assert force_ab.x * ab_dx + force_ab.y * ab_dy < 0
-    assert force_bc.x * bc_dx + force_bc.y * bc_dy < 0
-
-    # A/C have opposite facing poles (N/S): that pair attracts.
-    assert force_ac.x * ac_dx + force_ac.y * ac_dy > 0
+    # A/C face N-S: that pair attracts.
+    assert force_ac.x * (c.position.x - a.position.x) + force_ac.y * (c.position.y - a.position.y) > 0
 
