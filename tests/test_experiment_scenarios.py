@@ -74,3 +74,42 @@ def test_magnetic_force_is_bounded_for_nearby_finite_size_magnets():
     )
 
     assert maximum_coordinate < 10.0
+
+def test_two_pole_force_respects_same_and_opposite_facing_poles():
+    from forces.magnetic_force import MagneticForce
+
+    force_model = MagneticForce(1.0)
+
+    opposite = build_opposite_poles_scenario()
+    opposite_force = force_model.calculate(
+        opposite.bodies[0],
+        opposite.bodies[1],
+    )
+    assert opposite_force.x > 0
+
+    same = build_same_poles_scenario()
+    same_force = force_model.calculate(
+        same.bodies[0],
+        same.bodies[1],
+    )
+    assert same_force.x < 0
+
+
+def test_three_magnet_pairwise_poles_are_physically_consistent():
+    from forces.magnetic_force import MagneticForce
+
+    simulation = build_three_magnets_scenario()
+    a, b, c = simulation.bodies
+    force_model = MagneticForce(1.0)
+
+    force_ab = force_model.calculate(a, b)
+    force_bc = force_model.calculate(b, c)
+    force_ac = force_model.calculate(a, c)
+
+    # N-N faces across A/B and S-S faces across B/C: both pairs repel.
+    assert force_ab.x < 0
+    assert force_bc.x < 0
+
+    # A/C have opposite facing poles (N/S): that pair attracts.
+    assert force_ac.x > 0
+
