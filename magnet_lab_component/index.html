@@ -51,8 +51,20 @@ function renderForces(lab,magnets){
 }
 function render(){
   positions={};
+  const firstFrame = Array.isArray(args.trajectory)&&args.trajectory.length
+    ? args.trajectory[0]
+    : null;
+  const firstByName = {};
+  if(Array.isArray(firstFrame)){
+    for(const body of firstFrame){
+      if(body&&body.name) firstByName[body.name]=body;
+    }
+  }
   for(const m of (args.magnets||[])){
-    const p=args.positions&&args.positions[m.name];
+    const trajectoryBody = args.disabled===true ? firstByName[m.name] : null;
+    const p = trajectoryBody
+      ? {x:Number(trajectoryBody.position_x)||0,y:Number(trajectoryBody.position_y)||0}
+      : (args.positions&&args.positions[m.name]);
     positions[m.name]=typeof p==="object"?{x:Number(p.x)||0,y:Number(p.y)||0}:{x:Number(p)||0,y:0};
   }
   root.innerHTML="";
@@ -78,16 +90,37 @@ function render(){
 }
 function playTrajectory(frames,lab){
   if(!Array.isArray(frames)||frames.length<2||args.disabled!==true)return;
-  let frame=0;
-  const apply=()=>{
-    if(frame>=frames.length)return;
-    const snapshot=frames[frame]||[];
-    for(const body of snapshot){
-      const p={x:Number(body.position_x)||0,y:Number(body.position_y)||0};positions[body.name]=p;
-      const el=lab.querySelector('.magnet[data-name="'+body.name+'"]');if(el){el.style.left=px(p.x,lab)+"px";el.style.top=py(p.y,lab)+"px"}
+  const duration=Math.max(2200,Math.min(5000,1800+frames.length*12));
+  const start=performance.now();
+  const apply=(now)=>{
+    const progress=Math.min(1,(now-start)/duration);
+    const scaled=progress*(frames.length-1);
+    const index=Math.min(frames.length-1,Math.floor(scaled));
+    const blend=scaled-index;
+    const current=frames[index]||[];
+    const next=frames[Math.min(index+1,frames.length-1)]||current;
+    const nextByName={};
+    for(const body of next){
+      if(body&&body.name) nextByName[body.name]=body;
     }
-    renderForces(lab,args.magnets||[]);frame+=1;if(frame<frames.length)window.setTimeout(apply,55);
-  };apply();
+    for(const body of current){
+      if(!body||!body.name)continue;
+      const target=nextByName[body.name]||body;
+      const p={
+        x:(Number(body.position_x)||0)+((Number(target.position_x)||0)-(Number(body.position_x)||0))*blend,
+        y:(Number(body.position_y)||0)+((Number(target.position_y)||0)-(Number(body.position_y)||0))*blend,
+      };
+      positions[body.name]=p;
+      const el=lab.querySelector('.magnet[data-name="'+body.name+'"]');
+      if(el){
+        el.style.left=px(p.x,lab)+"px";
+        el.style.top=py(p.y,lab)+"px";
+      }
+    }
+    renderForces(lab,args.magnets||[]);
+    if(progress<1)window.requestAnimationFrame(apply);
+  };
+  window.requestAnimationFrame(apply);
 }
 document.addEventListener("pointermove",e=>{if(!drag||args.disabled)return;const lab=document.querySelector(".lab");if(!lab)return;const r=lab.getBoundingClientRect();const raw={x:Math.round(valX(e.clientX-r.left,lab)*4)/4,y:Math.round(valY(e.clientY-r.top,lab)*4)/4};
 const resolved=resolveCollisionCandidate(drag.name,raw,lab);positions[drag.name]=resolved;

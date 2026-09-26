@@ -33,6 +33,16 @@ from first_experiment_runtime import (
 MAX_VISIBLE_EXPERIMENT_STEPS = 100
 EXPERIMENT_STEPS_PER_RUN = 10
 
+# Keep each educational scenario on a physically meaningful observation window.
+# The physics engine still uses the real force integration; only the observation
+# duration changes so repulsion is not exaggerated and the three-magnet motion is
+# visible enough to study.
+EXPERIMENT_STEPS_BY_SCENARIO = {
+    "opposite-poles": 100,
+    "same-poles": 35,
+    "three-magnets": 220,
+}
+
 _MAGNET_LAB_COMPONENT = components.declare_component(
     "trios_magnet_lab",
     path=str(_PROJECT_ROOT / "magnet_lab_component"),
@@ -3052,7 +3062,10 @@ def _render_first_experiment():
         ):
             st.session_state.first_experiment_result = run_challenge(
                 challenge,
-                steps=MAX_VISIBLE_EXPERIMENT_STEPS,
+                steps=EXPERIMENT_STEPS_BY_SCENARIO.get(
+                    challenge.scenario_id,
+                    MAX_VISIBLE_EXPERIMENT_STEPS,
+                ),
                 initial_positions=positions,
             )
             st.session_state.first_experiment_simulation_steps = MAX_VISIBLE_EXPERIMENT_STEPS
