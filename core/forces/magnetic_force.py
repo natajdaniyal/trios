@@ -65,33 +65,40 @@ class MagneticForce(Force):
             * magnet_b.strength
         )
 
-        total_force = Vector2(0, 0)
+        # Educational bar magnets are represented by their two poles.
+        # For the translational force, use the poles that face each other
+        # along the line joining the magnet centers. This keeps the physical
+        # rule explicit:
+        #   N-N / S-S -> repulsion
+        #   N-S / S-N -> attraction
+        dx = magnet_b.position.x - magnet_a.position.x
+        if dx >= 0:
+            side_a = "right"
+            side_b = "left"
+        else:
+            side_a = "left"
+            side_b = "right"
 
-        pole_pairs = (
-            ("left", magnet_a.left_pole, "left", magnet_b.left_pole),
-            ("left", magnet_a.left_pole, "right", magnet_b.right_pole),
-            ("right", magnet_a.right_pole, "left", magnet_b.left_pole),
-            ("right", magnet_a.right_pole, "right", magnet_b.right_pole),
+        pole_a = (
+            magnet_a.right_pole
+            if side_a == "right"
+            else magnet_a.left_pole
+        )
+        pole_b = (
+            magnet_b.right_pole
+            if side_b == "right"
+            else magnet_b.left_pole
         )
 
-        # Each educational magnet is represented as two finite poles.
-        # Keep the overall force scale comparable to the previous model
-        # while summing the four pole-to-pole interactions.
-        pair_weight = 0.25
-
-        for side_a, pole_a, side_b, pole_b in pole_pairs:
-            force = self._single_pole_force(
-                magnet_a,
-                pole_a,
-                self._pole_position(magnet_a, side_a),
-                magnet_b,
-                pole_b,
-                self._pole_position(magnet_b, side_b),
-                base_strength * pair_weight,
-            )
-            total_force = total_force.add(force)
-
-        return total_force
+        return self._single_pole_force(
+            magnet_a,
+            pole_a,
+            self._pole_position(magnet_a, side_a),
+            magnet_b,
+            pole_b,
+            self._pole_position(magnet_b, side_b),
+            base_strength,
+        )
 
     def calculate(self, magnet_a, magnet_b):
         """
