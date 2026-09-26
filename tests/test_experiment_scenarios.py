@@ -51,3 +51,26 @@ def test_magnets_cannot_penetrate_each_other_during_simulation():
 def test_three_magnet_setup_is_not_symmetric():
     simulation = build_three_magnets_scenario()
     assert len({round(body.position.y, 6) for body in simulation.bodies}) == 3
+
+
+def test_magnetic_force_is_bounded_for_nearby_finite_size_magnets():
+    simulation = build_three_magnets_scenario(
+        positions={
+            "A": {"x": -1.0, "y": 0.0},
+            "B": {"x": 0.0, "y": 0.5},
+            "C": {"x": 1.0, "y": 0.0},
+        }
+    )
+
+    for _ in range(220):
+        simulation.step()
+
+    maximum_coordinate = max(
+        abs(body.position.x)
+        for body in simulation.bodies
+    ) + max(
+        abs(body.position.y)
+        for body in simulation.bodies
+    )
+
+    assert maximum_coordinate < 10.0
