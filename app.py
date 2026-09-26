@@ -2657,23 +2657,25 @@ def _render_game_styles():
 
 
 def _magnet_visual_definition(challenge):
+    collision_radius = 0.62
+
     if challenge.scenario_id == "opposite-poles":
         # Facing poles are N-S -> attraction.
         return (
-            {"name": "A", "left_pole": "S", "right_pole": "N"},
-            {"name": "B", "left_pole": "S", "right_pole": "N"},
+            {"name": "A", "left_pole": "S", "right_pole": "N", "collision_radius": collision_radius},
+            {"name": "B", "left_pole": "S", "right_pole": "N", "collision_radius": collision_radius},
         )
     if challenge.scenario_id == "same-poles":
         # Facing poles are N-N -> repulsion.
         return (
-            {"name": "A", "left_pole": "S", "right_pole": "N"},
-            {"name": "B", "left_pole": "N", "right_pole": "S"},
+            {"name": "A", "left_pole": "S", "right_pole": "N", "collision_radius": collision_radius},
+            {"name": "B", "left_pole": "N", "right_pole": "S", "collision_radius": collision_radius},
         )
     # N-S-N: the center magnet interacts with both outer magnets.
     return (
-        {"name": "A", "left_pole": "S", "right_pole": "N"},
-        {"name": "B", "left_pole": "N", "right_pole": "S"},
-        {"name": "C", "left_pole": "S", "right_pole": "N"},
+        {"name": "A", "left_pole": "S", "right_pole": "N", "collision_radius": collision_radius},
+        {"name": "B", "left_pole": "N", "right_pole": "S", "collision_radius": collision_radius},
+        {"name": "C", "left_pole": "S", "right_pole": "N", "collision_radius": collision_radius},
     )
 
 
