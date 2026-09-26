@@ -26,7 +26,7 @@
 <body><div id="root"></div>
 <script>
 (function(){
-const root=document.getElementById("root");let args={magnets:[],positions:{},disabled:false,hint:null,trajectory:null};let positions={};let drag=null;
+const root=document.getElementById("root");let args={magnets:[],positions:{},disabled:false,hint:null,trajectory:null};let positions={};let drag=null;let animationFrame=null;
 function send(type,payload){window.parent.postMessage(Object.assign({isStreamlitMessage:true,type:type},payload),"*")}
 function ready(){send("streamlit:componentReady",{apiVersion:1});send("streamlit:setFrameHeight",{height:560})}
 function px(x,lab){const w=lab.clientWidth;return w*.08+((Number(x)+4)/8)*(w*.84)}
@@ -50,6 +50,10 @@ function renderForces(lab,magnets){
   }
 }
 function render(){
+  if(animationFrame!==null){
+    window.cancelAnimationFrame(animationFrame);
+    animationFrame=null;
+  }
   positions={};
   const firstFrame = Array.isArray(args.trajectory)&&args.trajectory.length
     ? args.trajectory[0]
@@ -118,9 +122,13 @@ function playTrajectory(frames,lab){
       }
     }
     renderForces(lab,args.magnets||[]);
-    if(progress<1)window.requestAnimationFrame(apply);
+    if(progress<1){
+      animationFrame=window.requestAnimationFrame(apply);
+    }else{
+      animationFrame=null;
+    }
   };
-  window.requestAnimationFrame(apply);
+  animationFrame=window.requestAnimationFrame(apply);
 }
 document.addEventListener("pointermove",e=>{if(!drag||args.disabled)return;const lab=document.querySelector(".lab");if(!lab)return;const r=lab.getBoundingClientRect();const raw={x:Math.round(valX(e.clientX-r.left,lab)*4)/4,y:Math.round(valY(e.clientY-r.top,lab)*4)/4};
 const resolved=resolveCollisionCandidate(drag.name,raw,lab);positions[drag.name]=resolved;
