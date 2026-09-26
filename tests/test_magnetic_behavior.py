@@ -88,6 +88,49 @@ else:
 
 # تست اینکه خروجی بردار است
 
+# Explicit two-pole magnets must also follow the physical rule.
+north_bar = Magnet(
+    "North Bar",
+    1,
+    0,
+    0,
+    5,
+    "N",
+    left_pole="S",
+    right_pole="N",
+)
+south_bar = Magnet(
+    "South Bar",
+    1,
+    2,
+    0,
+    5,
+    "S",
+    left_pole="S",
+    right_pole="N",
+)
+same_facing_bar = Magnet(
+    "Same Facing Bar",
+    1,
+    2,
+    0,
+    5,
+    "N",
+    left_pole="N",
+    right_pole="S",
+)
+
+two_pole_attract = force.calculate(north_bar, south_bar)
+two_pole_repel = force.calculate(north_bar, same_facing_bar)
+
+if two_pole_attract.x > 0 and two_pole_repel.x < 0:
+    print("✅ Two-Pole Physics Direction Works")
+    passed += 1
+else:
+    print("❌ Two-Pole Physics Direction Failed")
+    failed += 1
+
+
 if hasattr(attract_force, "x") and hasattr(attract_force, "y"):
     print("✅ Force Returns Vector")
     passed += 1
