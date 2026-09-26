@@ -1886,6 +1886,50 @@ def navigate(page):
     st.switch_page(target)
 
 
+def _restore_page_scroll(page_path):
+    """Keep each TRIOS view anchored at the useful content after Streamlit reruns."""
+    target_selectors = (
+        ".trios-result-banner",
+        ".trios-mission-card",
+        ".trios-full-experiment",
+    ) if page_path == "lab" else ()
+
+    selectors_js = "[" + ",".join(repr(s) for s in target_selectors) + "]"
+    script = f"""
+<script>
+(function(){{
+    const selectors = {selectors_js};
+    const doc = window.parent.document;
+
+    function restoreScroll(){{
+        if (selectors.length){{
+            for (const selector of selectors){{
+                const target = doc.querySelector(selector);
+                if (target){{
+                    target.scrollIntoView({{behavior:"auto", block:"start"}});
+                    return;
+                }}
+            }}
+        }}
+
+        const main = doc.querySelector("section.main");
+        if (main && typeof main.scrollTo === "function"){{
+            main.scrollTo({{top:0, left:0, behavior:"auto"}});
+        }}
+        if (typeof window.parent.scrollTo === "function"){{
+            window.parent.scrollTo(0, 0);
+        }}
+    }}
+
+    requestAnimationFrame(restoreScroll);
+    setTimeout(restoreScroll, 80);
+    setTimeout(restoreScroll, 250);
+}})();
+</script>
+"""
+    components.html(script, height=1)
+
+
 def start_google_login(flow):
     st.session_state.google_flow = flow
     st.login("google")
@@ -2914,7 +2958,10 @@ def _show_first_experiment_result(challenge):
         disabled=True,
         hint=t("experiment_done"),
         trajectory=result_trajectory,
-        key=f"magnet_lab_result_{challenge.challenge_id}",
+        key=(
+            f"magnet_lab_result_{challenge.challenge_id}_"
+            f"{st.session_state.get('first_experiment_run_id', 0)}"
+        ),
     )
 
     if evaluation is not None:
@@ -3060,6 +3107,9 @@ def _render_first_experiment():
             use_container_width=True,
             key=f"first_experiment_run_{index}",
         ):
+            st.session_state.first_experiment_run_id = (
+                int(st.session_state.get("first_experiment_run_id", 0)) + 1
+            )
             st.session_state.first_experiment_result = run_challenge(
                 challenge,
                 steps=EXPERIMENT_STEPS_BY_SCENARIO.get(
@@ -3356,3 +3406,4 @@ if "user" not in st.session_state and navigation.url_path in {
     st.switch_page(NAVIGATION_PAGES["home"])
 
 navigation.run()
+_restore_page_scroll(navigation.url_path)
