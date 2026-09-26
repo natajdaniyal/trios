@@ -44,25 +44,25 @@ def _challenge(
 
 
 _STAGE_ONE_SHARED_QUESTION = {
-    "fa": "اگر این دو آهنربا را کنار هم بگذاری، فکر می‌کنی چه اتفاقی می‌افتد؟",
-    "en": "What do you think will happen if you place these two magnets next to each other?",
-    "ar": "ماذا تعتقد أنه سيحدث إذا وضعت هذين المغناطيسين بجانب بعضهما؟",
-    "zh": "如果把这两个磁铁放在一起，你觉得会发生什么？",
-    "es": "¿Qué crees que ocurrirá si colocas estos dos imanes uno junto al otro?",
-    "fr": "Que penses-tu qu'il se passera si tu places ces deux aimants côte à côte ?",
-    "de": "Was glaubst du, passiert, wenn du diese beiden Magnete nebeneinander legst?",
-    "ja": "この2つの磁石を隣に置くと、何が起こると思いますか？",
+    "fa": "این دو آهنربا را فقط به هم نزدیک کن، نه اینکه به هم بچسبانی؛ فکر می‌کنی چه اتفاقی می‌افتد؟",
+    "en": "Bring these two magnets close to each other, but do not make them touch. What do you think will happen?",
+    "ar": "قرّب هذين المغناطيسين من بعضهما، لكن لا تجعلهما يلمسان بعضهما. ماذا تعتقد أنه سيحدث؟",
+    "zh": "把这两个磁铁靠近，但不要让它们接触。你觉得会发生什么？",
+    "es": "Acerca estos dos imanes, pero no dejes que se toquen. ¿Qué crees que ocurrirá?",
+    "fr": "Approche ces deux aimants, mais ne les fais pas se toucher. Que penses-tu qu'il se passera ?",
+    "de": "Bringe diese beiden Magnete näher zusammen, ohne sie zu berühren. Was glaubst du, wird passieren?",
+    "ja": "この2つの磁石を近づけますが、触れ合わせないでください。何が起こると思いますか？",
 }
 
 _STAGE_ONE_CHALLENGE_THREE_QUESTION = {
-    "fa": "اگر این سه آهنربا را کنار هم بگذاری، فکر می‌کنی چه اتفاقی می‌افتد؟ چرا این مسئله سخت‌تر می‌شود؟",
-    "en": "What do you think will happen if you place these three magnets together? Why does this become harder?",
-    "ar": "ماذا تعتقد أنه سيحدث إذا وضعت هذه المغناطيسات الثلاثة معًا؟ ولماذا تصبح المسألة أصعب؟",
-    "zh": "如果把这三个磁铁放在一起，你觉得会发生什么？为什么这会变得更难？",
-    "es": "¿Qué crees que ocurrirá si colocas estos tres imanes juntos? ¿Por qué se vuelve más difícil?",
-    "fr": "Que penses-tu qu'il se passera avec ces trois aimants ? Pourquoi cela devient-il plus difficile ?",
-    "de": "Was glaubst du, passiert mit diesen drei Magneten zusammen? Warum wird es schwieriger?",
-    "ja": "この3つの磁石を一緒に置くと、何が起こると思いますか？ なぜ難しくなるのでしょうか？",
+    "fa": "این سه آهنربا را فقط به هم نزدیک کن، نه اینکه به هم بچسبانی؛ فکر می‌کنی چه اتفاقی می‌افتد و چرا پیش‌بینی آن سخت‌تر است؟",
+    "en": "Bring these three magnets close together, but do not make them touch. What do you think will happen, and why is it harder to predict?",
+    "ar": "قرّب هذه المغناطيسات الثلاثة من بعضها، لكن لا تجعلها تلمس بعضها. ماذا تعتقد أنه سيحدث، ولماذا يصعب التنبؤ به؟",
+    "zh": "把这三个磁铁靠近，但不要让它们接触。你觉得会发生什么？为什么更难预测？",
+    "es": "Acerca estos tres imanes, pero no dejes que se toquen. ¿Qué crees que ocurrirá y por qué es más difícil de predecir?",
+    "fr": "Approche ces trois aimants, mais ne les fais pas se toucher. Que penses-tu qu'il se passera, et pourquoi est-ce plus difficile à prévoir ?",
+    "de": "Bringe diese drei Magnete näher zusammen, ohne sie zu berühren. Was glaubst du, wird passieren, und warum ist es schwerer vorherzusagen?",
+    "ja": "この3つの磁石を近づけますが、触れ合わせないでください。何が起こると思いますか？なぜ予測が難しいのでしょうか？",
 }
 
 STAGE_ONE_CHALLENGES = (
