@@ -1927,7 +1927,7 @@ def _restore_page_scroll(page_path):
 }})();
 </script>
 """
-    components.html(script, height=1)
+    st.html(script, unsafe_allow_javascript=True)
 
 
 def start_google_login(flow):
