@@ -119,16 +119,18 @@ def _iter_profiles():
                 continue
 
 
-def google_profile(google_sub):
+def google_profile(google_sub, google_email=None):
     """Return the TRIOS profile linked to a Google identity, if any."""
-    if not google_sub:
+    if not google_sub and not google_email:
         return None
 
+    normalized_email = (google_email or "").strip().lower()
     for data in _iter_profiles():
-        if (
-            data.get("auth_method") == "google"
-            and data.get("google_sub") == google_sub
-        ):
+        if data.get("auth_method") != "google":
+            continue
+        if google_sub and data.get("google_sub") == google_sub:
+            return data
+        if normalized_email and data.get("google_email", "").strip().lower() == normalized_email:
             return data
 
     return None
