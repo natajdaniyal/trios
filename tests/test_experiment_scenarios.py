@@ -34,6 +34,11 @@ def test_three_magnets_scenario_has_three_magnets():
     simulation = build_three_magnets_scenario()
     assert len(simulation.bodies) == 3
 
+    a, b, c = simulation.bodies
+    assert (a.left_pole, a.right_pole) == ("S", "N")
+    assert (b.left_pole, b.right_pole) == ("N", "S")
+    assert (c.left_pole, c.right_pole) == ("S", "N")
+
 
 def test_unknown_scenario_is_rejected():
     with pytest.raises(ValueError, match="Unknown Experiment 1 scenario"):
