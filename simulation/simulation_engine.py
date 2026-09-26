@@ -67,8 +67,12 @@ class SimulationEngine:
                 body_b.position = body_b.position.add(normal.multiply(overlap * radius_a / total_radius))
                 relative_normal_speed = ((body_b.velocity.x - body_a.velocity.x) * normal.x + (body_b.velocity.y - body_a.velocity.y) * normal.y)
                 if relative_normal_speed < 0:
-                    body_a.velocity = body_a.velocity.add(normal.multiply(-relative_normal_speed * radius_b / total_radius))
-                    body_b.velocity = body_b.velocity.add(normal.multiply(relative_normal_speed * radius_a / total_radius))
+                    body_a.velocity = body_a.velocity.add(
+                        normal.multiply(relative_normal_speed * radius_b / total_radius)
+                    )
+                    body_b.velocity = body_b.velocity.add(
+                        normal.multiply(-relative_normal_speed * radius_a / total_radius)
+                    )
 
     def run(self, steps):
         """Run the simulation for a given number of steps."""
