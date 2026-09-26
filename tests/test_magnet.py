@@ -59,6 +59,24 @@ else:
     print("❌ Position Failed")
     failed += 1
 
+two_pole_magnet = Magnet(
+    "Two Pole Magnet",
+    1,
+    0,
+    0,
+    10,
+    "N",
+    left_pole="S",
+    right_pole="N",
+)
+
+if (two_pole_magnet.left_pole, two_pole_magnet.right_pole) == ("S", "N"):
+    print("✅ Two-Pole Configuration Works")
+    passed += 1
+else:
+    print("❌ Two-Pole Configuration Failed")
+    failed += 1
+
 
 
 print("===================")
