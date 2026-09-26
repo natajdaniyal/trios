@@ -105,6 +105,7 @@ function render(){
 function playTrajectory(frames,lab){
   if(!Array.isArray(frames)||frames.length<2||args.disabled!==true)return;
   let frame=0;
+  const stride=Math.max(1,Math.ceil(frames.length/80));
   const apply=()=>{
     if(frame>=frames.length)return;
     const snapshot=frames[frame]||[];
@@ -112,7 +113,9 @@ function playTrajectory(frames,lab){
       const p={x:Number(body.position_x)||0,y:Number(body.position_y)||0};positions[body.name]=p;
       const el=lab.querySelector('.magnet[data-name="'+body.name+'"]');if(el){el.style.left=px(p.x,lab)+"px";el.style.top=py(p.y,lab)+"px"}
     }
-    renderForces(lab,args.magnets||[]);frame+=1;if(frame<frames.length)window.setTimeout(apply,55);
+    renderForces(lab,args.magnets||[]);
+    frame+=stride;
+    if(frame<frames.length)window.setTimeout(apply,45);
   };apply();
 }
 document.addEventListener("pointermove",e=>{if(!drag||args.disabled)return;const lab=document.querySelector(".lab");if(!lab)return;const r=lab.getBoundingClientRect();const raw={x:Math.round(valX(e.clientX-r.left,lab)*4)/4,y:Math.round(valY(e.clientY-r.top,lab)*4)/4};
