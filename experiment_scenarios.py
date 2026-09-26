@@ -62,8 +62,16 @@ def build_opposite_poles_scenario(time_step=DEFAULT_TIME_STEP, positions=None):
     positions = _resolve_positions({"A": -1.0, "B": 1.0}, positions)
     return _simulation(
         [
-            Magnet("A", 1.0, positions["A"]["x"], positions["A"]["y"], MAGNETIC_STRENGTH, "N"),
-            Magnet("B", 1.0, positions["B"]["x"], positions["B"]["y"], MAGNETIC_STRENGTH, "S"),
+            Magnet(
+                "A", 1.0, positions["A"]["x"], positions["A"]["y"],
+                MAGNETIC_STRENGTH, "N",
+                left_pole="S", right_pole="N",
+            ),
+            Magnet(
+                "B", 1.0, positions["B"]["x"], positions["B"]["y"],
+                MAGNETIC_STRENGTH, "S",
+                left_pole="S", right_pole="N",
+            ),
         ],
         time_step=time_step,
     )
@@ -74,8 +82,16 @@ def build_same_poles_scenario(time_step=DEFAULT_TIME_STEP, positions=None):
     positions = _resolve_positions({"A": -1.0, "B": 1.0}, positions)
     return _simulation(
         [
-            Magnet("A", 1.0, positions["A"]["x"], positions["A"]["y"], MAGNETIC_STRENGTH, "N"),
-            Magnet("B", 1.0, positions["B"]["x"], positions["B"]["y"], MAGNETIC_STRENGTH, "N"),
+            Magnet(
+                "A", 1.0, positions["A"]["x"], positions["A"]["y"],
+                MAGNETIC_STRENGTH, "N",
+                left_pole="S", right_pole="N",
+            ),
+            Magnet(
+                "B", 1.0, positions["B"]["x"], positions["B"]["y"],
+                MAGNETIC_STRENGTH, "N",
+                left_pole="N", right_pole="S",
+            ),
         ],
         time_step=time_step,
     )
@@ -93,9 +109,21 @@ def build_three_magnets_scenario(time_step=DEFAULT_TIME_STEP, positions=None):
     )
     return _simulation(
         [
-            Magnet("A", 1.0, positions["A"]["x"], positions["A"]["y"], MAGNETIC_STRENGTH, "N"),
-            Magnet("B", 1.0, positions["B"]["x"], positions["B"]["y"], MAGNETIC_STRENGTH, "S"),
-            Magnet("C", 1.0, positions["C"]["x"], positions["C"]["y"], MAGNETIC_STRENGTH, "N"),
+            Magnet(
+                "A", 1.0, positions["A"]["x"], positions["A"]["y"],
+                MAGNETIC_STRENGTH, "N",
+                left_pole="S", right_pole="N",
+            ),
+            Magnet(
+                "B", 1.0, positions["B"]["x"], positions["B"]["y"],
+                MAGNETIC_STRENGTH, "S",
+                left_pole="N", right_pole="S",
+            ),
+            Magnet(
+                "C", 1.0, positions["C"]["x"], positions["C"]["y"],
+                MAGNETIC_STRENGTH, "N",
+                left_pole="S", right_pole="N",
+            ),
         ],
         time_step=time_step,
     )
