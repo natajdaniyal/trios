@@ -3145,9 +3145,17 @@ def _render_first_experiment():
                 _save_current_profile(profile)
                 st.session_state.first_experiment_completion_recorded = True
                 st.session_state.first_experiment_last_reward = completion["coins_awarded"]
-            st.session_state.first_experiment_active = False
+            # Keep the final challenge result on screen so the learner can
+            # actually watch the three-body trajectory before leaving.
             st.session_state.first_experiment_stage_completed = True
-            st.rerun()
+            if st.button(
+                t("back_to_experiments"),
+                icon=":material/arrow_back:",
+                use_container_width=True,
+                key="first_experiment_finish_stage",
+            ):
+                st.session_state.first_experiment_active = False
+                navigate("experiments")
     else:
         if st.button(
             t("retry_challenge"),
