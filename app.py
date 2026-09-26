@@ -30,7 +30,7 @@ from first_experiment_runtime import (
     run_challenge,
 )
 
-MAX_VISIBLE_EXPERIMENT_STEPS = 100
+MAX_VISIBLE_EXPERIMENT_STEPS = 240
 EXPERIMENT_STEPS_PER_RUN = 10
 
 _MAGNET_LAB_COMPONENT = components.declare_component(
@@ -531,8 +531,8 @@ FIRST_EXPERIMENT_TRANSLATIONS = {
         "stage_complete_copy": "هر سه چالش مرحلهٔ اول را پشت سر گذاشتی.",
         "coins_earned": "سکهٔ دریافت‌شده: +{amount}",
         "prediction_required": "اول پیش‌بینی خودت را بنویس.",
-        "experiment_drag_hint": "بعد از پیش‌بینی، آهنرباها را جابه‌جا کن.",
-        "prediction_lab_hint": "فعلاً فقط صحنه را بررسی کن؛ بعد از ثبت پیش‌بینی، کنترل آزمایش را در دست می‌گیری.",
+        "experiment_drag_hint": "بعد از پیش‌بینی، آهنرباها را فقط به هم نزدیک کن؛ نگذار به هم بچسبند.",
+        "prediction_lab_hint": "فعلاً فقط صحنه را بررسی کن؛ بعد از ثبت پیش‌بینی، کنترل آزمایش را در دست می‌گیری. آهنرباها را به هم نچسبان.",
     },
     "en": {
         "first_experiment_title": "Why is the three-body problem hard?",
@@ -1966,7 +1966,7 @@ def process_google_identity():
         return
 
     try:
-        profile = google_profile(identity["sub"])
+        profile = google_profile(identity["sub"], identity.get("email"))
     except Exception:
         # A database/network problem must not prevent the public TRIOS page
         # from rendering. The user can retry the sign-in flow later.
@@ -2244,7 +2244,7 @@ def show_google_profile():
     identity = st.session_state.get("google_identity", google_identity())
 
     try:
-        existing_profile = google_profile(identity.get("sub"))
+        existing_profile = google_profile(identity.get("sub"), identity.get("email"))
     except Exception:
         st.error("TRIOS could not verify the Google account right now. Please refresh and try again.")
         return
